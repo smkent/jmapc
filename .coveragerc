@@ -1,0 +1,6 @@
+[coverage:run]
+source = jmapc
+
+[report]
+fail_under = 0
+show_missing = True

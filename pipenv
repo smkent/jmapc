@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+export PIPENV_DEFAULT_PYTHON_VERSION=3
+export PIPENV_VENV_IN_PROJECT=1
+pipenv "${@}"
