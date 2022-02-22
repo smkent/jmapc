@@ -23,6 +23,10 @@ testdeps:
 .PHONY: test-full
 test-full: testdeps test
 
+.PHONY: my
+my:
+	$(PIPENV) run mypy
+
 .PHONY: test
 test:
 	$(PIPENV) run flake8 -- .
