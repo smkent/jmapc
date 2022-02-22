@@ -1,7 +1,3 @@
-from .jmap import JMAPCall, JMAPCallIdentityGet, JMAPSession
+from . import jmap
 
-__all__ = [
-    "JMAPCall",
-    "JMAPSession",
-    "JMAPCallIdentityGet",
-]
+__all__ = ["jmap"]

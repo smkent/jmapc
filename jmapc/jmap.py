@@ -1,36 +1,32 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import requests
 
 from . import constants
 from .config import Config
-from .types import JMAPCall, JMAPSession
+from .types.jmap import (
+    JMAPIdentityGetResponse,
+    JMAPMethod,
+    JMAPResponse,
+    JMAPSession,
+)
+
+JMAPMethodPair = Tuple[str, JMAPMethod]
+JMAPMethodResponsePair = Tuple[str, JMAPResponse]
 
 
 class JMAP(object):
-    @dataclass
-    class JMAPQueuedCalls:
-        using: set[str] = field(
-            default_factory=lambda: set([constants.JMAP_URN_CORE])
-        )
-        calls: list[tuple[str, JMAPCall]] = field(default_factory=list)
-
-        def add(self, call: JMAPCall) -> None:
-            self.using |= call.using
-            self.calls.append((str(len(self.calls)), call))
-
-        def reset(self) -> None:
-            self.using = set([constants.JMAP_URN_CORE])
-            self.calls = list()
+    METHOD_RESPONSES = {
+        "Identity/get": JMAPIdentityGetResponse,
+    }
+    METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 
     def __init__(self) -> None:
         self._config = Config()
         self._session: Optional[JMAPSession] = None
-        self._queued = self.JMAPQueuedCalls()
 
     @property
     def session(self) -> JMAPSession:
@@ -51,21 +47,47 @@ class JMAP(object):
     def account_id(self) -> str:
         return self.session.primary_accounts.mail
 
-    def queue_call(self, call: JMAPCall) -> None:
-        self._queued.add(call)
-
-    def exec_calls(self) -> Any:
-        return self.api_call(
+    def call_method(self, call: JMAPMethod) -> Any:
+        using = list(set([constants.JMAP_URN_CORE]).union(call.using))
+        result = self._api_call(
             {
-                "using": list(self._queued.using),
+                "using": using,
+                "methodCalls": [[call.name, call.to_dict(), "uno"]],
+            },
+        )
+        return result[0][1]
+
+    def call_methods(self, calls: list[JMAPMethodPair]) -> Any:
+        using = list(
+            set([constants.JMAP_URN_CORE]).union(*[c[1].using for c in calls])
+        )
+        return self._api_call(
+            {
+                "using": using,
                 "methodCalls": [
-                    [call[1].name, call[1].to_dict(), call[0]]
-                    for call in self._queued.calls
+                    [c[1].name, c[1].to_dict(), c[0]] for c in calls
                 ],
             },
         )
 
-    def api_call(self, call: Any) -> Any:
+    def _parse_responses(
+        self, data: dict[str, Any]
+    ) -> list[JMAPMethodResponsePair]:
+        method_responses = cast(
+            List[JMAP.METHOD_RESPONSES_TYPE],
+            data.get("methodResponses", []),
+        )
+        responses: list[JMAPMethodResponsePair] = []
+        for name, response, method_id in method_responses:
+            responses.append(
+                (
+                    method_id,
+                    self.METHOD_RESPONSES[name].from_dict(response),
+                )
+            )
+        return responses
+
+    def _api_call(self, call: Any) -> Any:
         r = requests.post(
             self.session.api_url,
             auth=(self._config.username, self._config.password),
@@ -73,4 +95,4 @@ class JMAP(object):
             data=json.dumps(call),
         )
         r.raise_for_status()
-        return r.json()
+        return self._parse_responses(r.json())
