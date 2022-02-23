@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, cast
+from typing import Any, Dict, List, Optional, Tuple, Type, cast
 
 import requests
 
@@ -16,6 +16,7 @@ from .types.jmap import (
     JMAPMethod,
     JMAPResponse,
     JMAPSession,
+    JMAPThreadGetResponse,
 )
 
 JMAPMethodPair = Tuple[str, JMAPMethod]
@@ -23,12 +24,13 @@ JMAPMethodResponsePair = Tuple[str, JMAPResponse]
 
 
 class JMAP(object):
-    METHOD_RESPONSES = {
-        "Identity/get": JMAPIdentityGetResponse,
+    METHOD_RESPONSES: Dict[str, Type[JMAPResponse]] = {
         "Email/get": JMAPEmailGetResponse,
         "Email/query": JMAPEmailQueryResponse,
+        "Identity/get": JMAPIdentityGetResponse,
         "Mailbox/get": JMAPMailboxGetResponse,
         "Mailbox/query": JMAPMailboxQueryResponse,
+        "Thread/get": JMAPThreadGetResponse,
     }
     METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 

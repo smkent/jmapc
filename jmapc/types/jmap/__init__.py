@@ -14,7 +14,15 @@ from .methods_mailbox import (
     JMAPMailboxQueryFilter,
     JMAPMailboxQueryResponse,
 )
-from .models import JMAPEmail, JMAPIdentity, JMAPIdentityBCC, JMAPMailbox
+from .methods_thread import JMAPThreadGet, JMAPThreadGetResponse
+from .models import (
+    JMAPEmail,
+    JMAPIdentity,
+    JMAPIdentityBCC,
+    JMAPMailbox,
+    JMAPThread,
+    JMAPThreadEmail,
+)
 from .session import JMAPSession
 
 __all__ = [
@@ -37,4 +45,8 @@ __all__ = [
     "JMAPMethod",
     "JMAPResponse",
     "JMAPSession",
+    "JMAPThread",
+    "JMAPThreadEmail",
+    "JMAPThreadGet",
+    "JMAPThreadGetResponse",
 ]

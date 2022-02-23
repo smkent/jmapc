@@ -55,3 +55,20 @@ class JMAPEmail(JsonDataClass):
     to: List[str]
     subject: str
     size: int
+
+
+@dataclass
+class JMAPThread(JsonDataClass):
+    def __len__(self) -> int:
+        return len(self.email_ids)
+
+    id: str
+    email_ids: List[str]
+
+
+@dataclass
+class JMAPThreadEmail(JsonDataClass):
+    id: str
+    mailbox_ids: List[str]
+    is_unread: bool
+    is_flagged: bool
