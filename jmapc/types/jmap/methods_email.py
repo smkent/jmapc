@@ -45,6 +45,12 @@ class JMAPEmailGet(JMAPMethod):
         return set([constants.JMAP_URN_MAIL])
 
     ids: List[str]
+    properties: Optional[List[str]] = None
+    body_properties: Optional[List[str]] = None
+    fetch_text_body_values: Optional[bool] = None
+    fetch_html_body_values: Optional[bool] = None
+    fetch_all_body_values: Optional[bool] = None
+    max_body_value_bytes: Optional[int] = None
 
 
 @dataclass
