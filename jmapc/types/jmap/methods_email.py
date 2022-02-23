@@ -22,6 +22,7 @@ class JMAPEmailQuery(JMAPMethod):
         return set([constants.JMAP_URN_MAIL])
 
     filter: Optional[JMAPEmailQueryFilter]
+    collapse_threads: Optional[bool]
 
 
 @dataclass
