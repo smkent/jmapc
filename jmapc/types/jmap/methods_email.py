@@ -3,9 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from dataclasses_json import DataClassJsonMixin, config
+from dataclasses_json import config
 
 from ... import constants
+from ..util import JsonDataClass
 from .methods import JMAPMethod, JMAPResponse
 from .models import JMAPEmail
 
@@ -29,8 +30,8 @@ class JMAPEmailQueryResponse(JMAPResponse):
 
 
 @dataclass
-class JMAPEmailQueryFilter(DataClassJsonMixin):
-    in_mailbox: str = field(metadata=config(field_name="inMailbox"))
+class JMAPEmailQueryFilter(JsonDataClass):
+    in_mailbox: str
 
 
 @dataclass

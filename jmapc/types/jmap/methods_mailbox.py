@@ -3,9 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from dataclasses_json import DataClassJsonMixin, config
+from dataclasses_json import config
 
 from ... import constants
+from ..util import JsonDataClass
 from .methods import JMAPMethod, JMAPResponse
 from .models import JMAPMailbox
 
@@ -29,12 +30,10 @@ class JMAPMailboxQueryResponse(JMAPResponse):
 
 
 @dataclass
-class JMAPMailboxQueryFilter(DataClassJsonMixin):
+class JMAPMailboxQueryFilter(JsonDataClass):
     name: Optional[str] = None
     role: Optional[str] = None
-    parent_id: Optional[str] = field(
-        metadata=config(field_name="parentId"), default=None
-    )
+    parent_id: Optional[str] = None
 
 
 @dataclass

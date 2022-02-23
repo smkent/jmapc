@@ -3,11 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from dataclasses_json import DataClassJsonMixin, config
+from dataclasses_json import config
+
+from ..util import JsonDataClass
 
 
 @dataclass
-class JMAPIdentity(DataClassJsonMixin):
+class JMAPIdentity(JsonDataClass):
     id: str
     name: str
     email: str
@@ -19,13 +21,13 @@ class JMAPIdentity(DataClassJsonMixin):
 
 
 @dataclass
-class JMAPIdentityBCC(DataClassJsonMixin):
+class JMAPIdentityBCC(JsonDataClass):
     name: Optional[str]
     email: str
 
 
 @dataclass
-class JMAPMailbox(DataClassJsonMixin):
+class JMAPMailbox(JsonDataClass):
     id: str = field(metadata=config(field_name="Id"))
     name: str
     sort_order: int = field(metadata=config(field_name="sortOrder"))
@@ -41,7 +43,7 @@ class JMAPMailbox(DataClassJsonMixin):
 
 
 @dataclass
-class JMAPEmail(DataClassJsonMixin):
+class JMAPEmail(JsonDataClass):
     id: str = field(metadata=config(field_name="Id"))
     blob_id: str = field(metadata=config(field_name="blobId"))
     thread_id: str = field(metadata=config(field_name="threadId"))
