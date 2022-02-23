@@ -83,7 +83,7 @@ def test_identity_get(
             },
         ),
     )
-    resp = jmap.call_methods([("0", JMAPIdentityGet(account_id="u1138"))])
+    resp = jmap.call_methods([("0", JMAPIdentityGet())])
     assert resp == [
         (
             "0",

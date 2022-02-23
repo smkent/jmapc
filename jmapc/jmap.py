@@ -60,7 +60,13 @@ class JMAP(object):
         result = self._api_call(
             {
                 "using": using,
-                "methodCalls": [[call.name, call.to_dict(), "uno"]],
+                "methodCalls": [
+                    [
+                        call.name,
+                        call.to_dict(account_id=self.account_id),
+                        "uno",
+                    ]
+                ],
             },
         )
         return result[0][1]
@@ -73,7 +79,8 @@ class JMAP(object):
             {
                 "using": using,
                 "methodCalls": [
-                    [c[1].name, c[1].to_dict(), c[0]] for c in calls
+                    [c[1].name, c[1].to_dict(account_id=self.account_id), c[0]]
+                    for c in calls
                 ],
             },
         )

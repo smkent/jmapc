@@ -1,17 +1,24 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+from typing import Optional
 
 from ..util import JsonDataClass
 
 
 @dataclass
 class JMAPMethodBase(JsonDataClass):
-    account_id: str
+    pass
 
 
-class JMAPMethod(JMAPMethodBase):
+@dataclass
+class JMAPMethodAccountID(JMAPMethodBase):
+    account_id: Optional[str] = field(init=False, default=None)
+
+
+class JMAPMethod(JMAPMethodAccountID):
     @property
     @abstractmethod
     def name(self) -> str:
@@ -23,5 +30,6 @@ class JMAPMethod(JMAPMethodBase):
         pass
 
 
+@dataclass
 class JMAPResponse(JMAPMethodBase):
-    pass
+    account_id: Optional[str]
