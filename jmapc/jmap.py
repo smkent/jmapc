@@ -9,6 +9,8 @@ from . import constants
 from .config import Config
 from .types.jmap import (
     JMAPIdentityGetResponse,
+    JMAPMailboxGetResponse,
+    JMAPMailboxQueryResponse,
     JMAPMethod,
     JMAPResponse,
     JMAPSession,
@@ -21,6 +23,8 @@ JMAPMethodResponsePair = Tuple[str, JMAPResponse]
 class JMAP(object):
     METHOD_RESPONSES = {
         "Identity/get": JMAPIdentityGetResponse,
+        "Mailbox/get": JMAPMailboxGetResponse,
+        "Mailbox/query": JMAPMailboxQueryResponse,
     }
     METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 

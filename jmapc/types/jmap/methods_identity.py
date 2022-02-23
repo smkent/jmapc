@@ -1,24 +1,26 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List, Optional
+from dataclasses import dataclass, field
+from typing import List
 
-from dataclasses_json import DataClassJsonMixin
+from dataclasses_json import config
 
-
-@dataclass
-class JMAPIdentity(DataClassJsonMixin):
-    id: str
-    name: str
-    email: str
-    replyTo: Optional[str]
-    bcc: Optional[List[JMAPIdentityBCC]]
-    textSignature: Optional[str]
-    htmlSignature: Optional[str]
-    mayDelete: bool
+from ... import constants
+from .methods import JMAPMethod, JMAPResponse
+from .models import JMAPIdentity
 
 
 @dataclass
-class JMAPIdentityBCC(DataClassJsonMixin):
-    name: Optional[str]
-    email: str
+class JMAPIdentityGet(JMAPMethod):
+    @property
+    def name(self) -> str:
+        return "Identity/get"
+
+    @property
+    def using(self) -> set[str]:
+        return set([constants.JMAP_URN_SUBMISSION])
+
+
+@dataclass
+class JMAPIdentityGetResponse(JMAPResponse):
+    data: List[JMAPIdentity] = field(metadata=config(field_name="list"))
