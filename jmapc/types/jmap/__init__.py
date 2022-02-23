@@ -1,4 +1,11 @@
 from .methods import JMAPMethod, JMAPResponse
+from .methods_email import (
+    JMAPEmailGet,
+    JMAPEmailGetResponse,
+    JMAPEmailQuery,
+    JMAPEmailQueryFilter,
+    JMAPEmailQueryResponse,
+)
 from .methods_identity import JMAPIdentityGet, JMAPIdentityGetResponse
 from .methods_mailbox import (
     JMAPMailboxGet,
@@ -7,10 +14,16 @@ from .methods_mailbox import (
     JMAPMailboxQueryFilter,
     JMAPMailboxQueryResponse,
 )
-from .models import JMAPIdentity, JMAPIdentityBCC, JMAPMailbox
+from .models import JMAPEmail, JMAPIdentity, JMAPIdentityBCC, JMAPMailbox
 from .session import JMAPSession
 
 __all__ = [
+    "JMAPEmail",
+    "JMAPEmailGet",
+    "JMAPEmailGetResponse",
+    "JMAPEmailQuery",
+    "JMAPEmailQueryFilter",
+    "JMAPEmailQueryResponse",
     "JMAPIdentity",
     "JMAPIdentityBCC",
     "JMAPIdentityGet",

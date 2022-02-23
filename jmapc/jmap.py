@@ -8,6 +8,8 @@ import requests
 from . import constants
 from .config import Config
 from .types.jmap import (
+    JMAPEmailGetResponse,
+    JMAPEmailQueryResponse,
     JMAPIdentityGetResponse,
     JMAPMailboxGetResponse,
     JMAPMailboxQueryResponse,
@@ -23,6 +25,8 @@ JMAPMethodResponsePair = Tuple[str, JMAPResponse]
 class JMAP(object):
     METHOD_RESPONSES = {
         "Identity/get": JMAPIdentityGetResponse,
+        "Email/get": JMAPEmailGetResponse,
+        "Email/query": JMAPEmailQueryResponse,
         "Mailbox/get": JMAPMailboxGetResponse,
         "Mailbox/query": JMAPMailboxQueryResponse,
     }
