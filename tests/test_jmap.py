@@ -76,6 +76,8 @@ def test_identity_get(
                                     "textSignature": "",
                                 },
                             ],
+                            "not_found": [],
+                            "state": "2187",
                         },
                         "0",
                     ],
@@ -83,12 +85,14 @@ def test_identity_get(
             },
         ),
     )
-    resp = jmap.call_methods([("0", JMAPIdentityGet())])
+    resp = jmap.call_methods([("0", JMAPIdentityGet(ids=None))])
     assert resp == [
         (
             "0",
             JMAPIdentityGetResponse(
                 account_id="u1138",
+                state="2187",
+                not_found=[],
                 data=[
                     JMAPIdentity(
                         id="0001",

@@ -1,6 +1,6 @@
-import dataclasses_json
+from typing import Any, Dict, Optional
 
-from typing import Optional, Dict, Any
+import dataclasses_json
 
 
 class JsonDataClass(dataclasses_json.DataClassJsonMixin):

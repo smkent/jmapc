@@ -6,12 +6,12 @@ from typing import List
 from dataclasses_json import config
 
 from ... import constants
-from .methods import JMAPMethod, JMAPResponse
+from .methods import JMAPGet, JMAPGetResponse
 from .models import JMAPThread
 
 
 @dataclass
-class JMAPThreadGet(JMAPMethod):
+class JMAPThreadGet(JMAPGet):
     @property
     def name(self) -> str:
         return "Thread/get"
@@ -20,9 +20,7 @@ class JMAPThreadGet(JMAPMethod):
     def using(self) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
-    ids: List[str]
-
 
 @dataclass
-class JMAPThreadGetResponse(JMAPResponse):
+class JMAPThreadGetResponse(JMAPGetResponse):
     data: List[JMAPThread] = field(metadata=config(field_name="list"))

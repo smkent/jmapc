@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Literal, Optional, Union
 
 from dataclasses_json import config
 
@@ -72,3 +72,23 @@ class JMAPThreadEmail(JsonDataClass):
     mailbox_ids: List[str]
     is_unread: bool
     is_flagged: bool
+
+
+@dataclass
+class JMAPComparator(JsonDataClass):
+    property: str
+    is_ascending: bool = True
+    collation: Optional[str] = None
+    anchor: Optional[str] = None
+    anchor_offset: int = 0
+    limit: Optional[int] = None
+    calculate_total: bool = False
+    position: int = 0
+
+
+@dataclass
+class JMAPFilterOperator(JsonDataClass):
+    operator: Union[Literal["AND"], Literal["OR"], Literal["NOT"]]
+
+
+JMAPOperatorLiteral = Union[Literal["AND"], Literal["OR"], Literal["NOT"]]

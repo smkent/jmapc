@@ -4,6 +4,8 @@ from .methods_email import (
     JMAPEmailGetResponse,
     JMAPEmailQuery,
     JMAPEmailQueryFilter,
+    JMAPEmailQueryFilterCondition,
+    JMAPEmailQueryFilterOperator,
     JMAPEmailQueryResponse,
 )
 from .methods_identity import JMAPIdentityGet, JMAPIdentityGetResponse
@@ -12,10 +14,13 @@ from .methods_mailbox import (
     JMAPMailboxGetResponse,
     JMAPMailboxQuery,
     JMAPMailboxQueryFilter,
+    JMAPMailboxQueryFilterCondition,
+    JMAPMailboxQueryFilterOperator,
     JMAPMailboxQueryResponse,
 )
 from .methods_thread import JMAPThreadGet, JMAPThreadGetResponse
 from .models import (
+    JMAPComparator,
     JMAPEmail,
     JMAPIdentity,
     JMAPIdentityBCC,
@@ -26,11 +31,14 @@ from .models import (
 from .session import JMAPSession
 
 __all__ = [
+    "JMAPComparator",
     "JMAPEmail",
     "JMAPEmailGet",
     "JMAPEmailGetResponse",
     "JMAPEmailQuery",
     "JMAPEmailQueryFilter",
+    "JMAPEmailQueryFilterCondition",
+    "JMAPEmailQueryFilterOperator",
     "JMAPEmailQueryResponse",
     "JMAPIdentity",
     "JMAPIdentityBCC",
@@ -41,6 +49,8 @@ __all__ = [
     "JMAPMailboxGetResponse",
     "JMAPMailboxQuery",
     "JMAPMailboxQueryFilter",
+    "JMAPMailboxQueryFilterCondition",
+    "JMAPMailboxQueryFilterOperator",
     "JMAPMailboxQueryResponse",
     "JMAPMethod",
     "JMAPResponse",

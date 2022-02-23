@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from dataclasses_json import config
 
 from ... import constants
 from ..util import JsonDataClass
-from .methods import JMAPMethod, JMAPResponse
-from .models import JMAPEmail
+from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
+from .models import JMAPEmail, JMAPOperatorLiteral
 
 
 @dataclass
-class JMAPEmailQuery(JMAPMethod):
+class JMAPEmailQuery(JMAPQuery):
     @property
     def name(self) -> str:
         return "Email/query"
@@ -21,22 +21,33 @@ class JMAPEmailQuery(JMAPMethod):
     def using(self) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
-    filter: Optional[JMAPEmailQueryFilter]
-    collapse_threads: Optional[bool]
+    filter: Optional[JMAPEmailQueryFilter] = None
+    collapse_threads: Optional[bool] = None
 
 
 @dataclass
-class JMAPEmailQueryResponse(JMAPResponse):
+class JMAPEmailQueryResponse(JMAPQueryResponse):
     ids: List[str]
 
 
 @dataclass
-class JMAPEmailQueryFilter(JsonDataClass):
-    in_mailbox: str
+class JMAPEmailQueryFilterCondition(JsonDataClass):
+    in_mailbox: Optional[str]
 
 
 @dataclass
-class JMAPEmailGet(JMAPMethod):
+class JMAPEmailQueryFilterOperator(JsonDataClass):
+    operator: JMAPOperatorLiteral
+    conditions: List[JMAPEmailQueryFilter]
+
+
+JMAPEmailQueryFilter = Union[
+    JMAPEmailQueryFilterCondition, JMAPEmailQueryFilterOperator
+]
+
+
+@dataclass
+class JMAPEmailGet(JMAPGet):
     @property
     def name(self) -> str:
         return "Email/get"
@@ -45,8 +56,6 @@ class JMAPEmailGet(JMAPMethod):
     def using(self) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
-    ids: List[str]
-    properties: Optional[List[str]] = None
     body_properties: Optional[List[str]] = None
     fetch_text_body_values: Optional[bool] = None
     fetch_html_body_values: Optional[bool] = None
@@ -55,5 +64,5 @@ class JMAPEmailGet(JMAPMethod):
 
 
 @dataclass
-class JMAPEmailGetResponse(JMAPResponse):
+class JMAPEmailGetResponse(JMAPGetResponse):
     data: List[JMAPEmail] = field(metadata=config(field_name="list"))

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import List, Optional
 
 from ..util import JsonDataClass
+from .models import JMAPComparator
 
 
 @dataclass
@@ -19,16 +19,36 @@ class JMAPMethodAccountID(JMAPMethodBase):
 
 class JMAPMethod(JMAPMethodAccountID):
     @property
-    @abstractmethod
     def name(self) -> str:
-        pass
+        raise NotImplementedError
 
     @property
-    @abstractmethod
     def using(self) -> set[str]:
-        pass
+        raise NotImplementedError
 
 
 @dataclass
 class JMAPResponse(JMAPMethodBase):
     account_id: Optional[str]
+
+
+@dataclass
+class JMAPGet(JMAPMethod):
+    ids: Optional[List[str]]
+    properties: Optional[List[str]] = None
+
+
+@dataclass
+class JMAPGetResponse(JMAPResponse):
+    state: str
+    not_found: List[str]
+
+
+@dataclass
+class JMAPQuery(JMAPMethod):
+    sort: Optional[List[JMAPComparator]] = None
+
+
+@dataclass
+class JMAPQueryResponse(JMAPResponse):
+    pass

@@ -6,12 +6,12 @@ from typing import List
 from dataclasses_json import config
 
 from ... import constants
-from .methods import JMAPMethod, JMAPResponse
+from .methods import JMAPGet, JMAPGetResponse
 from .models import JMAPIdentity
 
 
 @dataclass
-class JMAPIdentityGet(JMAPMethod):
+class JMAPIdentityGet(JMAPGet):
     @property
     def name(self) -> str:
         return "Identity/get"
@@ -22,5 +22,5 @@ class JMAPIdentityGet(JMAPMethod):
 
 
 @dataclass
-class JMAPIdentityGetResponse(JMAPResponse):
+class JMAPIdentityGetResponse(JMAPGetResponse):
     data: List[JMAPIdentity] = field(metadata=config(field_name="list"))
