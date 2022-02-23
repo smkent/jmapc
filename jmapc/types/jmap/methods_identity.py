@@ -12,12 +12,12 @@ from .models import JMAPIdentity
 
 @dataclass
 class JMAPIdentityGet(JMAPGet):
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         return "Identity/get"
 
-    @property
-    def using(self) -> set[str]:
+    @classmethod
+    def using(cls) -> set[str]:
         return set([constants.JMAP_URN_SUBMISSION])
 
 

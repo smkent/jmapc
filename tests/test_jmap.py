@@ -11,6 +11,7 @@ from jmapc.types.jmap import (
     JMAPIdentity,
     JMAPIdentityGet,
     JMAPIdentityGetResponse,
+    JMAPResultReference,
 )
 
 
@@ -85,7 +86,21 @@ def test_identity_get(
             },
         ),
     )
-    resp = jmap.call_methods([("0", JMAPIdentityGet(ids=None))])
+    resp = jmap.call_methods(
+        [
+            ("0", JMAPIdentityGet(ids=None)),
+            (
+                "1",
+                JMAPIdentityGet(
+                    ids=JMAPResultReference(
+                        name=JMAPIdentityGet.name(),
+                        path="/ids",
+                        result_of="0",
+                    )
+                ),
+            ),
+        ]
+    )
     assert resp == [
         (
             "0",

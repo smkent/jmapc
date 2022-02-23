@@ -8,17 +8,17 @@ from dataclasses_json import config
 from ... import constants
 from ..util import JsonDataClass
 from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
-from .models import JMAPEmail, JMAPOperatorLiteral
+from .models import JMAPEmail, JMAPList, JMAPOperatorLiteral, JMAPStr
 
 
 @dataclass
 class JMAPEmailQuery(JMAPQuery):
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         return "Email/query"
 
-    @property
-    def using(self) -> set[str]:
+    @classmethod
+    def using(cls) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
     filter: Optional[JMAPEmailQueryFilter] = None
@@ -27,12 +27,12 @@ class JMAPEmailQuery(JMAPQuery):
 
 @dataclass
 class JMAPEmailQueryResponse(JMAPQueryResponse):
-    ids: List[str]
+    ids: JMAPList[str]
 
 
 @dataclass
 class JMAPEmailQueryFilterCondition(JsonDataClass):
-    in_mailbox: Optional[str]
+    in_mailbox: Optional[JMAPStr]
 
 
 @dataclass
@@ -48,12 +48,12 @@ JMAPEmailQueryFilter = Union[
 
 @dataclass
 class JMAPEmailGet(JMAPGet):
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         return "Email/get"
 
-    @property
-    def using(self) -> set[str]:
+    @classmethod
+    def using(cls) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
     body_properties: Optional[List[str]] = None

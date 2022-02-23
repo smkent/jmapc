@@ -58,13 +58,13 @@ class JMAP(object):
         return self.session.primary_accounts.mail
 
     def call_method(self, call: JMAPMethod) -> Any:
-        using = list(set([constants.JMAP_URN_CORE]).union(call.using))
+        using = list(set([constants.JMAP_URN_CORE]).union(call.using()))
         result = self._api_call(
             {
                 "using": using,
                 "methodCalls": [
                     [
-                        call.name,
+                        call.name(),
                         call.to_dict(account_id=self.account_id),
                         "uno",
                     ]
@@ -75,13 +75,19 @@ class JMAP(object):
 
     def call_methods(self, calls: list[JMAPMethodPair]) -> Any:
         using = list(
-            set([constants.JMAP_URN_CORE]).union(*[c[1].using for c in calls])
+            set([constants.JMAP_URN_CORE]).union(
+                *[c[1].using() for c in calls]
+            )
         )
         return self._api_call(
             {
                 "using": using,
                 "methodCalls": [
-                    [c[1].name, c[1].to_dict(account_id=self.account_id), c[0]]
+                    [
+                        c[1].name(),
+                        c[1].to_dict(account_id=self.account_id),
+                        c[0],
+                    ]
                     for c in calls
                 ],
             },

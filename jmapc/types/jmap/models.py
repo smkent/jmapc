@@ -1,11 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Literal, Optional, Union
+from typing import Dict, List, Literal, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
-from ..util import JsonDataClass
+from ..util import JMAPResultReference, JsonDataClass
+
+T = TypeVar("T")
+
+
+JMAPStr = Union[str, JMAPResultReference]
+JMAPList = Union[JMAPResultReference, List[T]]
 
 
 @dataclass

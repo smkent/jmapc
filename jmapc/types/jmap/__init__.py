@@ -25,6 +25,7 @@ from .models import (
     JMAPIdentity,
     JMAPIdentityBCC,
     JMAPMailbox,
+    JMAPResultReference,
     JMAPThread,
     JMAPThreadEmail,
 )
@@ -54,6 +55,7 @@ __all__ = [
     "JMAPMailboxQueryResponse",
     "JMAPMethod",
     "JMAPResponse",
+    "JMAPResultReference",
     "JMAPSession",
     "JMAPThread",
     "JMAPThreadEmail",

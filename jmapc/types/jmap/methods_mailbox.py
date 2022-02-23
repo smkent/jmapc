@@ -8,17 +8,17 @@ from dataclasses_json import config
 from ... import constants
 from ..util import JsonDataClass
 from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
-from .models import JMAPMailbox, JMAPOperatorLiteral
+from .models import JMAPList, JMAPMailbox, JMAPOperatorLiteral, JMAPStr
 
 
 @dataclass
 class JMAPMailboxQuery(JMAPQuery):
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         return "Mailbox/query"
 
-    @property
-    def using(self) -> set[str]:
+    @classmethod
+    def using(cls) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
     filter: Optional[JMAPMailboxQueryFilter] = None
@@ -26,14 +26,14 @@ class JMAPMailboxQuery(JMAPQuery):
 
 @dataclass
 class JMAPMailboxQueryResponse(JMAPQueryResponse):
-    ids: List[str]
+    ids: JMAPList[str]
 
 
 @dataclass
 class JMAPMailboxQueryFilterCondition(JsonDataClass):
-    name: Optional[str] = None
-    role: Optional[str] = None
-    parent_id: Optional[str] = None
+    name: Optional[JMAPStr] = None
+    role: Optional[JMAPStr] = None
+    parent_id: Optional[JMAPStr] = None
 
 
 @dataclass
@@ -49,12 +49,12 @@ JMAPMailboxQueryFilter = Union[
 
 @dataclass
 class JMAPMailboxGet(JMAPGet):
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         return "Mailbox/get"
 
-    @property
-    def using(self) -> set[str]:
+    @classmethod
+    def using(cls) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
 

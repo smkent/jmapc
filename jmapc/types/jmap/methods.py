@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 from ..util import JsonDataClass
-from .models import JMAPComparator
+from .models import JMAPComparator, JMAPList
 
 
 @dataclass
@@ -18,12 +18,12 @@ class JMAPMethodAccountID(JMAPMethodBase):
 
 
 class JMAPMethod(JMAPMethodAccountID):
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         raise NotImplementedError
 
-    @property
-    def using(self) -> set[str]:
+    @classmethod
+    def using(cls) -> set[str]:
         raise NotImplementedError
 
 
@@ -34,7 +34,7 @@ class JMAPResponse(JMAPMethodBase):
 
 @dataclass
 class JMAPGet(JMAPMethod):
-    ids: Optional[List[str]]
+    ids: Optional[JMAPList[str]]
     properties: Optional[List[str]] = None
 
 
