@@ -47,3 +47,6 @@ test:
 lint:
 	$(PIPENV) run isort -- $(SOURCE_DIRS)
 	$(PIPENV) run black $(BLACK_ARGS) -- $(SOURCE_DIRS)
+
+.PHONY: ci
+ci: test-full
