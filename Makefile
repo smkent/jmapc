@@ -27,6 +27,10 @@ test-full: testdeps test
 my:
 	$(PIPENV) run mypy
 
+.PHONY: rm
+rm:
+	$(PIPENV) --rm
+
 .PHONY: test
 test:
 	$(PIPENV) run flake8 -- .
