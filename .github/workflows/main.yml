@@ -47,7 +47,7 @@ jobs:
           skip_existing: true
 
       # - name: 📦 Upload to PyPI to PyPI
-      #   if: startsWith(github.ref, 'refs/tags')
+      #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       #   uses: pypa/gh-action-pypi-publish@master
       #   with:
       #     password: ${{ secrets.PYPI_API_TOKEN }}

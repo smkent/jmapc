@@ -7,6 +7,7 @@ url = "https://pypi.python.org/simple"
 dataclasses-json = "*"
 python-dateutil = "*"
 requests = "*"
+setuptools_scm = "*"
 
 [dev-packages]
 build = "*"
