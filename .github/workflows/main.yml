@@ -34,7 +34,7 @@ jobs:
       - name: "Test"
         run: make test
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          fail_ci_if_error: true

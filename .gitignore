@@ -6,3 +6,4 @@
 .venv/
 bin/
 dist/
+coverage.xml
