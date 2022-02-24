@@ -31,6 +31,10 @@ my:
 rm:
 	$(PIPENV) --rm
 
+.PHONY: sync
+sync:
+	$(PIPENV) run pipenv-setup sync --pipfile
+
 .PHONY: test
 test:
 	$(PIPENV) run flake8 -- .

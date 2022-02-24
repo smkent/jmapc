@@ -22,7 +22,7 @@ setup(
     name="jmapc",
     version="0.0.1",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=["dataclasses-json", "python-dateutil", "requests"],
     entry_points=dict(console_scripts=[]),
     tests_require=["tox"],
     cmdclass=dict(test=Tox),
