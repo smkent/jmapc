@@ -9,6 +9,7 @@ python-dateutil = "*"
 requests = "*"
 
 [dev-packages]
+build = "*"
 black = "*"
 flake8 = "*"
 isort = "*"
