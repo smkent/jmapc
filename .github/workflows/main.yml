@@ -27,5 +27,8 @@ jobs:
       - name: "Install dependencies"
         run: python -m pip install --upgrade pip pipenv
 
+      - name: "Build"
+        run: make
+
       - name: "Test"
-        run: make ci
+        run: make test

@@ -1,12 +1,16 @@
 # jmapc
 
-## Repository setup
-
+## Create virtualenv and install dependencies
 ```sh
 make
 ```
 
-## Run unit tests and test code style
+## Run all tests
 ```sh
 make test
+```
+
+## Update or install new dependencies
+```sh
+make update
 ```
