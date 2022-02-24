@@ -26,6 +26,10 @@ update:
 my:
 	$(PIPENV) run mypy
 
+.PHONY: ci
+test-ci:
+	$(PIPENV) run tox
+
 .PHONY: test
 test:
 	$(PIPENV) run flake8 -- .
