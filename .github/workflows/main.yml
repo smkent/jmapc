@@ -10,8 +10,6 @@ jobs:
   tests:
     name: "Python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
-    env:
-      USING_COVERAGE: '3.6,3.8'
 
     strategy:
       matrix:
