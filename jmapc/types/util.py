@@ -1,7 +1,21 @@
 from dataclasses import dataclass, fields
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 import dataclasses_json
+import dateutil.parser
+
+
+def datetime_encode(dt: Optional[datetime]) -> Optional[str]:
+    if not dt:
+        return None
+    return f"{dt.replace(tzinfo=None).isoformat()}Z"
+
+
+def datetime_decode(value: Optional[str]) -> Optional[datetime]:
+    if not value:
+        return None
+    return dateutil.parser.isoparse(value)
 
 
 @dataclass
@@ -26,20 +40,21 @@ class JsonDataClass(dataclasses_json.DataClassJsonMixin):
     ) -> Dict[str, dataclasses_json.core.Json]:
         for k in [key for key in data.keys() if not key.startswith("#")]:
             v = data[k]
-            if isinstance(v, dict) and len(v.keys()) == len(
-                fields(JMAPResultReference)
-            ):
-                try:
-                    JMAPResultReference.from_dict(v)
-                    new_key = f"#{k}"
-                    if new_key in data:
-                        raise Exception(
-                            f"Reference key {new_key} already exists"
-                        )
-                    data[new_key] = v
-                    del data[k]
-                except KeyError:
-                    pass
+            if isinstance(v, dict):
+                if len(v.keys()) == len(fields(JMAPResultReference)):
+                    try:
+                        JMAPResultReference.from_dict(v)
+                        new_key = f"#{k}"
+                        if new_key in data:
+                            raise Exception(
+                                f"Reference key {new_key} already exists"
+                            )
+                        data[new_key] = v
+                        del data[k]
+                        continue
+                    except KeyError:
+                        pass
+                data[k] = self._fix_refs(v)
         return data
 
     def to_dict(

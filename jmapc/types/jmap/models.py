@@ -1,11 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Dict, List, Literal, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
-from ..util import JMAPResultReference, JsonDataClass
+from ..util import (
+    JMAPResultReference,
+    JsonDataClass,
+    datetime_decode,
+    datetime_encode,
+)
 
 T = TypeVar("T")
 
@@ -51,16 +57,72 @@ class JMAPMailbox(JsonDataClass):
 @dataclass
 class JMAPEmail(JsonDataClass):
     id: str = field(metadata=config(field_name="Id"))
-    blob_id: str = field(metadata=config(field_name="blobId"))
-    thread_id: str = field(metadata=config(field_name="threadId"))
-    mailboxIds: Dict[str, bool] = field(
-        metadata=config(field_name="mailboxIds")
+    blob_id: Optional[str] = None
+    thread_id: Optional[str] = None
+    mailbox_ids: Optional[Dict[str, bool]] = None
+    keywords: Optional[Dict[str, bool]] = None
+    size: Optional[int] = None
+    received_at: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
-    keywords: Dict[str, bool]
-    mail_from: List[str] = field(metadata=config(field_name="from"))
-    to: List[str]
-    subject: str
-    size: int
+    message_id: Optional[List[str]] = None
+    in_reply_to: Optional[List[str]] = None
+    references: Optional[List[str]] = None
+    headers: Optional[List[JMAPEmailHeader]] = None
+    mail_from: Optional[List[JMAPEmailAddress]] = field(
+        metadata=config(field_name="from"), default=None
+    )
+    to: Optional[List[JMAPEmailAddress]] = None
+    cc: Optional[List[JMAPEmailAddress]] = None
+    bcc: Optional[List[JMAPEmailAddress]] = None
+    subject: Optional[str] = None
+    sent_at: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+    body_structure: Optional[JMAPEmailBodyPart] = None
+    body_values: Optional[Dict[str, JMAPEmailBodyValue]] = None
+    text_body: Optional[List[JMAPEmailBodyPart]] = None
+    html_body: Optional[List[JMAPEmailBodyPart]] = None
+    attachments: Optional[List[JMAPEmailBodyPart]] = None
+    has_attachment: Optional[bool] = None
+    preview: Optional[str] = None
+
+
+@dataclass
+class JMAPEmailAddress(JsonDataClass):
+    name: Optional[str] = None
+    email: Optional[str] = None
+
+
+@dataclass
+class JMAPEmailHeader(JsonDataClass):
+    name: Optional[str] = None
+    value: Optional[str] = None
+
+
+@dataclass
+class JMAPEmailBodyPart(JsonDataClass):
+    part_id: Optional[str] = None
+    blob_id: Optional[str] = None
+    size: Optional[int] = None
+    headers: Optional[List[JMAPEmailHeader]] = None
+    name: Optional[str] = None
+    type: Optional[str] = None
+    charset: Optional[str] = None
+    disposition: Optional[str] = None
+    cid: Optional[str] = None
+    language: Optional[List[str]] = None
+    location: Optional[str] = None
+    sub_parts: Optional[List[JMAPEmailBodyPart]] = None
+
+
+@dataclass
+class JMAPEmailBodyValue(JsonDataClass):
+    value: Optional[str] = None
+    is_encoding_problem: Optional[bool] = None
+    is_truncated: Optional[bool] = None
 
 
 @dataclass

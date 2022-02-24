@@ -5,6 +5,7 @@ url = "https://pypi.python.org/simple"
 
 [packages]
 dataclasses-json = "*"
+python-dateutil = "*"
 requests = "*"
 
 [dev-packages]
@@ -16,3 +17,4 @@ pytest = "*"
 pytest-cov = "*"
 pytest-sugar = "*"
 responses = "*"
+types-python-dateutil = "*"
