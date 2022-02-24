@@ -40,7 +40,7 @@ jobs:
           fail_ci_if_error: true
 
       - name: "Dist"
-        run: make test
+        run: make dist
 
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
