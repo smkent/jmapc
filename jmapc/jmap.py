@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, Type, cast
+from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 
 import requests
 
@@ -17,20 +17,24 @@ from .types.jmap import (
     JMAPResponse,
     JMAPSession,
     JMAPThreadGetResponse,
+    errors,
 )
 
 JMAPMethodPair = Tuple[str, JMAPMethod]
-JMAPMethodResponsePair = Tuple[str, JMAPResponse]
+JMAPMethodResponsePair = Tuple[str, Union[errors.JMAPError, JMAPResponse]]
 
 
 class JMAP(object):
-    METHOD_RESPONSES: Dict[str, Type[JMAPResponse]] = {
+    METHOD_RESPONSES: Dict[
+        str, Type[Union[errors.JMAPError, JMAPResponse]]
+    ] = {
         "Email/get": JMAPEmailGetResponse,
         "Email/query": JMAPEmailQueryResponse,
         "Identity/get": JMAPIdentityGetResponse,
         "Mailbox/get": JMAPMailboxGetResponse,
         "Mailbox/query": JMAPMailboxQueryResponse,
         "Thread/get": JMAPThreadGetResponse,
+        "error": errors.JMAPError,
     }
     METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 
@@ -73,7 +77,13 @@ class JMAP(object):
         )
         return result[0][1]
 
-    def call_methods(self, calls: list[JMAPMethodPair]) -> Any:
+    def call_methods(
+        self, calls: Union[list[JMAPMethod], list[JMAPMethodPair]]
+    ) -> Any:
+        if isinstance(calls[0], JMAPMethod):
+            just_calls = cast(List[JMAPMethod], calls)
+            calls = [(str(i), call) for i, call in enumerate(just_calls)]
+        calls = cast(List[JMAPMethodPair], calls)
         using = list(
             set([constants.JMAP_URN_CORE]).union(
                 *[c[1].using() for c in calls]

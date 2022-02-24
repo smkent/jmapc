@@ -1,3 +1,4 @@
+from . import errors
 from .methods import JMAPMethod, JMAPResponse
 from .methods_email import (
     JMAPEmailGet,
@@ -41,6 +42,7 @@ __all__ = [
     "JMAPEmailQueryFilterCondition",
     "JMAPEmailQueryFilterOperator",
     "JMAPEmailQueryResponse",
+    "JMAPError",
     "JMAPIdentity",
     "JMAPIdentityBCC",
     "JMAPIdentityGet",
@@ -61,4 +63,5 @@ __all__ = [
     "JMAPThreadEmail",
     "JMAPThreadGet",
     "JMAPThreadGetResponse",
+    "errors",
 ]
