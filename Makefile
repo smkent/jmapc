@@ -20,7 +20,8 @@ sync:
 .PHONY: dev
 update:
 	$(PIPENV) update --dev
-	$(PIPENV) run pipenv-setup sync --pipfile
+	@# https://github.com/Madoshakalaka/pipenv-setup/issues/101
+	SETUPTOOLS_USE_DISTUTILS=stdlib $(PIPENV) run pipenv-setup sync --pipfile
 
 .PHONY: my
 my:

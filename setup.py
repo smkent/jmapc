@@ -21,7 +21,12 @@ class Tox(TestCommand):
 setup(
     name="jmapc",
     packages=find_packages(),
-    install_requires=["dataclasses-json", "python-dateutil", "requests"],
+    install_requires=[
+        "dataclasses-json",
+        "python-dateutil",
+        "requests",
+        "setuptools-scm",
+    ],
     entry_points=dict(console_scripts=[]),
     tests_require=["tox"],
     cmdclass=dict(test=Tox),
