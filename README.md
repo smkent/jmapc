@@ -1,26 +1,12 @@
 # jmapc
 
-## Create virtualenv and install dependencies
-```sh
-make
-```
+A [JMAP][jmapio] client for Python
 
-## Run all tests
-```sh
-make test
-```
+## Development
 
-## Run all tests in CI mode
-```sh
-make test-ci
-```
+* Setup: `make`
+* Test: `make test`
+* Update or install new dependencies: `make update`
+* Fix linting errors: `make lint`
 
-## Update or install new dependencies
-```sh
-make update
-```
-
-## Fix linting errors
-```sh
-make lint
-```
+[jmapio]: https://jmap.io
