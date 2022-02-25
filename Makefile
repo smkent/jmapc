@@ -17,7 +17,7 @@ sync:
 	$(PIPENV) sync --dev
 	$(PIPENV) run python setup.py develop --script-dir=bin/
 
-.PHONY: dev
+.PHONY: update
 update:
 	$(PIPENV) update --dev
 	@# https://github.com/Madoshakalaka/pipenv-setup/issues/101
