@@ -68,7 +68,7 @@ show_error_codes = true
 warn_unused_ignores = true
 
 [tool.pytest.ini_options]
-addopts = "--cov --cov-report term --cov-report xml:coverage.xml"
+addopts = "--cov --cov-append --cov-report term --cov-report xml:coverage.xml"
 
 [tool.tox]
 legacy_tox_ini = """
