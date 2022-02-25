@@ -33,7 +33,9 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
 
       - name: 🐍 Install dependencies
-        run: poetry install
+        run: |
+          pip install poetry-dynamic-versioning
+          poetry install
 
       - name: 🔥 Test
         run: poetry run tox
