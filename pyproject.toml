@@ -74,7 +74,7 @@ addopts = "--cov --cov-append --cov-report term --cov-report xml:coverage.xml"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py38
+envlist = py310
 isolated_build = True
 requires =
     tox-poetry-installer[poetry] == 0.6.0
@@ -88,7 +88,7 @@ commands =
 
 [gh-actions]
 python =
-    3.8: py38
+    3.10: py310
 """
 
 # vim: ft=cfg
