@@ -68,13 +68,15 @@ show_error_codes = true
 warn_unused_ignores = true
 
 [tool.pytest.ini_options]
-addopts = "--cov"
+addopts = "--cov --cov-report term --cov-report xml:coverage.xml"
 
 [tool.tox]
 legacy_tox_ini = """
 [tox]
 envlist = py38
 isolated_build = True
+requires =
+    tox-poetry-installer[poetry] == 0.6.0
 
 [testenv]
 deps =
