@@ -3,54 +3,67 @@ name: CI
 
 on:
   push:
-  pull_request:
   workflow_dispatch:
 
 jobs:
   build-test-publish:
-    name: "Python ${{ matrix.python-version }}"
+    name: Python ${{ matrix.python-version }}, Poetry ${{ matrix.poetry-version }}
     runs-on: ubuntu-latest
+    env:
+      ENABLE_PYPI_PUBLISH: true
+      ENABLE_TEST_PYPI_PUBLISH: true
+      ENABLE_COVERAGE: true
 
     strategy:
       matrix:
         python-version:
           - "3.10"
+        poetry-version:
+          - "1.1.11"
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: ${{ matrix.python-version }}
+
+      - name: ✨ Install Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
 
       - name: 🐍 Install dependencies
-        run: python -m pip install --upgrade pip pipenv
-
-      - name: 🛠 Build
-        run: make
+        run: poetry install
 
       - name: 🔥 Test
-        run: make test
+        run: poetry run tox
 
       - name: 📊 Upload coverage to Codecov
         uses: codecov/codecov-action@v2
+        if: env.ENABLE_COVERAGE
         with:
           fail_ci_if_error: true
 
       - name: 📦 Build package
-        run: make dist
+        if: env.ENABLE_PYPI_PUBLISH
+        run: poetry build
 
-      - name: 🔼 Upload to Test PyPI
+      - name: 🔼 Publish to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
+        if: env.ENABLE_TEST_PYPI_PUBLISH
         with:
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
           skip_existing: true
 
-      # - name: ☢ Upload to PyPI
-      #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-      #   uses: pypa/gh-action-pypi-publish@master
-      #   with:
-      #     password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: ☢️ Publish to PyPI
+        if: |
+          env.ENABLE_PYPI_PUBLISH &&
+          github.event_name == 'push' &&
+          startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
 concurrency:
   group: ci-tests-${{ github.ref }}-1
