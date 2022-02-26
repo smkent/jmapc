@@ -1,3 +1,4 @@
+from .core import CoreEcho, CoreEchoResponse
 from .email import (
     EmailGet,
     EmailGetResponse,
@@ -21,6 +22,8 @@ from .methods import Method, Response
 from .thread import ThreadGet, ThreadGetResponse
 
 __all__ = [
+    "CoreEcho",
+    "CoreEchoResponse",
     "EmailGet",
     "EmailGetResponse",
     "EmailQuery",

@@ -12,12 +12,7 @@ class MethodBase(Model):
     pass
 
 
-@dataclass
-class MethodAccountID(MethodBase):
-    account_id: Optional[str] = field(init=False, default=None)
-
-
-class Method(MethodAccountID):
+class Method(MethodBase):
     @classmethod
     def name(cls) -> str:
         raise NotImplementedError
@@ -28,27 +23,37 @@ class Method(MethodAccountID):
 
 
 @dataclass
+class MethodWithAccount(Method):
+    account_id: Optional[str] = field(init=False, default=None)
+
+
+@dataclass
 class Response(MethodBase):
+    pass
+
+
+@dataclass
+class ResponseWithAccount(Response):
     account_id: Optional[str]
 
 
 @dataclass
-class Get(Method):
+class Get(MethodWithAccount):
     ids: Optional[ListOrRef[str]]
     properties: Optional[List[str]] = None
 
 
 @dataclass
-class GetResponse(Response):
+class GetResponse(ResponseWithAccount):
     state: str
     not_found: List[str]
 
 
 @dataclass
-class Query(Method):
+class Query(MethodWithAccount):
     sort: Optional[List[Comparator]] = None
 
 
 @dataclass
-class QueryResponse(Response):
+class QueryResponse(ResponseWithAccount):
     pass

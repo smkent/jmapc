@@ -7,6 +7,7 @@ import requests
 
 from . import constants, errors
 from .methods import (
+    CoreEchoResponse,
     EmailGetResponse,
     EmailQueryResponse,
     IdentityGetResponse,
@@ -24,6 +25,7 @@ MethodResponseList = List[Tuple[str, Union[errors.Error, Response]]]
 
 class Client:
     METHOD_RESPONSES: Dict[str, Type[Union[errors.Error, Response]]] = {
+        "Core/echo": CoreEchoResponse,
         "Email/get": EmailGetResponse,
         "Email/query": EmailQueryResponse,
         "Identity/get": IdentityGetResponse,
