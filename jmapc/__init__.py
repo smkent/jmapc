@@ -1,3 +1,5 @@
+import logging
+
 from . import errors, methods
 from .client import Client
 from .errors import Error
@@ -37,3 +39,6 @@ __all__ = [
     "errors",
     "methods",
 ]
+
+# Set default logging handler to avoid "No handler found" warnings.
+logging.getLogger(__name__).addHandler(logging.NullHandler())
