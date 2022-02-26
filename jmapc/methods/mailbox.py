@@ -7,7 +7,7 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import ListOrRef, Mailbox, Operator, StrOrRef
-from ..util import JsonDataClass
+from ..serializer import JsonDataClass
 from .methods import Get, GetResponse, Query, QueryResponse
 
 

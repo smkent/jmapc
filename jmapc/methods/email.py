@@ -8,7 +8,7 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import Email, ListOrRef, Operator, StrOrRef
-from ..util import JsonDataClass, datetime_decode, datetime_encode
+from ..serializer import JsonDataClass, datetime_decode, datetime_encode
 from .methods import Get, GetResponse, Query, QueryResponse
 
 

@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
-from .util import (
+from .serializer import (
     JsonDataClass,
     ResultReference,
     datetime_decode,

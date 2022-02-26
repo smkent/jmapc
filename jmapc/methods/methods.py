@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 from ..models import Comparator, ListOrRef
-from ..util import JsonDataClass
+from ..serializer import JsonDataClass
 
 
 @dataclass
