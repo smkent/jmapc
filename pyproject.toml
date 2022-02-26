@@ -43,6 +43,8 @@ vcs = "git"
 style = "semver"
 
 [tool.poe.tasks]
+lt = ["lint", "test"]
+
 lint = ["isort_lint", "black_lint"]
 black_lint = { cmd = "black -l 79 -- tests/ jmapc/" }
 isort_lint = { cmd = "isort -- tests/ jmapc/" }
