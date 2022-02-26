@@ -4,14 +4,14 @@ from typing import Iterable
 import pytest
 import responses
 
-from jmapc import Identity, JMAPClient, ResultReference
+from jmapc import Identity, Client, ResultReference
 from jmapc.client import MethodList
 from jmapc.methods import IdentityGet, IdentityGetResponse
 
 
 @pytest.fixture
-def jmap() -> Iterable[JMAPClient]:
-    yield JMAPClient(
+def jmap() -> Iterable[Client]:
+    yield Client(
         host="jmap-example.localhost",
         user="ness",
         password="pk_fire",
@@ -40,7 +40,7 @@ def http_responses() -> Iterable[responses.RequestsMock]:
 
 
 def test_identity_get(
-    jmap: JMAPClient, http_responses: responses.RequestsMock
+    jmap: Client, http_responses: responses.RequestsMock
 ) -> None:
     http_responses.add(
         method=responses.POST,

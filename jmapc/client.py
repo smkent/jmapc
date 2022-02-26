@@ -22,7 +22,7 @@ MethodList = List[Tuple[str, Method]]
 MethodResponseList = List[Tuple[str, Union[errors.Error, Response]]]
 
 
-class JMAPClient:
+class Client:
     METHOD_RESPONSES: Dict[str, Type[Union[errors.Error, Response]]] = {
         "Email/get": EmailGetResponse,
         "Email/query": EmailQueryResponse,
@@ -101,7 +101,7 @@ class JMAPClient:
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
         method_responses = cast(
-            List[JMAPClient.METHOD_RESPONSES_TYPE],
+            List[Client.METHOD_RESPONSES_TYPE],
             data.get("methodResponses", []),
         )
         responses: MethodResponseList = []

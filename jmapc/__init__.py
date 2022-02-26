@@ -1,5 +1,5 @@
 from . import errors, methods
-from .client import JMAPClient
+from .client import Client
 from .models import (
     Comparator,
     Email,
@@ -25,7 +25,7 @@ __all__ = [
     "EmailBodyValue",
     "EmailHeader",
     "Identity",
-    "JMAPClient",
+    "Client",
     "ListOrRef",
     "Mailbox",
     "Operator",
