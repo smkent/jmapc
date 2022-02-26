@@ -6,9 +6,6 @@ from .mailbox import (
     MailboxGet,
     MailboxGetResponse,
     MailboxQuery,
-    MailboxQueryFilter,
-    MailboxQueryFilterCondition,
-    MailboxQueryFilterOperator,
     MailboxQueryResponse,
 )
 from .thread import ThreadGet, ThreadGetResponse
@@ -25,9 +22,6 @@ __all__ = [
     "MailboxGet",
     "MailboxGetResponse",
     "MailboxQuery",
-    "MailboxQueryFilter",
-    "MailboxQueryFilterCondition",
-    "MailboxQueryFilterOperator",
     "MailboxQueryResponse",
     "Method",
     "Response",

@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from dataclasses_json import config
 
 from .. import constants
-from ..models import ListOrRef, Mailbox, Operator, StrOrRef
-from ..serializer import Model
+from ..models import ListOrRef, Mailbox, MailboxQueryFilter
 from .base import Get, GetResponse, Query, QueryResponse
 
 
@@ -43,21 +42,3 @@ class MailboxQuery(Query):
 @dataclass
 class MailboxQueryResponse(QueryResponse):
     ids: ListOrRef[str]
-
-
-@dataclass
-class MailboxQueryFilterCondition(Model):
-    name: Optional[StrOrRef] = None
-    role: Optional[StrOrRef] = None
-    parent_id: Optional[StrOrRef] = None
-
-
-@dataclass
-class MailboxQueryFilterOperator(Model):
-    operator: Operator
-    conditions: List[MailboxQueryFilter]
-
-
-MailboxQueryFilter = Union[
-    MailboxQueryFilterCondition, MailboxQueryFilterOperator
-]

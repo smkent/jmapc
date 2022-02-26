@@ -192,3 +192,21 @@ class EmailQueryFilterOperator(Model):
 
 
 EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]
+
+
+@dataclass
+class MailboxQueryFilterCondition(Model):
+    name: Optional[StrOrRef] = None
+    role: Optional[StrOrRef] = None
+    parent_id: Optional[StrOrRef] = None
+
+
+@dataclass
+class MailboxQueryFilterOperator(Model):
+    operator: Operator
+    conditions: List[MailboxQueryFilter]
+
+
+MailboxQueryFilter = Union[
+    MailboxQueryFilterCondition, MailboxQueryFilterOperator
+]
