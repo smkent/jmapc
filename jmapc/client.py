@@ -52,10 +52,6 @@ class Client:
         return self._session
 
     @property
-    def api_url(self) -> str:
-        return self.session.api_url
-
-    @property
     def account_id(self) -> str:
         return self.session.primary_accounts.mail
 
