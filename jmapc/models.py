@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, TypeVar, Union
 from dataclasses_json import config
 
 from .serializer import (
-    JsonDataClass,
+    Model,
     ResultReference,
     datetime_decode,
     datetime_encode,
@@ -21,7 +21,7 @@ ListOrRef = Union[ResultReference, List[T]]
 
 
 @dataclass
-class Identity(JsonDataClass):
+class Identity(Model):
     id: str
     name: str
     email: str
@@ -33,7 +33,7 @@ class Identity(JsonDataClass):
 
 
 @dataclass
-class Mailbox(JsonDataClass):
+class Mailbox(Model):
     id: str = field(metadata=config(field_name="Id"))
     name: str
     sort_order: int = field(metadata=config(field_name="sortOrder"))
@@ -49,7 +49,7 @@ class Mailbox(JsonDataClass):
 
 
 @dataclass
-class Email(JsonDataClass):
+class Email(Model):
     id: str = field(metadata=config(field_name="Id"))
     blob_id: Optional[str] = None
     thread_id: Optional[str] = None
@@ -85,19 +85,19 @@ class Email(JsonDataClass):
 
 
 @dataclass
-class EmailAddress(JsonDataClass):
+class EmailAddress(Model):
     name: Optional[str] = None
     email: Optional[str] = None
 
 
 @dataclass
-class EmailHeader(JsonDataClass):
+class EmailHeader(Model):
     name: Optional[str] = None
     value: Optional[str] = None
 
 
 @dataclass
-class EmailBodyPart(JsonDataClass):
+class EmailBodyPart(Model):
     part_id: Optional[str] = None
     blob_id: Optional[str] = None
     size: Optional[int] = None
@@ -113,14 +113,14 @@ class EmailBodyPart(JsonDataClass):
 
 
 @dataclass
-class EmailBodyValue(JsonDataClass):
+class EmailBodyValue(Model):
     value: Optional[str] = None
     is_encoding_problem: Optional[bool] = None
     is_truncated: Optional[bool] = None
 
 
 @dataclass
-class Thread(JsonDataClass):
+class Thread(Model):
     def __len__(self) -> int:
         return len(self.email_ids)
 
@@ -129,7 +129,7 @@ class Thread(JsonDataClass):
 
 
 @dataclass
-class ThreadEmail(JsonDataClass):
+class ThreadEmail(Model):
     id: str
     mailbox_ids: List[str]
     is_unread: bool
@@ -137,7 +137,7 @@ class ThreadEmail(JsonDataClass):
 
 
 @dataclass
-class Comparator(JsonDataClass):
+class Comparator(Model):
     property: str
     is_ascending: bool = True
     collation: Optional[str] = None
@@ -149,7 +149,7 @@ class Comparator(JsonDataClass):
 
 
 @dataclass
-class FilterOperator(JsonDataClass):
+class FilterOperator(Model):
     operator: Operator
 
 

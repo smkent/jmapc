@@ -7,7 +7,7 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import ListOrRef, Mailbox, Operator, StrOrRef
-from ..serializer import JsonDataClass
+from ..serializer import Model
 from .methods import Get, GetResponse, Query, QueryResponse
 
 
@@ -30,14 +30,14 @@ class MailboxQueryResponse(QueryResponse):
 
 
 @dataclass
-class MailboxQueryFilterCondition(JsonDataClass):
+class MailboxQueryFilterCondition(Model):
     name: Optional[StrOrRef] = None
     role: Optional[StrOrRef] = None
     parent_id: Optional[StrOrRef] = None
 
 
 @dataclass
-class MailboxQueryFilterOperator(JsonDataClass):
+class MailboxQueryFilterOperator(Model):
     operator: Operator
     conditions: List[MailboxQueryFilter]
 

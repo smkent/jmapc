@@ -20,7 +20,7 @@ def datetime_decode(value: Optional[str]) -> Optional[datetime]:
     return dateutil.parser.isoparse(value)
 
 
-class JsonDataClass(dataclasses_json.DataClassJsonMixin):
+class Model(dataclasses_json.DataClassJsonMixin):
     dataclass_json_config = dataclasses_json.config(
         letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
         undefined=dataclasses_json.Undefined.EXCLUDE,

@@ -8,7 +8,7 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import Email, ListOrRef, Operator, StrOrRef
-from ..serializer import JsonDataClass, datetime_decode, datetime_encode
+from ..serializer import Model, datetime_decode, datetime_encode
 from .methods import Get, GetResponse, Query, QueryResponse
 
 
@@ -32,7 +32,7 @@ class EmailQueryResponse(QueryResponse):
 
 
 @dataclass
-class EmailQueryFilterCondition(JsonDataClass):
+class EmailQueryFilterCondition(Model):
     in_mailbox: Optional[StrOrRef] = None
     in_mailbox_other_than: Optional[ListOrRef] = None
     before: Optional[datetime] = field(
@@ -63,7 +63,7 @@ class EmailQueryFilterCondition(JsonDataClass):
 
 
 @dataclass
-class EmailQueryFilterOperator(JsonDataClass):
+class EmailQueryFilterOperator(Model):
     operator: Operator
     conditions: List[EmailQueryFilter]
 

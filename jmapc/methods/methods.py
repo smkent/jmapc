@@ -4,11 +4,11 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 from ..models import Comparator, ListOrRef
-from ..serializer import JsonDataClass
+from ..serializer import Model
 
 
 @dataclass
-class MethodBase(JsonDataClass):
+class MethodBase(Model):
     pass
 
 

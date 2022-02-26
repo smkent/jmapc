@@ -3,13 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
 
-from .serializer import JsonDataClass
+from .serializer import Model
 
 __all__ = ["JMAPError", "ServerFail"]
 
 
 @dataclass
-class JMAPError(JsonDataClass):
+class JMAPError(Model):
     type: str
 
     @staticmethod
