@@ -7,8 +7,8 @@ from typing import Dict, List, Literal, Optional, TypeVar, Union
 from dataclasses_json import config
 
 from .util import (
-    JMAPResultReference,
     JsonDataClass,
+    ResultReference,
     datetime_decode,
     datetime_encode,
 )
@@ -16,30 +16,30 @@ from .util import (
 T = TypeVar("T")
 
 
-JMAPStr = Union[str, JMAPResultReference]
-JMAPList = Union[JMAPResultReference, List[T]]
+JMAPStr = Union[str, ResultReference]
+JMAPList = Union[ResultReference, List[T]]
 
 
 @dataclass
-class JMAPIdentity(JsonDataClass):
+class Identity(JsonDataClass):
     id: str
     name: str
     email: str
     replyTo: Optional[str]
-    bcc: Optional[List[JMAPIdentityBCC]]
+    bcc: Optional[List[IdentityBCC]]
     textSignature: Optional[str]
     htmlSignature: Optional[str]
     mayDelete: bool
 
 
 @dataclass
-class JMAPIdentityBCC(JsonDataClass):
+class IdentityBCC(JsonDataClass):
     name: Optional[str]
     email: str
 
 
 @dataclass
-class JMAPMailbox(JsonDataClass):
+class Mailbox(JsonDataClass):
     id: str = field(metadata=config(field_name="Id"))
     name: str
     sort_order: int = field(metadata=config(field_name="sortOrder"))
@@ -55,7 +55,7 @@ class JMAPMailbox(JsonDataClass):
 
 
 @dataclass
-class JMAPEmail(JsonDataClass):
+class Email(JsonDataClass):
     id: str = field(metadata=config(field_name="Id"))
     blob_id: Optional[str] = None
     thread_id: Optional[str] = None
@@ -69,45 +69,45 @@ class JMAPEmail(JsonDataClass):
     message_id: Optional[List[str]] = None
     in_reply_to: Optional[List[str]] = None
     references: Optional[List[str]] = None
-    headers: Optional[List[JMAPEmailHeader]] = None
-    mail_from: Optional[List[JMAPEmailAddress]] = field(
+    headers: Optional[List[EmailHeader]] = None
+    mail_from: Optional[List[EmailAddress]] = field(
         metadata=config(field_name="from"), default=None
     )
-    to: Optional[List[JMAPEmailAddress]] = None
-    cc: Optional[List[JMAPEmailAddress]] = None
-    bcc: Optional[List[JMAPEmailAddress]] = None
+    to: Optional[List[EmailAddress]] = None
+    cc: Optional[List[EmailAddress]] = None
+    bcc: Optional[List[EmailAddress]] = None
     subject: Optional[str] = None
     sent_at: Optional[datetime] = field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
-    body_structure: Optional[JMAPEmailBodyPart] = None
-    body_values: Optional[Dict[str, JMAPEmailBodyValue]] = None
-    text_body: Optional[List[JMAPEmailBodyPart]] = None
-    html_body: Optional[List[JMAPEmailBodyPart]] = None
-    attachments: Optional[List[JMAPEmailBodyPart]] = None
+    body_structure: Optional[EmailBodyPart] = None
+    body_values: Optional[Dict[str, EmailBodyValue]] = None
+    text_body: Optional[List[EmailBodyPart]] = None
+    html_body: Optional[List[EmailBodyPart]] = None
+    attachments: Optional[List[EmailBodyPart]] = None
     has_attachment: Optional[bool] = None
     preview: Optional[str] = None
 
 
 @dataclass
-class JMAPEmailAddress(JsonDataClass):
+class EmailAddress(JsonDataClass):
     name: Optional[str] = None
     email: Optional[str] = None
 
 
 @dataclass
-class JMAPEmailHeader(JsonDataClass):
+class EmailHeader(JsonDataClass):
     name: Optional[str] = None
     value: Optional[str] = None
 
 
 @dataclass
-class JMAPEmailBodyPart(JsonDataClass):
+class EmailBodyPart(JsonDataClass):
     part_id: Optional[str] = None
     blob_id: Optional[str] = None
     size: Optional[int] = None
-    headers: Optional[List[JMAPEmailHeader]] = None
+    headers: Optional[List[EmailHeader]] = None
     name: Optional[str] = None
     type: Optional[str] = None
     charset: Optional[str] = None
@@ -115,18 +115,18 @@ class JMAPEmailBodyPart(JsonDataClass):
     cid: Optional[str] = None
     language: Optional[List[str]] = None
     location: Optional[str] = None
-    sub_parts: Optional[List[JMAPEmailBodyPart]] = None
+    sub_parts: Optional[List[EmailBodyPart]] = None
 
 
 @dataclass
-class JMAPEmailBodyValue(JsonDataClass):
+class EmailBodyValue(JsonDataClass):
     value: Optional[str] = None
     is_encoding_problem: Optional[bool] = None
     is_truncated: Optional[bool] = None
 
 
 @dataclass
-class JMAPThread(JsonDataClass):
+class Thread(JsonDataClass):
     def __len__(self) -> int:
         return len(self.email_ids)
 
@@ -135,7 +135,7 @@ class JMAPThread(JsonDataClass):
 
 
 @dataclass
-class JMAPThreadEmail(JsonDataClass):
+class ThreadEmail(JsonDataClass):
     id: str
     mailbox_ids: List[str]
     is_unread: bool
@@ -143,7 +143,7 @@ class JMAPThreadEmail(JsonDataClass):
 
 
 @dataclass
-class JMAPComparator(JsonDataClass):
+class Comparator(JsonDataClass):
     property: str
     is_ascending: bool = True
     collation: Optional[str] = None
@@ -159,4 +159,4 @@ class JMAPFilterOperator(JsonDataClass):
     operator: Union[Literal["AND"], Literal["OR"], Literal["NOT"]]
 
 
-JMAPOperatorLiteral = Union[Literal["AND"], Literal["OR"], Literal["NOT"]]
+OperatorLiteral = Union[Literal["AND"], Literal["OR"], Literal["NOT"]]

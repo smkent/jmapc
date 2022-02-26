@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional, Type
 
 from .util import JsonDataClass
 
-__all__ = ["JMAPError", "JMAPServerFail"]
+__all__ = ["JMAPError", "ServerFail"]
 
 
 @dataclass
@@ -15,8 +15,8 @@ class JMAPError(JsonDataClass):
     @staticmethod
     def _errors_map() -> Dict[str, Type[JMAPError]]:
         return {
-            "invalidArguments": JMAPInvalidArguments,
-            "serverFail": JMAPServerFail,
+            "invalidArguments": InvalidArguments,
+            "serverFail": ServerFail,
         }
 
     @classmethod
@@ -31,10 +31,10 @@ class JMAPError(JsonDataClass):
 
 
 @dataclass
-class JMAPInvalidArguments(JMAPError):
+class InvalidArguments(JMAPError):
     arguments: List[str]
 
 
 @dataclass
-class JMAPServerFail(JMAPError):
+class ServerFail(JMAPError):
     description: Optional[str]

@@ -6,13 +6,13 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
-from .models import JMAPList, JMAPMailbox, JMAPOperatorLiteral, JMAPStr
+from .methods import Get, GetResponse, Query, QueryResponse
+from .models import JMAPList, JMAPStr, Mailbox, OperatorLiteral
 from .util import JsonDataClass
 
 
 @dataclass
-class JMAPMailboxQuery(JMAPQuery):
+class MailboxQuery(Query):
     @classmethod
     def name(cls) -> str:
         return "Mailbox/query"
@@ -21,34 +21,34 @@ class JMAPMailboxQuery(JMAPQuery):
     def using(cls) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
-    filter: Optional[JMAPMailboxQueryFilter] = None
+    filter: Optional[MailboxQueryFilter] = None
 
 
 @dataclass
-class JMAPMailboxQueryResponse(JMAPQueryResponse):
+class MailboxQueryResponse(QueryResponse):
     ids: JMAPList[str]
 
 
 @dataclass
-class JMAPMailboxQueryFilterCondition(JsonDataClass):
+class MailboxQueryFilterCondition(JsonDataClass):
     name: Optional[JMAPStr] = None
     role: Optional[JMAPStr] = None
     parent_id: Optional[JMAPStr] = None
 
 
 @dataclass
-class JMAPMailboxQueryFilterOperator(JsonDataClass):
-    operator: JMAPOperatorLiteral
-    conditions: List[JMAPMailboxQueryFilter]
+class MailboxQueryFilterOperator(JsonDataClass):
+    operator: OperatorLiteral
+    conditions: List[MailboxQueryFilter]
 
 
-JMAPMailboxQueryFilter = Union[
-    JMAPMailboxQueryFilterCondition, JMAPMailboxQueryFilterOperator
+MailboxQueryFilter = Union[
+    MailboxQueryFilterCondition, MailboxQueryFilterOperator
 ]
 
 
 @dataclass
-class JMAPMailboxGet(JMAPGet):
+class MailboxGet(Get):
     @classmethod
     def name(cls) -> str:
         return "Mailbox/get"
@@ -59,5 +59,5 @@ class JMAPMailboxGet(JMAPGet):
 
 
 @dataclass
-class JMAPMailboxGetResponse(JMAPGetResponse):
-    data: List[JMAPMailbox] = field(metadata=config(field_name="list"))
+class MailboxGetResponse(GetResponse):
+    data: List[Mailbox] = field(metadata=config(field_name="list"))

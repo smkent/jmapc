@@ -7,13 +7,13 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
-from .models import JMAPEmail, JMAPList, JMAPOperatorLiteral, JMAPStr
+from .methods import Get, GetResponse, Query, QueryResponse
+from .models import Email, JMAPList, JMAPStr, OperatorLiteral
 from .util import JsonDataClass, datetime_decode, datetime_encode
 
 
 @dataclass
-class JMAPEmailQuery(JMAPQuery):
+class EmailQuery(Query):
     @classmethod
     def name(cls) -> str:
         return "Email/query"
@@ -22,17 +22,17 @@ class JMAPEmailQuery(JMAPQuery):
     def using(cls) -> set[str]:
         return set([constants.JMAP_URN_MAIL])
 
-    filter: Optional[JMAPEmailQueryFilter] = None
+    filter: Optional[EmailQueryFilter] = None
     collapse_threads: Optional[bool] = None
 
 
 @dataclass
-class JMAPEmailQueryResponse(JMAPQueryResponse):
+class EmailQueryResponse(QueryResponse):
     ids: JMAPList[str]
 
 
 @dataclass
-class JMAPEmailQueryFilterCondition(JsonDataClass):
+class EmailQueryFilterCondition(JsonDataClass):
     in_mailbox: Optional[JMAPStr] = None
     in_mailbox_other_than: Optional[JMAPList] = None
     before: Optional[datetime] = field(
@@ -63,18 +63,16 @@ class JMAPEmailQueryFilterCondition(JsonDataClass):
 
 
 @dataclass
-class JMAPEmailQueryFilterOperator(JsonDataClass):
-    operator: JMAPOperatorLiteral
-    conditions: List[JMAPEmailQueryFilter]
+class EmailQueryFilterOperator(JsonDataClass):
+    operator: OperatorLiteral
+    conditions: List[EmailQueryFilter]
 
 
-JMAPEmailQueryFilter = Union[
-    JMAPEmailQueryFilterCondition, JMAPEmailQueryFilterOperator
-]
+EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]
 
 
 @dataclass
-class JMAPEmailGet(JMAPGet):
+class EmailGet(Get):
     @classmethod
     def name(cls) -> str:
         return "Email/get"
@@ -91,5 +89,5 @@ class JMAPEmailGet(JMAPGet):
 
 
 @dataclass
-class JMAPEmailGetResponse(JMAPGetResponse):
-    data: List[JMAPEmail] = field(metadata=config(field_name="list"))
+class EmailGetResponse(GetResponse):
+    data: List[Email] = field(metadata=config(field_name="list"))

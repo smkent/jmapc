@@ -8,32 +8,28 @@ import requests
 from . import constants
 from .config import Config
 from .types import (
-    JMAPEmailGetResponse,
-    JMAPEmailQueryResponse,
-    JMAPIdentityGetResponse,
-    JMAPMailboxGetResponse,
-    JMAPMailboxQueryResponse,
-    JMAPMethod,
-    JMAPResponse,
+    EmailGetResponse,
+    EmailQueryResponse,
+    IdentityGetResponse,
     JMAPSession,
-    JMAPThreadGetResponse,
+    MailboxGetResponse,
+    MailboxQueryResponse,
+    Method,
+    Response,
+    ThreadGetResponse,
     errors,
 )
-
-JMAPMethodPair = Tuple[str, JMAPMethod]
-JMAPMethodResponsePair = Tuple[str, Union[errors.JMAPError, JMAPResponse]]
+from .types.methods import MethodList, MethodResponseList
 
 
 class JMAP(object):
-    METHOD_RESPONSES: Dict[
-        str, Type[Union[errors.JMAPError, JMAPResponse]]
-    ] = {
-        "Email/get": JMAPEmailGetResponse,
-        "Email/query": JMAPEmailQueryResponse,
-        "Identity/get": JMAPIdentityGetResponse,
-        "Mailbox/get": JMAPMailboxGetResponse,
-        "Mailbox/query": JMAPMailboxQueryResponse,
-        "Thread/get": JMAPThreadGetResponse,
+    METHOD_RESPONSES: Dict[str, Type[Union[errors.JMAPError, Response]]] = {
+        "Email/get": EmailGetResponse,
+        "Email/query": EmailQueryResponse,
+        "Identity/get": IdentityGetResponse,
+        "Mailbox/get": MailboxGetResponse,
+        "Mailbox/query": MailboxQueryResponse,
+        "Thread/get": ThreadGetResponse,
         "error": errors.JMAPError,
     }
     METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
@@ -61,7 +57,7 @@ class JMAP(object):
     def account_id(self) -> str:
         return self.session.primary_accounts.mail
 
-    def call_method(self, call: JMAPMethod) -> Any:
+    def call_method(self, call: Method) -> Any:
         using = list(set([constants.JMAP_URN_CORE]).union(call.using()))
         result = self._api_call(
             {
@@ -77,13 +73,11 @@ class JMAP(object):
         )
         return result[0][1]
 
-    def call_methods(
-        self, calls: Union[list[JMAPMethod], list[JMAPMethodPair]]
-    ) -> Any:
-        if isinstance(calls[0], JMAPMethod):
-            just_calls = cast(List[JMAPMethod], calls)
+    def call_methods(self, calls: Union[list[Method], MethodList]) -> Any:
+        if isinstance(calls[0], Method):
+            just_calls = cast(List[Method], calls)
             calls = [(str(i), call) for i, call in enumerate(just_calls)]
-        calls = cast(List[JMAPMethodPair], calls)
+        calls = cast(MethodList, calls)
         using = list(
             set([constants.JMAP_URN_CORE]).union(
                 *[c[1].using() for c in calls]
@@ -103,14 +97,12 @@ class JMAP(object):
             },
         )
 
-    def _parse_responses(
-        self, data: dict[str, Any]
-    ) -> list[JMAPMethodResponsePair]:
+    def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
         method_responses = cast(
             List[JMAP.METHOD_RESPONSES_TYPE],
             data.get("methodResponses", []),
         )
-        responses: list[JMAPMethodResponsePair] = []
+        responses: MethodResponseList = []
         for name, response, method_id in method_responses:
             responses.append(
                 (

@@ -19,7 +19,7 @@ def datetime_decode(value: Optional[str]) -> Optional[datetime]:
 
 
 @dataclass
-class JMAPResultReference(dataclasses_json.DataClassJsonMixin):
+class ResultReference(dataclasses_json.DataClassJsonMixin):
     dataclass_json_config = dataclasses_json.config(
         letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
     )["dataclasses_json"]
@@ -41,9 +41,9 @@ class JsonDataClass(dataclasses_json.DataClassJsonMixin):
         for k in [key for key in data.keys() if not key.startswith("#")]:
             v = data[k]
             if isinstance(v, dict):
-                if len(v.keys()) == len(fields(JMAPResultReference)):
+                if len(v.keys()) == len(fields(ResultReference)):
                     try:
-                        JMAPResultReference.from_dict(v)
+                        ResultReference.from_dict(v)
                         new_key = f"#{k}"
                         if new_key in data:
                             raise Exception(

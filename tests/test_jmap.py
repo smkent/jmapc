@@ -1,18 +1,19 @@
 import json
 import os
-from typing import Iterable, List
+from typing import Iterable
 from unittest import mock
 
 import pytest
 import responses
 
-from jmapc import JMAP, JMAPMethodPair
+from jmapc import JMAP
 from jmapc.types import (
-    JMAPIdentity,
-    JMAPIdentityGet,
-    JMAPIdentityGetResponse,
-    JMAPResultReference,
+    Identity,
+    IdentityGet,
+    IdentityGetResponse,
+    ResultReference,
 )
+from jmapc.types.methods import MethodList
 
 
 @pytest.fixture(autouse=True)
@@ -86,13 +87,13 @@ def test_identity_get(
             },
         ),
     )
-    args: List[JMAPMethodPair] = [
-        ("0", JMAPIdentityGet(ids=None)),
+    args: MethodList = [
+        ("0", IdentityGet(ids=None)),
         (
             "1",
-            JMAPIdentityGet(
-                ids=JMAPResultReference(
-                    name=JMAPIdentityGet.name(),
+            IdentityGet(
+                ids=ResultReference(
+                    name=IdentityGet.name(),
                     path="/ids",
                     result_of="0",
                 )
@@ -103,12 +104,12 @@ def test_identity_get(
     assert resp == [
         (
             "0",
-            JMAPIdentityGetResponse(
+            IdentityGetResponse(
                 account_id="u1138",
                 state="2187",
                 not_found=[],
                 data=[
-                    JMAPIdentity(
+                    Identity(
                         id="0001",
                         name="Ness",
                         email="ness@onett.example.net",

@@ -1,3 +1,3 @@
-from .client import JMAP, JMAPMethodPair, JMAPMethodResponsePair
+from .client import JMAP
 
-__all__ = ["JMAP", "JMAPMethodPair", "JMAPMethodResponsePair"]
+__all__ = ["JMAP"]
