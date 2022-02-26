@@ -138,3 +138,16 @@ def test_call_methods(
         ("0", expected_response),
         ("1", expected_response),
     ]
+
+
+def test_error_unauthorized(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    http_responses.add(
+        method=responses.POST,
+        url="https://jmap-api.localhost/api",
+        status=401,
+    )
+    with pytest.raises(requests.exceptions.HTTPError) as e:
+        client.call_method(CoreEcho(data=echo_test_data))
+    assert e.value.response.status_code == 401
