@@ -26,16 +26,10 @@ class Identity(JsonDataClass):
     name: str
     email: str
     replyTo: Optional[str]
-    bcc: Optional[List[IdentityBCC]]
+    bcc: Optional[List[EmailAddress]]
     textSignature: Optional[str]
     htmlSignature: Optional[str]
     mayDelete: bool
-
-
-@dataclass
-class IdentityBCC(JsonDataClass):
-    name: Optional[str]
-    email: str
 
 
 @dataclass
@@ -155,7 +149,7 @@ class Comparator(JsonDataClass):
 
 
 @dataclass
-class JMAPFilterOperator(JsonDataClass):
+class FilterOperator(JsonDataClass):
     operator: Union[Literal["AND"], Literal["OR"], Literal["NOT"]]
 
 
