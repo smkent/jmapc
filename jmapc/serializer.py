@@ -56,7 +56,4 @@ class JsonDataClass(dataclasses_json.DataClassJsonMixin):
             self.account_id: Optional[str] = account_id
         result = super().to_dict(*args, **kwargs)
         result = self._fix_refs(result)
-        import pprint
-
-        pprint.pprint(result)
         return result
