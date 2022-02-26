@@ -16,6 +16,9 @@ classifiers = [
     "Topic :: Office/Business :: Groupware",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+include = [
+    "examples",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -46,12 +49,12 @@ style = "semver"
 lt = ["lint", "test"]
 
 lint = ["isort_lint", "black_lint"]
-black_lint = { cmd = "black -l 79 -- tests/ jmapc/" }
-isort_lint = { cmd = "isort -- tests/ jmapc/" }
+black_lint = { cmd = "black -l 79 -- tests/ examples/ jmapc/" }
+isort_lint = { cmd = "isort -- tests/ examples/ jmapc/" }
 
 test = ["flake8", "isort", "black", "mypy", "pytest"]
-black = { cmd = "black -l 79 --check --diff --color -- tests/ jmapc/" }
-isort = { cmd = "isort --check-only -- tests/ jmapc/" }
+black = { cmd = "black -l 79 --check --diff --color -- tests/ examples/ jmapc/" }
+isort = { cmd = "isort --check-only -- tests/ examples/ jmapc/" }
 flake8 = { cmd = "flake8" }
 mypy = { cmd = "mypy" }
 pytest = { cmd = "pytest" }
