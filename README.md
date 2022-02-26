@@ -7,7 +7,7 @@ A [JMAP][jmapio] client library for Python
 Prerequisites: [Poetry][poetry]
 
 * Setup: `poetry install`
-* Test template rendering and run rendered project tests: `poetry run poe test`
+* Run all tests: `poetry run poe test`
 * Fix linting errors: `poetry run poe lint`
 
 ---
