@@ -8,6 +8,7 @@ from .models import (
     EmailHeader,
     Identity,
     Mailbox,
+    Operator,
     Thread,
     ThreadEmail,
 )
@@ -23,6 +24,7 @@ __all__ = [
     "Identity",
     "JMAPClient",
     "Mailbox",
+    "Operator",
     "ResultReference",
     "Thread",
     "ThreadEmail",

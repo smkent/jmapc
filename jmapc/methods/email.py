@@ -7,7 +7,7 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Email, JMAPList, JMAPStr, OperatorLiteral
+from ..models import Email, JMAPList, JMAPStr, Operator
 from ..util import JsonDataClass, datetime_decode, datetime_encode
 from .methods import Get, GetResponse, Query, QueryResponse
 
@@ -64,7 +64,7 @@ class EmailQueryFilterCondition(JsonDataClass):
 
 @dataclass
 class EmailQueryFilterOperator(JsonDataClass):
-    operator: OperatorLiteral
+    operator: Operator
     conditions: List[EmailQueryFilter]
 
 

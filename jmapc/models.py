@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Literal, Optional, TypeVar, Union
+from typing import Dict, List, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
@@ -150,7 +150,10 @@ class Comparator(JsonDataClass):
 
 @dataclass
 class FilterOperator(JsonDataClass):
-    operator: Union[Literal["AND"], Literal["OR"], Literal["NOT"]]
+    operator: Operator
 
 
-OperatorLiteral = Union[Literal["AND"], Literal["OR"], Literal["NOT"]]
+class Operator:
+    AND = "AND"
+    OR = "OR"
+    NOT = "NOT"
