@@ -1,10 +1,29 @@
 import json
+import logging
+import time
 from typing import Iterable
 
 import pytest
 import responses
 
 from jmapc import Client
+
+
+@pytest.fixture(autouse=True)
+def test_log() -> Iterable[None]:
+    class UTCFormatter(logging.Formatter):
+        converter = time.gmtime
+
+    logger = logging.getLogger()
+    handler = logging.StreamHandler()
+    formatter = UTCFormatter(
+        "%(asctime)s %(name)-12s %(levelname)-8s "
+        "[%(filename)s:%(funcName)s:%(lineno)d] %(message)s"
+    )
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+    yield
 
 
 @pytest.fixture
