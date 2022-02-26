@@ -32,13 +32,14 @@ First, run `poetry install` to set up your local repository.
 JMAP_HOST=jmap.example.com \
 JMAP_USER=ness \
 JMAP_PASSWORD=pk_fire \
-poetry run examples/core.py
+poetry run examples/identity_get.py
 ```
 
-If successful, `examples/core.py` should output:
+If successful, `examples/identity_get.py` should output something like:
 
 ```
-CoreEchoResponse(data={'hello': 'world'})
+Identity 12345 is for Ness at ness@onett.example.com
+Identity 67890 is for Ness at ness-alternate@onett.example.com
 ```
 
 ## Development
