@@ -16,8 +16,8 @@ from .util import (
 T = TypeVar("T")
 
 
-JMAPStr = Union[str, ResultReference]
-JMAPList = Union[ResultReference, List[T]]
+StrOrRef = Union[str, ResultReference]
+ListOrRef = Union[ResultReference, List[T]]
 
 
 @dataclass

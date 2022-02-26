@@ -7,7 +7,7 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Email, JMAPList, JMAPStr, Operator
+from ..models import Email, ListOrRef, Operator, StrOrRef
 from ..util import JsonDataClass, datetime_decode, datetime_encode
 from .methods import Get, GetResponse, Query, QueryResponse
 
@@ -28,13 +28,13 @@ class EmailQuery(Query):
 
 @dataclass
 class EmailQueryResponse(QueryResponse):
-    ids: JMAPList[str]
+    ids: ListOrRef[str]
 
 
 @dataclass
 class EmailQueryFilterCondition(JsonDataClass):
-    in_mailbox: Optional[JMAPStr] = None
-    in_mailbox_other_than: Optional[JMAPList] = None
+    in_mailbox: Optional[StrOrRef] = None
+    in_mailbox_other_than: Optional[ListOrRef] = None
     before: Optional[datetime] = field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
@@ -45,21 +45,21 @@ class EmailQueryFilterCondition(JsonDataClass):
     )
     min_size: Optional[int] = None
     max_size: Optional[int] = None
-    all_in_thread_have_keyword: Optional[JMAPStr] = None
-    some_in_thread_have_keyword: Optional[JMAPStr] = None
-    none_in_thread_have_keyword: Optional[JMAPStr] = None
-    has_keyword: Optional[JMAPStr] = None
-    not_keyword: Optional[JMAPStr] = None
+    all_in_thread_have_keyword: Optional[StrOrRef] = None
+    some_in_thread_have_keyword: Optional[StrOrRef] = None
+    none_in_thread_have_keyword: Optional[StrOrRef] = None
+    has_keyword: Optional[StrOrRef] = None
+    not_keyword: Optional[StrOrRef] = None
     has_attachment: Optional[bool] = None
-    text: Optional[JMAPStr] = None
+    text: Optional[StrOrRef] = None
     mail_from: Optional[str] = field(
         metadata=config(field_name="from"), default=None
     )
-    to: Optional[JMAPStr] = None
-    cc: Optional[JMAPStr] = None
-    bcc: Optional[JMAPStr] = None
-    body: Optional[JMAPStr] = None
-    header: Optional[JMAPList] = None
+    to: Optional[StrOrRef] = None
+    cc: Optional[StrOrRef] = None
+    bcc: Optional[StrOrRef] = None
+    body: Optional[StrOrRef] = None
+    header: Optional[ListOrRef] = None
 
 
 @dataclass

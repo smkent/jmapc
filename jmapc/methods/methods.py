@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from ..models import Comparator, JMAPList
+from ..models import Comparator, ListOrRef
 from ..util import JsonDataClass
 
 
@@ -34,7 +34,7 @@ class Response(MethodBase):
 
 @dataclass
 class Get(Method):
-    ids: Optional[JMAPList[str]]
+    ids: Optional[ListOrRef[str]]
     properties: Optional[List[str]] = None
 
 

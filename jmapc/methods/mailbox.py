@@ -6,7 +6,7 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from ..models import JMAPList, JMAPStr, Mailbox, Operator
+from ..models import ListOrRef, Mailbox, Operator, StrOrRef
 from ..util import JsonDataClass
 from .methods import Get, GetResponse, Query, QueryResponse
 
@@ -26,14 +26,14 @@ class MailboxQuery(Query):
 
 @dataclass
 class MailboxQueryResponse(QueryResponse):
-    ids: JMAPList[str]
+    ids: ListOrRef[str]
 
 
 @dataclass
 class MailboxQueryFilterCondition(JsonDataClass):
-    name: Optional[JMAPStr] = None
-    role: Optional[JMAPStr] = None
-    parent_id: Optional[JMAPStr] = None
+    name: Optional[StrOrRef] = None
+    role: Optional[StrOrRef] = None
+    parent_id: Optional[StrOrRef] = None
 
 
 @dataclass
