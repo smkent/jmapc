@@ -6,8 +6,8 @@ from typing import Dict, List, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
-from .ref import ResultReference
-from .serializer import Model, datetime_decode, datetime_encode
+from ..ref import ResultReference
+from ..serializer import Model, datetime_decode, datetime_encode
 
 T = TypeVar("T")
 StrOrRef = Union[str, ResultReference]
