@@ -19,18 +19,18 @@ from .methods import (
 from .session import Session
 
 MethodList = List[Tuple[str, Method]]
-MethodResponseList = List[Tuple[str, Union[errors.JMAPError, Response]]]
+MethodResponseList = List[Tuple[str, Union[errors.Error, Response]]]
 
 
 class JMAPClient:
-    METHOD_RESPONSES: Dict[str, Type[Union[errors.JMAPError, Response]]] = {
+    METHOD_RESPONSES: Dict[str, Type[Union[errors.Error, Response]]] = {
         "Email/get": EmailGetResponse,
         "Email/query": EmailQueryResponse,
         "Identity/get": IdentityGetResponse,
         "Mailbox/get": MailboxGetResponse,
         "Mailbox/query": MailboxQueryResponse,
         "Thread/get": ThreadGetResponse,
-        "error": errors.JMAPError,
+        "error": errors.Error,
     }
     METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 
