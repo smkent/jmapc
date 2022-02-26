@@ -16,6 +16,9 @@ classifiers = [
     "Topic :: Office/Business :: Groupware",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+include = [
+    "examples",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
