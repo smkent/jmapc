@@ -1,24 +1,21 @@
-from .models import (
-    Comparator,
+from .email import (
     Email,
-    EmailAddress,
     EmailBodyPart,
     EmailBodyValue,
     EmailHeader,
     EmailQueryFilter,
     EmailQueryFilterCondition,
     EmailQueryFilterOperator,
-    Identity,
-    ListOrRef,
+)
+from .identity import Identity
+from .mailbox import (
     Mailbox,
     MailboxQueryFilter,
     MailboxQueryFilterCondition,
     MailboxQueryFilterOperator,
-    Operator,
-    StrOrRef,
-    Thread,
-    ThreadEmail,
 )
+from .models import Comparator, EmailAddress, ListOrRef, Operator, StrOrRef
+from .thread import Thread, ThreadEmail
 
 __all__ = [
     "Comparator",
