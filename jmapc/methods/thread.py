@@ -5,13 +5,13 @@ from typing import List
 
 from dataclasses_json import config
 
-from ... import constants
-from .methods import JMAPGet, JMAPGetResponse
-from .models import JMAPThread
+from .. import constants
+from ..models import Thread
+from .methods import Get, GetResponse
 
 
 @dataclass
-class JMAPThreadGet(JMAPGet):
+class ThreadGet(Get):
     @classmethod
     def name(cls) -> str:
         return "Thread/get"
@@ -22,5 +22,5 @@ class JMAPThreadGet(JMAPGet):
 
 
 @dataclass
-class JMAPThreadGetResponse(JMAPGetResponse):
-    data: List[JMAPThread] = field(metadata=config(field_name="list"))
+class ThreadGetResponse(GetResponse):
+    data: List[Thread] = field(metadata=config(field_name="list"))

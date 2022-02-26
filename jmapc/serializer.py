@@ -1,9 +1,11 @@
-from dataclasses import dataclass, fields
+from dataclasses import fields
 from datetime import datetime
 from typing import Any, Dict, Optional
 
 import dataclasses_json
 import dateutil.parser
+
+from .ref import ResultReference
 
 
 def datetime_encode(dt: Optional[datetime]) -> Optional[str]:
@@ -18,17 +20,7 @@ def datetime_decode(value: Optional[str]) -> Optional[datetime]:
     return dateutil.parser.isoparse(value)
 
 
-@dataclass
-class JMAPResultReference(dataclasses_json.DataClassJsonMixin):
-    dataclass_json_config = dataclasses_json.config(
-        letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
-    )["dataclasses_json"]
-    name: str
-    path: str
-    result_of: str
-
-
-class JsonDataClass(dataclasses_json.DataClassJsonMixin):
+class Model(dataclasses_json.DataClassJsonMixin):
     dataclass_json_config = dataclasses_json.config(
         letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
         undefined=dataclasses_json.Undefined.EXCLUDE,
@@ -41,9 +33,9 @@ class JsonDataClass(dataclasses_json.DataClassJsonMixin):
         for k in [key for key in data.keys() if not key.startswith("#")]:
             v = data[k]
             if isinstance(v, dict):
-                if len(v.keys()) == len(fields(JMAPResultReference)):
+                if len(v.keys()) == len(fields(ResultReference)):
                     try:
-                        JMAPResultReference.from_dict(v)
+                        ResultReference.from_dict(v)
                         new_key = f"#{k}"
                         if new_key in data:
                             raise Exception(
@@ -64,7 +56,4 @@ class JsonDataClass(dataclasses_json.DataClassJsonMixin):
             self.account_id: Optional[str] = account_id
         result = super().to_dict(*args, **kwargs)
         result = self._fix_refs(result)
-        import pprint
-
-        pprint.pprint(result)
         return result

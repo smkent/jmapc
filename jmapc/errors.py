@@ -3,26 +3,26 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
 
-from ..util import JsonDataClass
+from .serializer import Model
 
-__all__ = ["JMAPError", "JMAPServerFail"]
+__all__ = ["Error", "ServerFail"]
 
 
 @dataclass
-class JMAPError(JsonDataClass):
+class Error(Model):
     type: str
 
     @staticmethod
-    def _errors_map() -> Dict[str, Type[JMAPError]]:
+    def _errors_map() -> Dict[str, Type[Error]]:
         return {
-            "invalidArguments": JMAPInvalidArguments,
-            "serverFail": JMAPServerFail,
+            "invalidArguments": InvalidArguments,
+            "serverFail": ServerFail,
         }
 
     @classmethod
-    def from_dict(cls, *args: Any, **kwargs: Any) -> JMAPError:
+    def from_dict(cls, *args: Any, **kwargs: Any) -> Error:
         res = super().from_dict(*args, **kwargs)
-        if cls == JMAPError:
+        if cls == Error:
             errors_map = cls._errors_map()
             if res.type in errors_map:
                 return errors_map[res.type].from_dict(*args, **kwargs)
@@ -31,10 +31,10 @@ class JMAPError(JsonDataClass):
 
 
 @dataclass
-class JMAPInvalidArguments(JMAPError):
+class InvalidArguments(Error):
     arguments: List[str]
 
 
 @dataclass
-class JMAPServerFail(JMAPError):
+class ServerFail(Error):
     description: Optional[str]

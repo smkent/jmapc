@@ -5,13 +5,13 @@ from typing import List
 
 from dataclasses_json import config
 
-from ... import constants
-from .methods import JMAPGet, JMAPGetResponse
-from .models import JMAPIdentity
+from .. import constants
+from ..models import Identity
+from .methods import Get, GetResponse
 
 
 @dataclass
-class JMAPIdentityGet(JMAPGet):
+class IdentityGet(Get):
     @classmethod
     def name(cls) -> str:
         return "Identity/get"
@@ -22,5 +22,5 @@ class JMAPIdentityGet(JMAPGet):
 
 
 @dataclass
-class JMAPIdentityGetResponse(JMAPGetResponse):
-    data: List[JMAPIdentity] = field(metadata=config(field_name="list"))
+class IdentityGetResponse(GetResponse):
+    data: List[Identity] = field(metadata=config(field_name="list"))
