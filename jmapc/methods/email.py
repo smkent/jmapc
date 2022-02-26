@@ -7,8 +7,14 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Email, ListOrRef, Operator, StrOrRef
-from ..serializer import Model, datetime_decode, datetime_encode
+from ..models import Email, Operator
+from ..serializer import (
+    ListOrRef,
+    Model,
+    StrOrRef,
+    datetime_decode,
+    datetime_encode,
+)
 from .methods import Get, GetResponse, Query, QueryResponse
 
 

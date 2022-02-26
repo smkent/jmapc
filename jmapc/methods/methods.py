@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from ..models import Comparator, ListOrRef
-from ..serializer import Model
+from ..models import Comparator
+from ..serializer import ListOrRef, Model
 
 
 @dataclass

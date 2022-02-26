@@ -2,22 +2,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional, TypeVar, Union
+from typing import Dict, List, Optional
 
 from dataclasses_json import config
 
-from .serializer import (
-    Model,
-    ResultReference,
-    datetime_decode,
-    datetime_encode,
-)
-
-T = TypeVar("T")
-
-
-StrOrRef = Union[str, ResultReference]
-ListOrRef = Union[ResultReference, List[T]]
+from .serializer import Model, datetime_decode, datetime_encode
 
 
 @dataclass
