@@ -45,8 +45,8 @@ class Get(MethodWithAccount):
 
 @dataclass
 class GetResponse(ResponseWithAccount):
-    state: str
-    not_found: List[str]
+    state: Optional[str]
+    not_found: Optional[List[str]]
 
 
 @dataclass
