@@ -30,9 +30,15 @@ Todo list:
 pip install jmapc
 ```
 
-## Examples
+## Development
 
-First, run `poetry install` to set up your local repository.
+Prerequisites: [Poetry][poetry]
+
+* Repository setup: `poetry install`
+* Run all tests: `poetry run poe test`
+* Fix linting errors: `poetry run poe lint`
+
+### Examples
 
 [Any of the examples](/examples) can be invoked with `poetry run`:
 
@@ -49,14 +55,6 @@ If successful, `examples/identity_get.py` should output something like:
 Identity 12345 is for Ness at ness@onett.example.com
 Identity 67890 is for Ness at ness-alternate@onett.example.com
 ```
-
-## Development
-
-Prerequisites: [Poetry][poetry]
-
-* Setup: `poetry install`
-* Run all tests: `poetry run poe test`
-* Fix linting errors: `poetry run poe lint`
 
 ---
 
