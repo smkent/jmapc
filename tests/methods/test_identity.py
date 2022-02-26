@@ -9,6 +9,13 @@ from ..utils import expect_jmap_call
 def test_identity_get(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
+    expected_request = {
+        "methodCalls": [["Identity/get", {"accountId": "u1138"}, "uno"]],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
     response = {
         "methodResponses": [
             [
@@ -33,13 +40,6 @@ def test_identity_get(
                 "uno",
             ]
         ]
-    }
-    expected_request = {
-        "methodCalls": [["Identity/get", {"accountId": "u1138"}, "uno"]],
-        "using": [
-            "urn:ietf:params:jmap:core",
-            "urn:ietf:params:jmap:submission",
-        ],
     }
     expect_jmap_call(http_responses, expected_request, response)
     assert client.call_method(IdentityGet()) == IdentityGetResponse(
