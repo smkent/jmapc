@@ -152,3 +152,43 @@ class Operator:
     AND = "AND"
     OR = "OR"
     NOT = "NOT"
+
+
+@dataclass
+class EmailQueryFilterCondition(Model):
+    in_mailbox: Optional[StrOrRef] = None
+    in_mailbox_other_than: Optional[ListOrRef] = None
+    before: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+    after: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+    min_size: Optional[int] = None
+    max_size: Optional[int] = None
+    all_in_thread_have_keyword: Optional[StrOrRef] = None
+    some_in_thread_have_keyword: Optional[StrOrRef] = None
+    none_in_thread_have_keyword: Optional[StrOrRef] = None
+    has_keyword: Optional[StrOrRef] = None
+    not_keyword: Optional[StrOrRef] = None
+    has_attachment: Optional[bool] = None
+    text: Optional[StrOrRef] = None
+    mail_from: Optional[str] = field(
+        metadata=config(field_name="from"), default=None
+    )
+    to: Optional[StrOrRef] = None
+    cc: Optional[StrOrRef] = None
+    bcc: Optional[StrOrRef] = None
+    body: Optional[StrOrRef] = None
+    header: Optional[ListOrRef] = None
+
+
+@dataclass
+class EmailQueryFilterOperator(Model):
+    operator: Operator
+    conditions: List[EmailQueryFilter]
+
+
+EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]
