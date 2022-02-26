@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 
-# Example output:
-#
-# Identity 12345 is for Ness at ness@onett.example.com
-# Identity 67890 is for Ness at ness-alternate@onett.example.com
-
 import os
 
 from jmapc import Client
@@ -30,3 +25,8 @@ for identity in result.data:
         f"Identity {identity.id} is for "
         f"{identity.name} at {identity.email}"
     )
+
+# Example output:
+#
+# Identity 12345 is for Ness at ness@onett.example.com
+# Identity 67890 is for Ness at ness-alternate@onett.example.com

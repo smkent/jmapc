@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-# Example output:
-#
-# CoreEchoResponse(data={'hello': 'world'})
-
 import os
 
 from jmapc import Client
@@ -24,3 +20,7 @@ result = client.call_method(method)
 
 # Print result
 print(result)
+
+# Example output:
+#
+# CoreEchoResponse(data={'hello': 'world'})
