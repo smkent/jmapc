@@ -59,6 +59,7 @@ class Email(Model):
     to: Optional[List[EmailAddress]] = None
     cc: Optional[List[EmailAddress]] = None
     bcc: Optional[List[EmailAddress]] = None
+    reply_to: Optional[List[EmailAddress]] = None
     subject: Optional[str] = None
     sent_at: Optional[datetime] = field(
         default=None,

@@ -30,7 +30,9 @@ class EmailGet(Get):
 
     body_properties: Optional[List[str]] = None
     fetch_text_body_values: Optional[bool] = None
-    fetch_html_body_values: Optional[bool] = None
+    fetch_html_body_values: Optional[bool] = field(
+        metadata=config(field_name="fetchHTMLBodyValues"), default=None
+    )
     fetch_all_body_values: Optional[bool] = None
     max_body_value_bytes: Optional[int] = None
 
