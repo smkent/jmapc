@@ -1,4 +1,4 @@
-# A [JMAP][jmapio] client library for Python
+# jmapc: A [JMAP][jmapio] client library for Python
 
 jmapc is in initial development.
 
@@ -22,9 +22,23 @@ Todo list:
 * Implement `EmailSubmission` methods for sending email
 * Write documentation
 
-## Examples
+## Installation
 
-First, run `poetry install` to set up your local repository.
+[jmapc is available on PyPI][jmapc-pypi]:
+
+```
+pip install jmapc
+```
+
+## Development
+
+Prerequisites: [Poetry][poetry]
+
+* Repository setup: `poetry install`
+* Run all tests: `poetry run poe test`
+* Fix linting errors: `poetry run poe lint`
+
+### Examples
 
 [Any of the examples](/examples) can be invoked with `poetry run`:
 
@@ -42,14 +56,6 @@ Identity 12345 is for Ness at ness@onett.example.com
 Identity 67890 is for Ness at ness-alternate@onett.example.com
 ```
 
-## Development
-
-Prerequisites: [Poetry][poetry]
-
-* Setup: `poetry install`
-* Run all tests: `poetry run poe test`
-* Fix linting errors: `poetry run poe lint`
-
 ---
 
 Created from [smkent/cookie-python][cookie-python] using
@@ -59,3 +65,4 @@ Created from [smkent/cookie-python][cookie-python] using
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation
+[jmapc-pypi]: https://pypi.org/project/jmapc/

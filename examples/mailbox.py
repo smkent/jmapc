@@ -28,7 +28,7 @@ methods = [
 ]
 
 # Call JMAP API with the prepared request
-results = client.call_methods(methods)
+results = client.method_calls(methods)
 
 # Retrieve the result tuple for the second method. The result tuple contains
 # the client-provided method ID, and the result data model.

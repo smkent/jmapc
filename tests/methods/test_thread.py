@@ -52,7 +52,7 @@ def test_identity_get(
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.call_method(
+    assert client.method_call(
         ThreadGet(ids=["T1", "T1000"])
     ) == ThreadGetResponse(
         account_id="u1138",

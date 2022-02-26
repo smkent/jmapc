@@ -28,7 +28,7 @@ def test_session(
     )
 
 
-def test_call_method(
+def test_method_call(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
     expected_request = {
@@ -51,7 +51,7 @@ def test_call_method(
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.call_method(
+    assert client.method_call(
         CoreEcho(data=echo_test_data)
     ) == CoreEchoResponse(data=echo_test_data)
 
@@ -67,7 +67,7 @@ def test_call_method(
     ],
     ids=["methods_only", "custom_ids"],
 )
-def test_call_methods(
+def test_method_calls(
     client: Client,
     http_responses: responses.RequestsMock,
     method_params: MethodList,
@@ -103,7 +103,7 @@ def test_call_methods(
     }
     expect_jmap_call(http_responses, expected_request, response)
     expected_response = CoreEchoResponse(data=echo_test_data)
-    assert client.call_methods(method_params) == [
+    assert client.method_calls(method_params) == [
         ("0", expected_response),
         ("1", expected_response),
     ]
@@ -118,5 +118,5 @@ def test_error_unauthorized(
         status=401,
     )
     with pytest.raises(requests.exceptions.HTTPError) as e:
-        client.call_method(CoreEcho(data=echo_test_data))
+        client.method_call(CoreEcho(data=echo_test_data))
     assert e.value.response.status_code == 401
