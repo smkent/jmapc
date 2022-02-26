@@ -2,8 +2,8 @@
 
 import os
 
-from jmapc import Client, ResultReference, MailboxQueryFilterCondition
-from jmapc.methods import MailboxQuery, MailboxGet
+from jmapc import Client, MailboxQueryFilterCondition, ResultReference
+from jmapc.methods import MailboxGet, MailboxQuery
 
 # Create and configure client
 client = Client(
