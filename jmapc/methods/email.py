@@ -19,6 +19,28 @@ from .methods import Get, GetResponse, Query, QueryResponse
 
 
 @dataclass
+class EmailGet(Get):
+    @classmethod
+    def name(cls) -> str:
+        return "Email/get"
+
+    @classmethod
+    def using(cls) -> set[str]:
+        return set([constants.JMAP_URN_MAIL])
+
+    body_properties: Optional[List[str]] = None
+    fetch_text_body_values: Optional[bool] = None
+    fetch_html_body_values: Optional[bool] = None
+    fetch_all_body_values: Optional[bool] = None
+    max_body_value_bytes: Optional[int] = None
+
+
+@dataclass
+class EmailGetResponse(GetResponse):
+    data: List[Email] = field(metadata=config(field_name="list"))
+
+
+@dataclass
 class EmailQuery(Query):
     @classmethod
     def name(cls) -> str:
@@ -75,25 +97,3 @@ class EmailQueryFilterOperator(Model):
 
 
 EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]
-
-
-@dataclass
-class EmailGet(Get):
-    @classmethod
-    def name(cls) -> str:
-        return "Email/get"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
-
-    body_properties: Optional[List[str]] = None
-    fetch_text_body_values: Optional[bool] = None
-    fetch_html_body_values: Optional[bool] = None
-    fetch_all_body_values: Optional[bool] = None
-    max_body_value_bytes: Optional[int] = None
-
-
-@dataclass
-class EmailGetResponse(GetResponse):
-    data: List[Email] = field(metadata=config(field_name="list"))

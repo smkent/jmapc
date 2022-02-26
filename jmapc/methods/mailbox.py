@@ -12,6 +12,22 @@ from .methods import Get, GetResponse, Query, QueryResponse
 
 
 @dataclass
+class MailboxGet(Get):
+    @classmethod
+    def name(cls) -> str:
+        return "Mailbox/get"
+
+    @classmethod
+    def using(cls) -> set[str]:
+        return set([constants.JMAP_URN_MAIL])
+
+
+@dataclass
+class MailboxGetResponse(GetResponse):
+    data: List[Mailbox] = field(metadata=config(field_name="list"))
+
+
+@dataclass
 class MailboxQuery(Query):
     @classmethod
     def name(cls) -> str:
@@ -45,19 +61,3 @@ class MailboxQueryFilterOperator(Model):
 MailboxQueryFilter = Union[
     MailboxQueryFilterCondition, MailboxQueryFilterOperator
 ]
-
-
-@dataclass
-class MailboxGet(Get):
-    @classmethod
-    def name(cls) -> str:
-        return "Mailbox/get"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
-
-
-@dataclass
-class MailboxGetResponse(GetResponse):
-    data: List[Mailbox] = field(metadata=config(field_name="list"))

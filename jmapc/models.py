@@ -25,12 +25,12 @@ class Identity(Model):
 class Mailbox(Model):
     id: str = field(metadata=config(field_name="Id"))
     name: str
-    sort_order: int = field(metadata=config(field_name="sortOrder"))
-    total_emails: int = field(metadata=config(field_name="totalEmails"))
-    unread_emails: int = field(metadata=config(field_name="unreadEmails"))
-    total_threads: int = field(metadata=config(field_name="totalThreads"))
-    unread_threads: int = field(metadata=config(field_name="unreadThreads"))
-    is_subsribed: bool = field(metadata=config(field_name="isSubscribed"))
+    sort_order: int
+    total_emails: int
+    unread_emails: int
+    total_threads: int
+    unread_threads: int
+    is_subscribed: bool
     role: Optional[str] = None
     parent_id: Optional[str] = field(
         metadata=config(field_name="parentId"), default=None
