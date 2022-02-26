@@ -38,7 +38,7 @@ types-requests = "^2.27.11"
 responses = "^0.18.0"
 
 [tool.poetry-dynamic-versioning]
-enable = true
+enable = false
 vcs = "git"
 style = "semver"
 
