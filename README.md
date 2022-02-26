@@ -22,6 +22,14 @@ Todo list:
 * Implement `EmailSubmission` methods for sending email
 * Write documentation
 
+## Installation
+
+[jmapc is available on PyPI][jmapc-pypi]:
+
+```
+pip install jmapc
+```
+
 ## Examples
 
 First, run `poetry install` to set up your local repository.
@@ -59,3 +67,4 @@ Created from [smkent/cookie-python][cookie-python] using
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation
+[jmapc-pypi]: https://pypi.org/project/jmapc/
