@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 
 import requests
@@ -61,7 +62,7 @@ class Client:
         using = list(set([constants.JMAP_URN_CORE]).union(call.using()))
         result = self._api_call(
             {
-                "using": using,
+                "using": sorted(using),
                 "methodCalls": [
                     [
                         call.name(),
@@ -85,7 +86,7 @@ class Client:
         )
         return self._api_call(
             {
-                "using": using,
+                "using": sorted(using),
                 "methodCalls": [
                     [
                         c[1].name(),
@@ -113,6 +114,7 @@ class Client:
         return responses
 
     def _api_call(self, call: Any) -> Any:
+        logging.debug(f"Sending JMAP request {json.dumps(call)}")
         r = requests.post(
             self.session.api_url,
             auth=(self._user, self._password),
@@ -120,4 +122,5 @@ class Client:
             data=json.dumps(call),
         )
         r.raise_for_status()
+        logging.debug(f"Received JMAP response {r.text}")
         return self._parse_responses(r.json())

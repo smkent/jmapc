@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
-from .methods import Method, Response
+from .base import Method, Response
 
 
 @dataclass

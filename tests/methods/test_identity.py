@@ -1,79 +1,61 @@
-import json
-
 import responses
 
-from jmapc import Client, Identity, ResultReference
-from jmapc.client import MethodList
+from jmapc import Client, Identity
 from jmapc.methods import IdentityGet, IdentityGetResponse
+
+from ..utils import expect_jmap_call
 
 
 def test_identity_get(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
-    http_responses.add(
-        method=responses.POST,
-        url="https://jmap-api.localhost/api",
-        body=json.dumps(
-            {
-                "methodResponses": [
-                    [
-                        "Identity/get",
+    expected_request = {
+        "methodCalls": [["Identity/get", {"accountId": "u1138"}, "uno"]],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Identity/get",
+                {
+                    "accountId": "u1138",
+                    "list": [
                         {
-                            "accountId": "u1138",
-                            "list": [
-                                {
-                                    "bcc": None,
-                                    "email": "ness@onett.example.net",
-                                    "htmlSignature": "",
-                                    "id": "0001",
-                                    "mayDelete": False,
-                                    "name": "Ness",
-                                    "replyTo": None,
-                                    "textSignature": "",
-                                },
-                            ],
-                            "not_found": [],
-                            "state": "2187",
+                            "bcc": None,
+                            "email": "ness@onett.example.net",
+                            "htmlSignature": "",
+                            "id": "0001",
+                            "mayDelete": False,
+                            "name": "Ness",
+                            "replyTo": None,
+                            "textSignature": "",
                         },
-                        "0",
                     ],
-                ],
-            },
-        ),
+                    "not_found": [],
+                    "state": "2187",
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.call_method(IdentityGet()) == IdentityGetResponse(
+        account_id="u1138",
+        state="2187",
+        not_found=[],
+        data=[
+            Identity(
+                id="0001",
+                name="Ness",
+                email="ness@onett.example.net",
+                replyTo=None,
+                bcc=None,
+                textSignature="",
+                htmlSignature="",
+                mayDelete=False,
+            )
+        ],
     )
-    args: MethodList = [
-        ("0", IdentityGet(ids=None)),
-        (
-            "1",
-            IdentityGet(
-                ids=ResultReference(
-                    name=IdentityGet.name(),
-                    path="/ids",
-                    result_of="0",
-                )
-            ),
-        ),
-    ]
-    resp = client.call_methods(args)
-    assert resp == [
-        (
-            "0",
-            IdentityGetResponse(
-                account_id="u1138",
-                state="2187",
-                not_found=[],
-                data=[
-                    Identity(
-                        id="0001",
-                        name="Ness",
-                        email="ness@onett.example.net",
-                        replyTo=None,
-                        bcc=None,
-                        textSignature="",
-                        htmlSignature="",
-                        mayDelete=False,
-                    )
-                ],
-            ),
-        ),
-    ]

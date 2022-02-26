@@ -2,39 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from dataclasses_json import config
 
-from .serializer import Model, datetime_decode, datetime_encode
-
-
-@dataclass
-class Identity(Model):
-    id: str
-    name: str
-    email: str
-    replyTo: Optional[str]
-    bcc: Optional[List[EmailAddress]]
-    textSignature: Optional[str]
-    htmlSignature: Optional[str]
-    mayDelete: bool
-
-
-@dataclass
-class Mailbox(Model):
-    id: str = field(metadata=config(field_name="Id"))
-    name: str
-    sort_order: int = field(metadata=config(field_name="sortOrder"))
-    total_emails: int = field(metadata=config(field_name="totalEmails"))
-    unread_emails: int = field(metadata=config(field_name="unreadEmails"))
-    total_threads: int = field(metadata=config(field_name="totalThreads"))
-    unread_threads: int = field(metadata=config(field_name="unreadThreads"))
-    is_subsribed: bool = field(metadata=config(field_name="isSubscribed"))
-    role: Optional[str] = None
-    parent_id: Optional[str] = field(
-        metadata=config(field_name="parentId"), default=None
-    )
+from ..serializer import Model, datetime_decode, datetime_encode
+from .models import EmailAddress, ListOrRef, Operator, StrOrRef
 
 
 @dataclass
@@ -59,6 +32,7 @@ class Email(Model):
     to: Optional[List[EmailAddress]] = None
     cc: Optional[List[EmailAddress]] = None
     bcc: Optional[List[EmailAddress]] = None
+    reply_to: Optional[List[EmailAddress]] = None
     subject: Optional[str] = None
     sent_at: Optional[datetime] = field(
         default=None,
@@ -71,12 +45,6 @@ class Email(Model):
     attachments: Optional[List[EmailBodyPart]] = None
     has_attachment: Optional[bool] = None
     preview: Optional[str] = None
-
-
-@dataclass
-class EmailAddress(Model):
-    name: Optional[str] = None
-    email: Optional[str] = None
 
 
 @dataclass
@@ -109,40 +77,40 @@ class EmailBodyValue(Model):
 
 
 @dataclass
-class Thread(Model):
-    def __len__(self) -> int:
-        return len(self.email_ids)
-
-    id: str
-    email_ids: List[str]
+class EmailQueryFilterCondition(Model):
+    in_mailbox: Optional[StrOrRef] = None
+    in_mailbox_other_than: Optional[ListOrRef] = None
+    before: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+    after: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+    min_size: Optional[int] = None
+    max_size: Optional[int] = None
+    all_in_thread_have_keyword: Optional[StrOrRef] = None
+    some_in_thread_have_keyword: Optional[StrOrRef] = None
+    none_in_thread_have_keyword: Optional[StrOrRef] = None
+    has_keyword: Optional[StrOrRef] = None
+    not_keyword: Optional[StrOrRef] = None
+    has_attachment: Optional[bool] = None
+    text: Optional[StrOrRef] = None
+    mail_from: Optional[str] = field(
+        metadata=config(field_name="from"), default=None
+    )
+    to: Optional[StrOrRef] = None
+    cc: Optional[StrOrRef] = None
+    bcc: Optional[StrOrRef] = None
+    body: Optional[StrOrRef] = None
+    header: Optional[ListOrRef] = None
 
 
 @dataclass
-class ThreadEmail(Model):
-    id: str
-    mailbox_ids: List[str]
-    is_unread: bool
-    is_flagged: bool
-
-
-@dataclass
-class Comparator(Model):
-    property: str
-    is_ascending: bool = True
-    collation: Optional[str] = None
-    anchor: Optional[str] = None
-    anchor_offset: int = 0
-    limit: Optional[int] = None
-    calculate_total: bool = False
-    position: int = 0
-
-
-@dataclass
-class FilterOperator(Model):
+class EmailQueryFilterOperator(Model):
     operator: Operator
+    conditions: List[EmailQueryFilter]
 
 
-class Operator:
-    AND = "AND"
-    OR = "OR"
-    NOT = "NOT"
+EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]
