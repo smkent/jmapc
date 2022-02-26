@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 import requests
 
 from . import constants
-from .config import Config
 from .types import (
     EmailGetResponse,
     EmailQueryResponse,
@@ -34,16 +33,18 @@ class JMAP(object):
     }
     METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 
-    def __init__(self) -> None:
-        self._config = Config()
+    def __init__(self, host: str, user: str, password: str) -> None:
+        self._host: str = host
+        self._user: str = user
+        self._password: str = password
         self._session: Optional[JMAPSession] = None
 
     @property
     def session(self) -> JMAPSession:
         if not self._session:
             r = requests.get(
-                f"https://{self._config.hostname}/.well-known/jmap",
-                auth=(self._config.username, self._config.password),
+                f"https://{self._host}/.well-known/jmap",
+                auth=(self._user, self._password),
             )
             r.raise_for_status()
             self._session = JMAPSession.from_dict(r.json())
@@ -115,7 +116,7 @@ class JMAP(object):
     def _api_call(self, call: Any) -> Any:
         r = requests.post(
             self.session.api_url,
-            auth=(self._config.username, self._config.password),
+            auth=(self._user, self._password),
             headers={"Content-Type": "application/json"},
             data=json.dumps(call),
         )

@@ -1,7 +1,5 @@
 import json
-import os
 from typing import Iterable
-from unittest import mock
 
 import pytest
 import responses
@@ -16,20 +14,13 @@ from jmapc.types import (
 from jmapc.types.methods import MethodList
 
 
-@pytest.fixture(autouse=True)
-def os_environ() -> Iterable[None]:
-    mock_environ = dict(
-        JMAP_HOSTNAME="jmap-example.localhost",
-        JMAP_USERNAME="ness",
-        JMAP_PASSWORD="pk_fire",
-    )
-    with mock.patch.object(os, "environ", mock_environ) as _:
-        yield
-
-
 @pytest.fixture
 def jmap() -> Iterable[JMAP]:
-    yield JMAP()
+    yield JMAP(
+        host="jmap-example.localhost",
+        user="ness",
+        password="pk_fire",
+    )
 
 
 @pytest.fixture
