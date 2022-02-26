@@ -62,7 +62,7 @@ class Client:
         using = list(set([constants.JMAP_URN_CORE]).union(call.using()))
         result = self._api_call(
             {
-                "using": using,
+                "using": sorted(using),
                 "methodCalls": [
                     [
                         call.name(),
@@ -86,7 +86,7 @@ class Client:
         )
         return self._api_call(
             {
-                "using": using,
+                "using": sorted(using),
                 "methodCalls": [
                     [
                         c[1].name(),

@@ -8,6 +8,8 @@ import responses
 
 from jmapc import Client
 
+pytest.register_assert_rewrite("tests.utils")
+
 
 @pytest.fixture(autouse=True)
 def test_log() -> Iterable[None]:

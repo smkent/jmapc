@@ -1,6 +1,3 @@
-import json
-from typing import Dict, Tuple
-
 import pytest
 import requests
 import responses
@@ -9,6 +6,8 @@ from jmapc import Client
 from jmapc.client import MethodList
 from jmapc.methods import CoreEcho, CoreEchoResponse
 from jmapc.session import Session, SessionPrimaryAccount
+
+from .utils import expect_jmap_call
 
 echo_test_data = dict(
     who="Ness", goods=["Mr. Saturn coin", "Hall of Fame Bat"]
@@ -32,41 +31,26 @@ def test_session(
 def test_call_method(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
-    def _response(
-        request: requests.PreparedRequest,
-    ) -> Tuple[int, Dict[str, str], str]:
-        assert request.headers["Content-Type"] == "application/json"
-        assert json.loads(request.body or "{}") == {
-            "methodCalls": [
-                [
-                    "Core/echo",
-                    echo_test_data,
-                    "uno",
-                ],
+    expected_request = {
+        "methodCalls": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "uno",
             ],
-            "using": ["urn:ietf:params:jmap:core"],
-        }
-        return (
-            200,
-            dict(),
-            json.dumps(
-                {
-                    "methodResponses": [
-                        [
-                            "Core/echo",
-                            echo_test_data,
-                            "uno",
-                        ],
-                    ],
-                },
-            ),
-        )
-
-    http_responses.add_callback(
-        method=responses.POST,
-        url="https://jmap-api.localhost/api",
-        callback=_response,
-    )
+        ],
+        "using": ["urn:ietf:params:jmap:core"],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "uno",
+            ],
+        ],
+    }
+    expect_jmap_call(http_responses, expected_request, response)
     assert client.call_method(
         CoreEcho(data=echo_test_data)
     ) == CoreEchoResponse(data=echo_test_data)
@@ -88,51 +72,36 @@ def test_call_methods(
     http_responses: responses.RequestsMock,
     method_params: MethodList,
 ) -> None:
-    def _response(
-        request: requests.PreparedRequest,
-    ) -> Tuple[int, Dict[str, str], str]:
-        assert request.headers["Content-Type"] == "application/json"
-        assert json.loads(request.body or "{}") == {
-            "methodCalls": [
-                [
-                    "Core/echo",
-                    echo_test_data,
-                    "0",
-                ],
-                [
-                    "Core/echo",
-                    echo_test_data,
-                    "1",
-                ],
+    expected_request = {
+        "methodCalls": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "0",
             ],
-            "using": ["urn:ietf:params:jmap:core"],
-        }
-        return (
-            200,
-            dict(),
-            json.dumps(
-                {
-                    "methodResponses": [
-                        [
-                            "Core/echo",
-                            echo_test_data,
-                            "0",
-                        ],
-                        [
-                            "Core/echo",
-                            echo_test_data,
-                            "1",
-                        ],
-                    ],
-                },
-            ),
-        )
-
-    http_responses.add_callback(
-        method=responses.POST,
-        url="https://jmap-api.localhost/api",
-        callback=_response,
-    )
+            [
+                "Core/echo",
+                echo_test_data,
+                "1",
+            ],
+        ],
+        "using": ["urn:ietf:params:jmap:core"],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "0",
+            ],
+            [
+                "Core/echo",
+                echo_test_data,
+                "1",
+            ],
+        ],
+    }
+    expect_jmap_call(http_responses, expected_request, response)
     expected_response = CoreEchoResponse(data=echo_test_data)
     assert client.call_methods(method_params) == [
         ("0", expected_response),
