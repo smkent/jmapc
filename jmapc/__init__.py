@@ -9,14 +9,13 @@ from .models import (
     EmailBodyValue,
     EmailHeader,
     Identity,
-    ListOrRef,
     Mailbox,
     Operator,
-    StrOrRef,
     Thread,
     ThreadEmail,
 )
 from .ref import ResultReference
+from .serializer import ListOrRef, StrOrRef
 
 __all__ = [
     "Client",
