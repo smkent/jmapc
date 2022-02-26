@@ -6,8 +6,7 @@ from typing import List, Optional
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Identity
-from ..serializer import ListOrRef
+from ..models import Identity, ListOrRef
 from .methods import Get, GetResponse
 
 

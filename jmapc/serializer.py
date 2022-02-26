@@ -1,15 +1,11 @@
 from dataclasses import fields
 from datetime import datetime
-from typing import Any, Dict, List, Optional, TypeVar, Union
+from typing import Any, Dict, Optional
 
 import dataclasses_json
 import dateutil.parser
 
 from .ref import ResultReference
-
-T = TypeVar("T")
-StrOrRef = Union[str, ResultReference]
-ListOrRef = Union[ResultReference, List[T]]
 
 
 def datetime_encode(dt: Optional[datetime]) -> Optional[str]:

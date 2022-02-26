@@ -6,8 +6,8 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Mailbox, Operator
-from ..serializer import ListOrRef, Model, StrOrRef
+from ..models import ListOrRef, Mailbox, Operator, StrOrRef
+from ..serializer import Model
 from .methods import Get, GetResponse, Query, QueryResponse
 
 

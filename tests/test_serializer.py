@@ -2,7 +2,8 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from jmapc import ResultReference
-from jmapc.serializer import ListOrRef, Model
+from jmapc.models import ListOrRef
+from jmapc.serializer import Model
 
 
 def test_camel_case() -> None:
