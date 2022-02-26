@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 
 import os
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 
 from jmapc import (
     Client,
+    Comparator,
+    EmailQueryFilterCondition,
     MailboxQueryFilterCondition,
     ResultReference,
-    EmailQueryFilterCondition,
-    Comparator,
 )
 from jmapc.methods import (
+    EmailGet,
+    EmailQuery,
     MailboxGet,
     MailboxQuery,
-    EmailQuery,
     ThreadGet,
-    EmailGet,
 )
 
 # Create and configure client
