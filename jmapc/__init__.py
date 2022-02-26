@@ -1,3 +1,4 @@
+from . import errors, methods
 from .client import JMAPClient
 from .models import (
     Comparator,
@@ -14,7 +15,7 @@ from .models import (
     Thread,
     ThreadEmail,
 )
-from .util import ResultReference
+from .ref import ResultReference
 
 __all__ = [
     "Comparator",
@@ -32,4 +33,6 @@ __all__ = [
     "StrOrRef",
     "Thread",
     "ThreadEmail",
+    "errors",
+    "methods",
 ]

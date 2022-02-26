@@ -1,9 +1,11 @@
-from dataclasses import dataclass, fields
+from dataclasses import fields
 from datetime import datetime
 from typing import Any, Dict, Optional
 
 import dataclasses_json
 import dateutil.parser
+
+from .ref import ResultReference
 
 
 def datetime_encode(dt: Optional[datetime]) -> Optional[str]:
@@ -16,16 +18,6 @@ def datetime_decode(value: Optional[str]) -> Optional[datetime]:
     if not value:
         return None
     return dateutil.parser.isoparse(value)
-
-
-@dataclass
-class ResultReference(dataclasses_json.DataClassJsonMixin):
-    dataclass_json_config = dataclasses_json.config(
-        letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
-    )["dataclasses_json"]
-    name: str
-    path: str
-    result_of: str
 
 
 class JsonDataClass(dataclasses_json.DataClassJsonMixin):
