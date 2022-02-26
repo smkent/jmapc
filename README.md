@@ -1,6 +1,26 @@
-# jmapc
+# A [JMAP][jmapio] client library for Python
 
-A [JMAP][jmapio] client library for Python
+`jmapc` is in initial development.
+
+Currently implemented:
+
+* Basic models
+* Request methods:
+  * `Core/echo`
+  * `Email/get`
+  * `Email/query`
+  * `Identity/get`
+  * `Thread/get`
+  * `Mailbox/get`
+  * `Mailbox/query`
+* Combined requests with support for result references
+* Basic JMAP method response error handling
+* Unit tests for basic functionality and methods
+
+Todo list:
+
+* Implement `EmailSubmission` methods for sending email
+* Write documentation
 
 ## Examples
 
