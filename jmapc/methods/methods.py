@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional
 
-from . import errors
-from .models import Comparator, JMAPList
-from .util import JsonDataClass
+from ..models import Comparator, JMAPList
+from ..util import JsonDataClass
 
 
 @dataclass
@@ -53,7 +52,3 @@ class Query(Method):
 @dataclass
 class QueryResponse(Response):
     pass
-
-
-MethodList = List[Tuple[str, Method]]
-MethodResponseList = List[Tuple[str, Union[errors.JMAPError, Response]]]

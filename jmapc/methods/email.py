@@ -7,9 +7,9 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
+from ..models import Email, JMAPList, JMAPStr, OperatorLiteral
+from ..util import JsonDataClass, datetime_decode, datetime_encode
 from .methods import Get, GetResponse, Query, QueryResponse
-from .models import Email, JMAPList, JMAPStr, OperatorLiteral
-from .util import JsonDataClass, datetime_decode, datetime_encode
 
 
 @dataclass

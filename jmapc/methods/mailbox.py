@@ -6,9 +6,9 @@ from typing import List, Optional, Union
 from dataclasses_json import config
 
 from .. import constants
+from ..models import JMAPList, JMAPStr, Mailbox, OperatorLiteral
+from ..util import JsonDataClass
 from .methods import Get, GetResponse, Query, QueryResponse
-from .models import JMAPList, JMAPStr, Mailbox, OperatorLiteral
-from .util import JsonDataClass
 
 
 @dataclass

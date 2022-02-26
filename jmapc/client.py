@@ -5,20 +5,21 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 
 import requests
 
-from . import constants
-from .types import (
+from . import constants, errors
+from .methods import (
     EmailGetResponse,
     EmailQueryResponse,
     IdentityGetResponse,
-    JMAPSession,
     MailboxGetResponse,
     MailboxQueryResponse,
     Method,
     Response,
     ThreadGetResponse,
-    errors,
 )
-from .types.methods import MethodList, MethodResponseList
+from .session import Session
+
+MethodList = List[Tuple[str, Method]]
+MethodResponseList = List[Tuple[str, Union[errors.JMAPError, Response]]]
 
 
 class JMAPClient:
@@ -37,17 +38,17 @@ class JMAPClient:
         self._host: str = host
         self._user: str = user
         self._password: str = password
-        self._session: Optional[JMAPSession] = None
+        self._session: Optional[Session] = None
 
     @property
-    def session(self) -> JMAPSession:
+    def session(self) -> Session:
         if not self._session:
             r = requests.get(
                 f"https://{self._host}/.well-known/jmap",
                 auth=(self._user, self._password),
             )
             r.raise_for_status()
-            self._session = JMAPSession.from_dict(r.json())
+            self._session = Session.from_dict(r.json())
         return self._session
 
     @property

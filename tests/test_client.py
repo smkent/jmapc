@@ -4,14 +4,9 @@ from typing import Iterable
 import pytest
 import responses
 
-from jmapc import JMAPClient
-from jmapc.types import (
-    Identity,
-    IdentityGet,
-    IdentityGetResponse,
-    ResultReference,
-)
-from jmapc.types.methods import MethodList
+from jmapc import Identity, JMAPClient, ResultReference
+from jmapc.client import MethodList
+from jmapc.methods import IdentityGet, IdentityGetResponse
 
 
 @pytest.fixture

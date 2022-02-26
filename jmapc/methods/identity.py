@@ -6,21 +6,21 @@ from typing import List
 from dataclasses_json import config
 
 from .. import constants
+from ..models import Identity
 from .methods import Get, GetResponse
-from .models import Thread
 
 
 @dataclass
-class ThreadGet(Get):
+class IdentityGet(Get):
     @classmethod
     def name(cls) -> str:
-        return "Thread/get"
+        return "Identity/get"
 
     @classmethod
     def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
+        return set([constants.JMAP_URN_SUBMISSION])
 
 
 @dataclass
-class ThreadGetResponse(GetResponse):
-    data: List[Thread] = field(metadata=config(field_name="list"))
+class IdentityGetResponse(GetResponse):
+    data: List[Identity] = field(metadata=config(field_name="list"))

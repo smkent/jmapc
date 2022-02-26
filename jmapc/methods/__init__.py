@@ -1,6 +1,4 @@
-from . import errors
-from .methods import Method, Response
-from .methods_email import (
+from .email import (
     EmailGet,
     EmailGetResponse,
     EmailQuery,
@@ -9,8 +7,8 @@ from .methods_email import (
     EmailQueryFilterOperator,
     EmailQueryResponse,
 )
-from .methods_identity import IdentityGet, IdentityGetResponse
-from .methods_mailbox import (
+from .identity import IdentityGet, IdentityGetResponse
+from .mailbox import (
     MailboxGet,
     MailboxGetResponse,
     MailboxQuery,
@@ -19,22 +17,10 @@ from .methods_mailbox import (
     MailboxQueryFilterOperator,
     MailboxQueryResponse,
 )
-from .methods_thread import ThreadGet, ThreadGetResponse
-from .models import (
-    Comparator,
-    Email,
-    Identity,
-    IdentityBCC,
-    Mailbox,
-    ResultReference,
-    Thread,
-    ThreadEmail,
-)
-from .session import JMAPSession
+from .methods import Method, Response
+from .thread import ThreadGet, ThreadGetResponse
 
 __all__ = [
-    "Comparator",
-    "Email",
     "EmailGet",
     "EmailGetResponse",
     "EmailQuery",
@@ -42,12 +28,8 @@ __all__ = [
     "EmailQueryFilterCondition",
     "EmailQueryFilterOperator",
     "EmailQueryResponse",
-    "JMAPError",
-    "Identity",
-    "IdentityBCC",
     "IdentityGet",
     "IdentityGetResponse",
-    "Mailbox",
     "MailboxGet",
     "MailboxGetResponse",
     "MailboxQuery",
@@ -57,11 +39,6 @@ __all__ = [
     "MailboxQueryResponse",
     "Method",
     "Response",
-    "ResultReference",
-    "JMAPSession",
-    "Thread",
-    "ThreadEmail",
     "ThreadGet",
     "ThreadGetResponse",
-    "errors",
 ]
