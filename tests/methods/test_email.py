@@ -71,7 +71,7 @@ def test_identity_get(
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.call_method(
+    assert client.method_call(
         EmailGet(
             ids=["f0001", "f1000"],
             fetch_text_body_values=False,

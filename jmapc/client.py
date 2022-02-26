@@ -58,15 +58,15 @@ class Client:
     def account_id(self) -> str:
         return self.session.primary_accounts.mail
 
-    def call_method(self, call: Method) -> Any:
-        using = list(set([constants.JMAP_URN_CORE]).union(call.using()))
-        result = self._api_call(
+    def method_call(self, method: Method) -> Any:
+        using = list(set([constants.JMAP_URN_CORE]).union(method.using()))
+        result = self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
                     [
-                        call.name(),
-                        call.to_dict(account_id=self.account_id),
+                        method.name(),
+                        method.to_dict(account_id=self.account_id),
                         "uno",
                     ]
                 ],
@@ -74,17 +74,17 @@ class Client:
         )
         return result[0][1]
 
-    def call_methods(self, calls: Union[list[Method], MethodList]) -> Any:
+    def method_calls(self, calls: Union[list[Method], MethodList]) -> Any:
         if isinstance(calls[0], Method):
             just_calls = cast(List[Method], calls)
-            calls = [(str(i), call) for i, call in enumerate(just_calls)]
+            calls = [(str(i), method) for i, method in enumerate(just_calls)]
         calls = cast(MethodList, calls)
         using = list(
             set([constants.JMAP_URN_CORE]).union(
                 *[c[1].using() for c in calls]
             )
         )
-        return self._api_call(
+        return self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
@@ -97,6 +97,18 @@ class Client:
                 ],
             },
         )
+
+    def _api_request(self, request: Any) -> Any:
+        logging.debug(f"Sending JMAP request {json.dumps(request)}")
+        r = requests.post(
+            self.session.api_url,
+            auth=(self._user, self._password),
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(request),
+        )
+        r.raise_for_status()
+        logging.debug(f"Received JMAP response {r.text}")
+        return self._parse_responses(r.json())
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
         method_responses = cast(
@@ -112,15 +124,3 @@ class Client:
                 )
             )
         return responses
-
-    def _api_call(self, call: Any) -> Any:
-        logging.debug(f"Sending JMAP request {json.dumps(call)}")
-        r = requests.post(
-            self.session.api_url,
-            auth=(self._user, self._password),
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(call),
-        )
-        r.raise_for_status()
-        logging.debug(f"Received JMAP response {r.text}")
-        return self._parse_responses(r.json())

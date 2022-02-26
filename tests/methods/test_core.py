@@ -32,5 +32,5 @@ def test_core_echo(
     expect_jmap_call(http_responses, expected_request, response)
     echo = CoreEcho(data=test_data)
     assert echo.to_dict() == test_data
-    resp = client.call_method(echo)
+    resp = client.method_call(echo)
     assert resp == CoreEchoResponse(data=test_data)

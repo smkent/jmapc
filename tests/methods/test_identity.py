@@ -42,7 +42,7 @@ def test_identity_get(
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.call_method(IdentityGet()) == IdentityGetResponse(
+    assert client.method_call(IdentityGet()) == IdentityGetResponse(
         account_id="u1138",
         state="2187",
         not_found=[],

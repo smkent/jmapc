@@ -58,7 +58,7 @@ def test_identity_get(
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.call_method(
+    assert client.method_call(
         MailboxGet(ids=["MBX1", "MBX1000"])
     ) == MailboxGetResponse(
         account_id="u1138",
