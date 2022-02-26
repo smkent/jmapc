@@ -4,7 +4,7 @@ from typing import Iterable
 import pytest
 import responses
 
-from jmapc import Identity, Client, ResultReference
+from jmapc import Client, Identity, ResultReference
 from jmapc.client import MethodList
 from jmapc.methods import IdentityGet, IdentityGetResponse
 

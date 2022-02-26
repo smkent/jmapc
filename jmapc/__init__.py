@@ -1,5 +1,6 @@
 from . import errors, methods
 from .client import Client
+from .errors import Error
 from .models import (
     Comparator,
     Email,
@@ -18,14 +19,15 @@ from .models import (
 from .ref import ResultReference
 
 __all__ = [
+    "Client",
     "Comparator",
     "Email",
     "EmailAddress",
     "EmailBodyPart",
     "EmailBodyValue",
     "EmailHeader",
+    "Error",
     "Identity",
-    "Client",
     "ListOrRef",
     "Mailbox",
     "Operator",
