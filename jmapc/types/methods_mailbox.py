@@ -5,10 +5,10 @@ from typing import List, Optional, Union
 
 from dataclasses_json import config
 
-from ... import constants
-from ..util import JsonDataClass
+from .. import constants
 from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
 from .models import JMAPList, JMAPMailbox, JMAPOperatorLiteral, JMAPStr
+from .util import JsonDataClass
 
 
 @dataclass

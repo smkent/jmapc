@@ -6,10 +6,10 @@ from typing import List, Optional, Union
 
 from dataclasses_json import config
 
-from ... import constants
-from ..util import JsonDataClass, datetime_decode, datetime_encode
+from .. import constants
 from .methods import JMAPGet, JMAPGetResponse, JMAPQuery, JMAPQueryResponse
 from .models import JMAPEmail, JMAPList, JMAPOperatorLiteral, JMAPStr
+from .util import JsonDataClass, datetime_decode, datetime_encode
 
 
 @dataclass

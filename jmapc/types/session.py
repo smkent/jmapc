@@ -4,8 +4,8 @@ from dataclasses import dataclass, field
 
 from dataclasses_json import config
 
-from ... import constants
-from ..util import JsonDataClass
+from .. import constants
+from .util import JsonDataClass
 
 
 @dataclass

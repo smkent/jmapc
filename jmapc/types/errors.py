@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
 
-from ..util import JsonDataClass
+from .util import JsonDataClass
 
 __all__ = ["JMAPError", "JMAPServerFail"]
 

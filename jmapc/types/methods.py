@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from ..util import JsonDataClass
 from .models import JMAPComparator, JMAPList
+from .util import JsonDataClass
 
 
 @dataclass

@@ -6,8 +6,8 @@ from unittest import mock
 import pytest
 import responses
 
-from jmapc.jmap import JMAP, JMAPMethodPair
-from jmapc.types.jmap import (
+from jmapc import JMAP, JMAPMethodPair
+from jmapc.types import (
     JMAPIdentity,
     JMAPIdentityGet,
     JMAPIdentityGetResponse,

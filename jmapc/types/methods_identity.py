@@ -5,22 +5,22 @@ from typing import List
 
 from dataclasses_json import config
 
-from ... import constants
+from .. import constants
 from .methods import JMAPGet, JMAPGetResponse
-from .models import JMAPThread
+from .models import JMAPIdentity
 
 
 @dataclass
-class JMAPThreadGet(JMAPGet):
+class JMAPIdentityGet(JMAPGet):
     @classmethod
     def name(cls) -> str:
-        return "Thread/get"
+        return "Identity/get"
 
     @classmethod
     def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
+        return set([constants.JMAP_URN_SUBMISSION])
 
 
 @dataclass
-class JMAPThreadGetResponse(JMAPGetResponse):
-    data: List[JMAPThread] = field(metadata=config(field_name="list"))
+class JMAPIdentityGetResponse(JMAPGetResponse):
+    data: List[JMAPIdentity] = field(metadata=config(field_name="list"))

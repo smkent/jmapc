@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
-from ..util import (
+from .util import (
     JMAPResultReference,
     JsonDataClass,
     datetime_decode,

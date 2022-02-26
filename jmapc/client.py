@@ -7,7 +7,7 @@ import requests
 
 from . import constants
 from .config import Config
-from .types.jmap import (
+from .types import (
     JMAPEmailGetResponse,
     JMAPEmailQueryResponse,
     JMAPIdentityGetResponse,
