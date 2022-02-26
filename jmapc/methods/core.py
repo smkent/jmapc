@@ -26,9 +26,6 @@ class CoreEcho(Method):
 class CoreEchoResponse(Response):
     data: Optional[Dict[str, Any]] = None
 
-    def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
-        return self.data or dict()
-
     @classmethod
     def from_dict(
         cls, kvs: Any, *args: Any, **kwargs: Any

@@ -40,7 +40,7 @@ Prerequisites: [Poetry][poetry]
 
 ### Examples
 
-[Any of the examples](/examples) can be invoked with `poetry run`:
+Any of the included examples can be invoked with `poetry run`:
 
 ```sh
 JMAP_HOST=jmap.example.com \
