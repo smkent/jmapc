@@ -1,33 +1,10 @@
 import json
-from typing import Iterable
 
-import pytest
 import responses
 
 from jmapc import Client, Identity, ResultReference
 from jmapc.client import MethodList
 from jmapc.methods import IdentityGet, IdentityGetResponse
-
-
-@pytest.fixture
-def http_responses() -> Iterable[responses.RequestsMock]:
-    with responses.RequestsMock() as resp_mock:
-        resp_mock.add(
-            method=responses.GET,
-            url="https://jmap-example.localhost/.well-known/jmap",
-            body=json.dumps(
-                {
-                    "apiUrl": "https://jmap-api.localhost/api",
-                    "username": "ness@onett.example.net",
-                    "primary_accounts": {
-                        "urn:ietf:params:jmap:core": "u1138",
-                        "urn:ietf:params:jmap:mail": "u1138",
-                        "urn:ietf:params:jmap:submission": "u1138",
-                    },
-                },
-            ),
-        )
-        yield resp_mock
 
 
 def test_identity_get(
