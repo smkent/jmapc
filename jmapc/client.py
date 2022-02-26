@@ -21,7 +21,7 @@ from .types import (
 from .types.methods import MethodList, MethodResponseList
 
 
-class JMAP(object):
+class JMAPClient:
     METHOD_RESPONSES: Dict[str, Type[Union[errors.JMAPError, Response]]] = {
         "Email/get": EmailGetResponse,
         "Email/query": EmailQueryResponse,
@@ -100,7 +100,7 @@ class JMAP(object):
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
         method_responses = cast(
-            List[JMAP.METHOD_RESPONSES_TYPE],
+            List[JMAPClient.METHOD_RESPONSES_TYPE],
             data.get("methodResponses", []),
         )
         responses: MethodResponseList = []
