@@ -77,4 +77,3 @@ def test_identity_get(
             ),
         ),
     ]
-    print(resp)
