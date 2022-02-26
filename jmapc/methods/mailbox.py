@@ -8,7 +8,7 @@ from dataclasses_json import config
 from .. import constants
 from ..models import ListOrRef, Mailbox, Operator, StrOrRef
 from ..serializer import Model
-from .methods import Get, GetResponse, Query, QueryResponse
+from .base import Get, GetResponse, Query, QueryResponse
 
 
 @dataclass

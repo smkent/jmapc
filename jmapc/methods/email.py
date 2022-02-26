@@ -9,7 +9,7 @@ from dataclasses_json import config
 from .. import constants
 from ..models import Email, ListOrRef, Operator, StrOrRef
 from ..serializer import Model, datetime_decode, datetime_encode
-from .methods import Get, GetResponse, Query, QueryResponse
+from .base import Get, GetResponse, Query, QueryResponse
 
 
 @dataclass

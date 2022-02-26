@@ -1,3 +1,4 @@
+from .base import Method, Response
 from .core import CoreEcho, CoreEchoResponse
 from .email import (
     EmailGet,
@@ -18,7 +19,6 @@ from .mailbox import (
     MailboxQueryFilterOperator,
     MailboxQueryResponse,
 )
-from .methods import Method, Response
 from .thread import ThreadGet, ThreadGetResponse
 
 __all__ = [
