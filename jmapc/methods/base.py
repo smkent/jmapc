@@ -52,6 +52,11 @@ class GetResponse(ResponseWithAccount):
 @dataclass
 class Query(MethodWithAccount):
     sort: Optional[List[Comparator]] = None
+    position: Optional[int] = None
+    anchor: Optional[str] = None
+    anchorOffset: Optional[int] = None
+    limit: Optional[int] = None
+    calculateTotal: Optional[bool] = None
 
 
 @dataclass
