@@ -12,13 +12,13 @@ from .serializer import Model
 class Session(Model):
     username: str
     api_url: str = field(metadata=config(field_name="apiUrl"))
-    primary_accounts: JMAPSessionPrimaryAccount = field(
+    primary_accounts: SessionPrimaryAccount = field(
         metadata=config(field_name="primaryAccounts")
     )
 
 
 @dataclass
-class JMAPSessionPrimaryAccount(Model):
+class SessionPrimaryAccount(Model):
     core: str = field(metadata=config(field_name=constants.JMAP_URN_CORE))
     mail: str = field(metadata=config(field_name=constants.JMAP_URN_MAIL))
     submission: str = field(
