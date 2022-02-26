@@ -1,4 +1,4 @@
-# A [JMAP][jmapio] client library for Python
+# jmapc: A [JMAP][jmapio] client library for Python
 
 jmapc is in initial development.
 

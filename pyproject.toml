@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "jmapc"
 version = "0.0.0"
-description = "A JMAP client library for Python"
+description = "JMAP client library for Python"
 license = "GPL-3.0-or-later"
 authors = ["Stephen Kent <smkent@smkent.net>"]
 readme = "README.md"
