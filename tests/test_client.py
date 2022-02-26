@@ -4,7 +4,7 @@ from jmapc import Client
 from jmapc.session import Session, SessionPrimaryAccount
 
 
-def test_identity_get(
+def test_session(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
     assert client.session == Session(
