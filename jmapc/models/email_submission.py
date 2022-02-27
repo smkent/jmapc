@@ -11,7 +11,7 @@ from ..serializer import Model, datetime_decode, datetime_encode
 
 @dataclass
 class EmailSubmission(Model):
-    id: str = field(metadata=config(field_name="Id"), default=None)
+    id: Optional[str] = field(metadata=config(field_name="Id"), default=None)
     identity_id: Optional[str] = None
     email_id: Optional[str] = None
     thread_id: Optional[str] = None

@@ -115,20 +115,18 @@ def test_email_get(
 def test_email_set(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
-    draft = (
-        Email(
-            mail_from=[
-                EmailAddress(name="Paula", email="paula@twoson.example.net"),
-            ],
-            to=[
-                EmailAddress(name="Ness", email="ness@onett.example.net"),
-            ],
-            subject="I'm taking a day trip to Happy Happy Village",
-            keywords={"$draft": True},
-            mailbox_ids={"MBX1": True},
-            body_values=dict(body=EmailBodyValue(value="See you there!")),
-            text_body=[EmailBodyPart(part_id="body", type="text/plain")],
-        ),
+    draft = Email(
+        mail_from=[
+            EmailAddress(name="Paula", email="paula@twoson.example.net"),
+        ],
+        to=[
+            EmailAddress(name="Ness", email="ness@onett.example.net"),
+        ],
+        subject="I'm taking a day trip to Happy Happy Village",
+        keywords={"$draft": True},
+        mailbox_ids={"MBX1": True},
+        body_values=dict(body=EmailBodyValue(value="See you there!")),
+        text_body=[EmailBodyPart(part_id="body", type="text/plain")],
     )
 
     expected_request = {
@@ -138,34 +136,32 @@ def test_email_set(
                 {
                     "accountId": "u1138",
                     "create": {
-                        "draft": [
-                            {
-                                "from": [
-                                    {
-                                        "email": "paula@twoson.example.net",
-                                        "name": "Paula",
-                                    }
-                                ],
-                                "to": [
-                                    {
-                                        "email": "ness@onett.example.net",
-                                        "name": "Ness",
-                                    }
-                                ],
-                                "subject": (
-                                    "I'm taking a day trip to "
-                                    "Happy Happy Village"
-                                ),
-                                "keywords": {"$draft": True},
-                                "mailboxIds": {"MBX1": True},
-                                "bodyValues": {
-                                    "body": {"value": "See you there!"}
-                                },
-                                "textBody": [
-                                    {"partId": "body", "type": "text/plain"}
-                                ],
-                            }
-                        ]
+                        "draft": {
+                            "from": [
+                                {
+                                    "email": "paula@twoson.example.net",
+                                    "name": "Paula",
+                                }
+                            ],
+                            "to": [
+                                {
+                                    "email": "ness@onett.example.net",
+                                    "name": "Ness",
+                                }
+                            ],
+                            "subject": (
+                                "I'm taking a day trip to "
+                                "Happy Happy Village"
+                            ),
+                            "keywords": {"$draft": True},
+                            "mailboxIds": {"MBX1": True},
+                            "bodyValues": {
+                                "body": {"value": "See you there!"}
+                            },
+                            "textBody": [
+                                {"partId": "body", "type": "text/plain"}
+                            ],
+                        }
                     },
                 },
                 "uno",

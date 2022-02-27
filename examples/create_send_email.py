@@ -114,9 +114,9 @@ results = client.method_calls(
         # Send the created draft email, and delete from the Drafts mailbox on
         # success
         EmailSubmissionSet(
-            on_success_destroy_email=["#sendIt"],
+            on_success_destroy_email=["#emailToSend"],
             create=dict(
-                sendIt=EmailSubmission(
+                emailToSend=EmailSubmission(
                     email_id="#draft",
                     identity_id=identity.id,
                     envelope=Envelope(
@@ -135,7 +135,7 @@ assert isinstance(
 ), f"Error sending test email: f{email_send_result}"
 
 # Retrieve sent email metadata from EmailSubmission/set method response
-sent_data = email_send_result.created["sendIt"]
+sent_data = email_send_result.created["emailToSend"]
 
 # Print sent email timestamp
 print(f"Test email sent to {identity.email} at {sent_data.send_at}")

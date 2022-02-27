@@ -12,7 +12,7 @@ from .models import EmailAddress, ListOrRef, Operator, StrOrRef
 
 @dataclass
 class Email(Model):
-    id: str = field(metadata=config(field_name="Id"), default=None)
+    id: Optional[str] = field(metadata=config(field_name="Id"), default=None)
     blob_id: Optional[str] = None
     thread_id: Optional[str] = None
     mailbox_ids: Optional[Dict[str, bool]] = None
