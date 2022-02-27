@@ -1,7 +1,12 @@
 import responses
 
-from jmapc import Client, Mailbox
-from jmapc.methods import MailboxGet, MailboxGetResponse
+from jmapc import Client, Mailbox, MailboxQueryFilterCondition
+from jmapc.methods import (
+    MailboxGet,
+    MailboxGetResponse,
+    MailboxQuery,
+    MailboxQueryResponse,
+)
 
 from ..utils import expect_jmap_call
 
@@ -86,4 +91,46 @@ def test_mailbox_get(
                 is_subscribed=False,
             ),
         ],
+    )
+
+
+def test_mailbox_query(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Mailbox/query",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "name": "Inbox",
+                    },
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Mailbox/query",
+                {
+                    "accountId": "u1138",
+                    "ids": ["MBX1", "MBX5"],
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox"))
+    ) == MailboxQueryResponse(
+        account_id="u1138",
+        ids=["MBX1", "MBX5"],
     )
