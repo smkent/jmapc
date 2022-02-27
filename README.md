@@ -1,5 +1,9 @@
 # jmapc: A [JMAP][jmapio] client library for Python
 
+![PyPI](https://img.shields.io/pypi/v/jmapc)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)
+[![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)](https://codecov.io/gh/smkent/jmapc)
+
 jmapc is in initial development.
 
 Currently implemented:
