@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from dataclasses_json import config
 
 from .. import constants
 from ..models import Email, EmailQueryFilter, ListOrRef
-from .base import Get, GetResponse, Query, QueryResponse
+from .base import Get, GetResponse, Query, QueryResponse, Set, SetResponse
 
 
 @dataclass
@@ -32,6 +32,25 @@ class EmailGet(Get):
 @dataclass
 class EmailGetResponse(GetResponse):
     data: List[Email] = field(metadata=config(field_name="list"))
+
+
+@dataclass
+class EmailSet(Set):
+    @classmethod
+    def name(cls) -> str:
+        return "Email/set"
+
+    @classmethod
+    def using(cls) -> set[str]:
+        return set([constants.JMAP_URN_MAIL])
+
+    create: Optional[Dict[str, Email]] = None
+
+
+@dataclass
+class EmailSetResponse(SetResponse):
+    created: Optional[Dict[str, Email]]
+    updated: Optional[Dict[str, Email]]
 
 
 @dataclass

@@ -2,13 +2,18 @@ from datetime import datetime, timezone
 
 import responses
 
-from jmapc import Client, Email, EmailAddress
-from jmapc.methods import EmailGet, EmailGetResponse
+from jmapc import Client, Email, EmailAddress, EmailBodyPart, EmailBodyValue
+from jmapc.methods import (
+    EmailGet,
+    EmailGetResponse,
+    EmailSet,
+    EmailSetResponse,
+)
 
 from ..utils import expect_jmap_call
 
 
-def test_identity_get(
+def test_email_get(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
     expected_request = {
@@ -104,4 +109,111 @@ def test_identity_get(
                 ),
             ),
         ],
+    )
+
+
+def test_email_set(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    draft = Email(
+        mail_from=[
+            EmailAddress(name="Paula", email="paula@twoson.example.net"),
+        ],
+        to=[
+            EmailAddress(name="Ness", email="ness@onett.example.net"),
+        ],
+        subject="I'm taking a day trip to Happy Happy Village",
+        keywords={"$draft": True},
+        mailbox_ids={"MBX1": True},
+        body_values=dict(body=EmailBodyValue(value="See you there!")),
+        text_body=[EmailBodyPart(part_id="body", type="text/plain")],
+    )
+
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/set",
+                {
+                    "accountId": "u1138",
+                    "create": {
+                        "draft": {
+                            "from": [
+                                {
+                                    "email": "paula@twoson.example.net",
+                                    "name": "Paula",
+                                }
+                            ],
+                            "to": [
+                                {
+                                    "email": "ness@onett.example.net",
+                                    "name": "Ness",
+                                }
+                            ],
+                            "subject": (
+                                "I'm taking a day trip to "
+                                "Happy Happy Village"
+                            ),
+                            "keywords": {"$draft": True},
+                            "mailboxIds": {"MBX1": True},
+                            "bodyValues": {
+                                "body": {"value": "See you there!"}
+                            },
+                            "textBody": [
+                                {"partId": "body", "type": "text/plain"}
+                            ],
+                        }
+                    },
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/set",
+                {
+                    "accountId": "u1138",
+                    "created": {
+                        "draft": {
+                            "blobId": "G12345",
+                            "id": "M1001",
+                            "size": 42,
+                            "threadId": "T1002",
+                        }
+                    },
+                    "destroyed": None,
+                    "newState": "2",
+                    "notCreated": None,
+                    "notDestroyed": None,
+                    "notUpdated": None,
+                    "oldState": "1",
+                    "updated": None,
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+
+    assert client.method_call(
+        EmailSet(create=dict(draft=draft))
+    ) == EmailSetResponse(
+        account_id="u1138",
+        old_state="1",
+        new_state="2",
+        created=dict(
+            draft=Email(
+                blob_id="G12345", id="M1001", size=42, thread_id="T1002"
+            )
+        ),
+        updated=None,
+        destroyed=None,
+        not_created=None,
+        not_updated=None,
+        not_destroyed=None,
     )

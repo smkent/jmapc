@@ -9,17 +9,18 @@ Currently implemented:
   * `Core/echo`
   * `Email/get`
   * `Email/query`
+  * `Email/set`
+  * `EmailSubmission/set`
   * `Identity/get`
-  * `Thread/get`
   * `Mailbox/get`
   * `Mailbox/query`
+  * `Thread/get`
 * Combined requests with support for result references
 * Basic JMAP method response error handling
 * Unit tests for basic functionality and methods
 
 Todo list:
 
-* Implement `EmailSubmission` methods for sending email
 * Write documentation
 
 ## Installation

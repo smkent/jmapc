@@ -11,6 +11,8 @@ from .methods import (
     CoreEchoResponse,
     EmailGetResponse,
     EmailQueryResponse,
+    EmailSetResponse,
+    EmailSubmissionSetResponse,
     IdentityGetResponse,
     MailboxGetResponse,
     MailboxQueryResponse,
@@ -21,7 +23,11 @@ from .methods import (
 from .session import Session
 
 MethodList = List[Tuple[str, Method]]
-MethodResponseList = List[Tuple[str, Union[errors.Error, Response]]]
+MethodResponseOrError = Union[errors.Error, Response]
+MethodResponseList = List[Tuple[str, MethodResponseOrError]]
+MethodCallResponseOrList = Union[
+    MethodResponseOrError, List[MethodResponseOrError]
+]
 
 
 class Client:
@@ -29,6 +35,8 @@ class Client:
         "Core/echo": CoreEchoResponse,
         "Email/get": EmailGetResponse,
         "Email/query": EmailQueryResponse,
+        "Email/set": EmailSetResponse,
+        "EmailSubmission/set": EmailSubmissionSetResponse,
         "Identity/get": IdentityGetResponse,
         "Mailbox/get": MailboxGetResponse,
         "Mailbox/query": MailboxQueryResponse,
@@ -57,9 +65,11 @@ class Client:
     def account_id(self) -> str:
         return self.session.primary_accounts.mail
 
-    def method_call(self, method: Method) -> Any:
+    def method_call(
+        self, method: Method, flatten_single_response: bool = True
+    ) -> MethodCallResponseOrList:
         using = list(set([constants.JMAP_URN_CORE]).union(method.using()))
-        result = self._api_request(
+        results = self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
@@ -71,9 +81,16 @@ class Client:
                 ],
             },
         )
-        return result[0][1]
+        # One method call may result in multiple responses for that call.
+        # If there is a single response, return the response object.
+        # Otherwise, return the list of responses.
+        if len(results) == 1:
+            return results[0][1]
+        return [result[1] for result in results]
 
-    def method_calls(self, calls: Union[list[Method], MethodList]) -> Any:
+    def method_calls(
+        self, calls: Union[list[Method], MethodList]
+    ) -> MethodResponseList:
         if isinstance(calls[0], Method):
             just_calls = cast(List[Method], calls)
             calls = [(str(i), method) for i, method in enumerate(just_calls)]
@@ -97,7 +114,7 @@ class Client:
             },
         )
 
-    def _api_request(self, request: Any) -> Any:
+    def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = requests.post(
             self.session.api_url,
