@@ -3,7 +3,7 @@ import requests
 import responses
 
 from jmapc import Client
-from jmapc.client import MethodList
+from jmapc.client import MethodCallResponseOrList, MethodList
 from jmapc.methods import CoreEcho, CoreEchoResponse
 from jmapc.session import Session, SessionPrimaryAccount
 
@@ -28,8 +28,18 @@ def test_session(
     )
 
 
+@pytest.mark.parametrize(
+    ["flatten_single_response", "expected_response"],
+    [
+        (True, CoreEchoResponse(data=echo_test_data)),
+        (False, [CoreEchoResponse(data=echo_test_data)]),
+    ],
+)
 def test_method_call(
-    client: Client, http_responses: responses.RequestsMock
+    client: Client,
+    http_responses: responses.RequestsMock,
+    flatten_single_response: bool,
+    expected_response: MethodCallResponseOrList,
 ) -> None:
     expected_request = {
         "methodCalls": [
