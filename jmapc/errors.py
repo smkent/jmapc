@@ -15,8 +15,16 @@ class Error(Model):
     @staticmethod
     def _errors_map() -> Dict[str, Type[Error]]:
         return {
+            "accountNotFound": AccountNotFound,
+            "accountNotSupportedByMethod": AccountNotSupportedByMethod,
+            "accountReadOnly": AccountReadOnly,
             "invalidArguments": InvalidArguments,
+            "invalidResultReference": InvalidResultReference,
+            "forbidden": Forbidden,
             "serverFail": ServerFail,
+            "serverPartialFail": ServerPartialFail,
+            "serverUnavailable": ServerUnavailable,
+            "unknownMethod": UnknownMethod,
         }
 
     @classmethod
@@ -31,10 +39,51 @@ class Error(Model):
 
 
 @dataclass
+class AccountNotFound(Error):
+    pass
+
+
+@dataclass
+class AccountNotSupportedByMethod(Error):
+    pass
+
+
+@dataclass
+class AccountReadOnly(Error):
+    pass
+
+
+@dataclass
 class InvalidArguments(Error):
-    arguments: List[str]
+    arguments: Optional[List[str]] = None
+    description: Optional[str] = None
+
+
+@dataclass
+class InvalidResultReference(Error):
+    pass
+
+
+@dataclass
+class Forbidden(Error):
+    pass
 
 
 @dataclass
 class ServerFail(Error):
-    description: Optional[str]
+    description: Optional[str] = None
+
+
+@dataclass
+class ServerPartialFail(Error):
+    pass
+
+
+@dataclass
+class ServerUnavailable(Error):
+    pass
+
+
+@dataclass
+class UnknownMethod(Error):
+    pass

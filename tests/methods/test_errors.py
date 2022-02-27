@@ -14,12 +14,23 @@ from ..utils import expect_jmap_call
     [
         (
             {
-                "type": "serverFail",
-                "description": "Something went wrong",
+                "type": "accountNotFound",
             },
-            errors.ServerFail(
-                type="serverFail", description="Something went wrong"
+            errors.AccountNotFound(type="accountNotFound"),
+        ),
+        (
+            {
+                "type": "accountNotSupportedByMethod",
+            },
+            errors.AccountNotSupportedByMethod(
+                type="accountNotSupportedByMethod"
             ),
+        ),
+        (
+            {
+                "type": "accountReadOnly",
+            },
+            errors.AccountReadOnly(type="accountReadOnly"),
         ),
         (
             {
@@ -29,6 +40,52 @@ from ..utils import expect_jmap_call
             errors.InvalidArguments(
                 type="invalidArguments", arguments=["ids"]
             ),
+        ),
+        (
+            {
+                "type": "invalidResultReference",
+            },
+            errors.InvalidResultReference(type="invalidResultReference"),
+        ),
+        (
+            {
+                "type": "forbidden",
+            },
+            errors.Forbidden(type="forbidden"),
+        ),
+        (
+            {
+                "type": "serverFail",
+                "description": "Something went wrong",
+            },
+            errors.ServerFail(
+                type="serverFail", description="Something went wrong"
+            ),
+        ),
+        (
+            {
+                "type": "serverPartialFail",
+            },
+            errors.ServerPartialFail(type="serverPartialFail"),
+        ),
+        (
+            {
+                "type": "serverUnavailable",
+            },
+            errors.ServerUnavailable(type="serverUnavailable"),
+        ),
+        (
+            {
+                "type": "unknownMethod",
+            },
+            errors.UnknownMethod(type="unknownMethod"),
+        ),
+        (
+            {
+                "type": "unsupportedUnitTestErrorType",
+                "extraField": "This is an unknown error type",
+            },
+            errors.Error(type="unsupportedUnitTestErrorType"),
         ),
     ],
 )

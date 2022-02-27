@@ -15,6 +15,7 @@ Currently implemented:
   * `Mailbox/get`
   * `Mailbox/query`
   * `Thread/get`
+  * Arbitrary methods via the `CustomMethod` class
 * Combined requests with support for result references
 * Basic JMAP method response error handling
 * Unit tests for basic functionality and methods
