@@ -2,7 +2,9 @@
 
 [![PyPI](https://img.shields.io/pypi/v/jmapc)][pypi]
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)][pypi]
+[![Build](https://img.shields.io/github/checks-status/smkent/jmapc/master?label=build)][gh-actions]
 [![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)][codecov]
+[![GitHub watchers](https://img.shields.io/github/watchers/smkent/jmapc?style=social)][repo]
 
 jmapc is in initial development.
 
@@ -70,7 +72,9 @@ Created from [smkent/cookie-python][cookie-python] using
 [codecov]: https://codecov.io/gh/smkent/jmapc
 [cookie-python]: https://github.com/smkent/cookie-python
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
+[gh-actions]: https://github.com/smkent/jmapc/actions
 [jmapc-pypi]: https://pypi.org/project/jmapc/
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation
 [pypi]: https://pypi.org/project/jmapc/
+[repo]: https://github.com/smkent/jmapc
