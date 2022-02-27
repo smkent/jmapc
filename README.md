@@ -21,7 +21,6 @@ Currently implemented:
 
 Todo list:
 
-* Implement `EmailSubmission` methods for sending email
 * Write documentation
 
 ## Installation
