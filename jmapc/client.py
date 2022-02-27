@@ -35,7 +35,6 @@ class Client:
         "Thread/get": ThreadGetResponse,
         "error": errors.Error,
     }
-    METHOD_RESPONSES_TYPE = Tuple[str, Dict[str, Any], str]
 
     def __init__(self, host: str, user: str, password: str) -> None:
         self._host: str = host
@@ -112,7 +111,7 @@ class Client:
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
         method_responses = cast(
-            List[Client.METHOD_RESPONSES_TYPE],
+            List[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),
         )
         responses: MethodResponseList = []
