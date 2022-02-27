@@ -11,6 +11,7 @@ from .methods import (
     CoreEchoResponse,
     EmailGetResponse,
     EmailQueryResponse,
+    EmailSetResponse,
     IdentityGetResponse,
     MailboxGetResponse,
     MailboxQueryResponse,
@@ -28,6 +29,7 @@ class Client:
     METHOD_RESPONSES: Dict[str, Type[Union[errors.Error, Response]]] = {
         "Core/echo": CoreEchoResponse,
         "Email/get": EmailGetResponse,
+        "Email/set": EmailSetResponse,
         "Email/query": EmailQueryResponse,
         "Identity/get": IdentityGetResponse,
         "Mailbox/get": MailboxGetResponse,

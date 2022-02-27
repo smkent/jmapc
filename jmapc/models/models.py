@@ -38,3 +38,9 @@ class Operator:
     AND = "AND"
     OR = "OR"
     NOT = "NOT"
+
+
+@dataclass
+class SetError(Model):
+    type: str
+    description: Optional[str]

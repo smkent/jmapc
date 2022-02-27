@@ -14,7 +14,14 @@ from .mailbox import (
     MailboxQueryFilterCondition,
     MailboxQueryFilterOperator,
 )
-from .models import Comparator, EmailAddress, ListOrRef, Operator, StrOrRef
+from .models import (
+    Comparator,
+    EmailAddress,
+    ListOrRef,
+    Operator,
+    SetError,
+    StrOrRef,
+)
 from .thread import Thread, ThreadEmail
 
 __all__ = [
@@ -34,6 +41,7 @@ __all__ = [
     "MailboxQueryFilterCondition",
     "MailboxQueryFilterOperator",
     "Operator",
+    "SetError",
     "StrOrRef",
     "Thread",
     "ThreadEmail",

@@ -1,6 +1,13 @@
 from .base import Method, Response
 from .core import CoreEcho, CoreEchoResponse
-from .email import EmailGet, EmailGetResponse, EmailQuery, EmailQueryResponse
+from .email import (
+    EmailGet,
+    EmailGetResponse,
+    EmailQuery,
+    EmailQueryResponse,
+    EmailSet,
+    EmailSetResponse,
+)
 from .identity import IdentityGet, IdentityGetResponse
 from .mailbox import (
     MailboxGet,
@@ -15,6 +22,8 @@ __all__ = [
     "CoreEchoResponse",
     "EmailGet",
     "EmailGetResponse",
+    "EmailSet",
+    "EmailSetResponse",
     "EmailQuery",
     "EmailQueryResponse",
     "IdentityGet",

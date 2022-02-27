@@ -6,7 +6,7 @@ from jmapc.methods import ThreadGet, ThreadGetResponse
 from ..utils import expect_jmap_call
 
 
-def test_identity_get(
+def test_thread_get(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
     expected_request = {
