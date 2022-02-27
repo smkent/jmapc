@@ -10,6 +10,7 @@ Currently implemented:
   * `Email/get`
   * `Email/query`
   * `Email/set`
+  * `EmailSubmission/set`
   * `Identity/get`
   * `Mailbox/get`
   * `Mailbox/query`

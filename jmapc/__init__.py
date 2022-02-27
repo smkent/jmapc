@@ -2,7 +2,11 @@ from . import errors, methods, models
 from .client import Client
 from .errors import Error
 from .models import (
+    Address,
     Comparator,
+    Delivered,
+    DeliveryStatus,
+    Displayed,
     Email,
     EmailAddress,
     EmailBodyPart,
@@ -11,6 +15,8 @@ from .models import (
     EmailQueryFilter,
     EmailQueryFilterCondition,
     EmailQueryFilterOperator,
+    EmailSubmission,
+    Envelope,
     Identity,
     ListOrRef,
     Mailbox,
@@ -21,6 +27,7 @@ from .models import (
     StrOrRef,
     Thread,
     ThreadEmail,
+    UndoStatus,
 )
 from .ref import ResultReference
 
@@ -51,4 +58,11 @@ __all__ = [
     "log",
     "methods",
     "models",
+    "EmailSubmission",
+    "Envelope",
+    "Address",
+    "UndoStatus",
+    "DeliveryStatus",
+    "Delivered",
+    "Displayed",
 ]

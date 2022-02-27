@@ -8,6 +8,7 @@ from .email import (
     EmailSet,
     EmailSetResponse,
 )
+from .email_submission import EmailSubmissionSet, EmailSubmissionSetResponse
 from .identity import IdentityGet, IdentityGetResponse
 from .mailbox import (
     MailboxGet,
@@ -22,10 +23,12 @@ __all__ = [
     "CoreEchoResponse",
     "EmailGet",
     "EmailGetResponse",
-    "EmailSet",
-    "EmailSetResponse",
     "EmailQuery",
     "EmailQueryResponse",
+    "EmailSet",
+    "EmailSetResponse",
+    "EmailSubmissionSet",
+    "EmailSubmissionSetResponse",
     "IdentityGet",
     "IdentityGetResponse",
     "MailboxGet",
