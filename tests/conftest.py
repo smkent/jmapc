@@ -7,6 +7,7 @@ import pytest
 import responses
 
 from jmapc import Client
+from jmapc.logging import log
 
 pytest.register_assert_rewrite("tests.utils")
 
@@ -24,7 +25,7 @@ def test_log() -> Iterable[None]:
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
+    log.setLevel(logging.DEBUG)
     yield
 
 
