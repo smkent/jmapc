@@ -12,9 +12,8 @@ from .base import Get, GetResponse, Query, QueryResponse
 
 @dataclass
 class MailboxGet(Get):
-    def __post_init__(self) -> None:
-        self.name = "Mailbox/get"
-        self.using = set([constants.JMAP_URN_MAIL])
+    name = "Mailbox/get"
+    using = set([constants.JMAP_URN_MAIL])
 
 
 @dataclass
@@ -24,9 +23,8 @@ class MailboxGetResponse(GetResponse):
 
 @dataclass
 class MailboxQuery(Query):
-    def __post_init__(self) -> None:
-        self.name = "Mailbox/query"
-        self.using = set([constants.JMAP_URN_MAIL])
+    name = "Mailbox/query"
+    using = set([constants.JMAP_URN_MAIL])
 
     filter: Optional[MailboxQueryFilter] = None
 

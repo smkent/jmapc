@@ -13,24 +13,8 @@ class MethodBase(Model):
 
 
 class Method(MethodBase):
-    @property
-    def name(self) -> str:
-        assert (
-            self._name
-        ), f"{self.__class__.__name__} has no method name defined"
-        return self._name
-
-    @name.setter
-    def name(self, value: str) -> None:
-        self._name = value
-
-    @property
-    def using(self) -> set[str]:
-        return self._using or set()
-
-    @using.setter
-    def using(self, value: set[str]) -> None:
-        self._using = value
+    name = ""
+    using: set[str] = set()
 
 
 @dataclass

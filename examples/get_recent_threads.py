@@ -31,7 +31,7 @@ results = client.method_calls(
         MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox")),
         MailboxGet(
             ids=ResultReference(
-                name=MailboxQuery.name(),
+                name=MailboxQuery.name,
                 path="/ids",
                 result_of="0",
             ),
@@ -66,7 +66,7 @@ results = client.method_calls(
         # Use Email/query results to retrieve thread IDs for each email ID
         EmailGet(
             ids=ResultReference(
-                name=EmailQuery.name(),
+                name=EmailQuery.name,
                 path="/ids",
                 result_of="0",
             ),
@@ -75,7 +75,7 @@ results = client.method_calls(
         # Use Email/get results to retrieve email counts for each thread ID
         ThreadGet(
             ids=ResultReference(
-                name=EmailGet.name(),
+                name=EmailGet.name,
                 path="/list/*/threadId",
                 result_of="1",
             )

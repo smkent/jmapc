@@ -20,7 +20,7 @@ methods = [
     MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox")),
     MailboxGet(
         ids=ResultReference(
-            name=MailboxQuery.name(),
+            name=MailboxQuery.name,
             path="/ids",
             result_of="0",
         ),
