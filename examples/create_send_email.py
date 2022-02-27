@@ -46,7 +46,7 @@ results = client.method_calls(
         MailboxQuery(filter=MailboxQueryFilterCondition(name="Drafts")),
         MailboxGet(
             ids=ResultReference(
-                name=MailboxQuery.name(),
+                name=MailboxQuery.name,
                 path="/ids",
                 result_of="0",
             ),
