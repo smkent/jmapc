@@ -9,7 +9,7 @@ from .base import MethodWithAccount, ResponseWithAccount
 @dataclass
 class CustomMethod(MethodWithAccount):
     def __post_init__(self) -> None:
-        self.name = "Custom/method"
+        self.name = ""
         self.using = set()
 
     def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:

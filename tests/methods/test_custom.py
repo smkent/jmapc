@@ -1,6 +1,6 @@
 import responses
 
-from jmapc import Client
+from jmapc import Client, constants
 from jmapc.methods import CustomMethod, CustomResponse
 
 from ..utils import expect_jmap_call
@@ -22,7 +22,7 @@ def test_custom_method(
                 "uno",
             ],
         ],
-        "using": ["urn:ietf:params:jmap:core"],
+        "using": ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail"],
     }
     response = {
         "methodResponses": [
@@ -35,6 +35,8 @@ def test_custom_method(
     }
     expect_jmap_call(http_responses, expected_request, response)
     method = CustomMethod(data=test_data)
+    method.name = "Custom/method"
+    method.using = set([constants.JMAP_URN_MAIL])
     assert method.to_dict() == test_data
     resp = client.method_call(method)
     assert resp == CustomResponse(account_id="u1138", data=test_data)
