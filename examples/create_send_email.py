@@ -135,4 +135,4 @@ print(f"Test email sent to {identity.email} at {sent_data.send_at}")
 #
 # Found the mailbox named Inbox with ID deadbeef-0000-0000-0000-000000000001
 # Found identity with email address ness@onett.example.com
-# Test email sent to ness@onet.example.com at 2022-01-01 12:00:00+00:00
+# Test email sent to ness@onett.example.com at 2022-01-01 12:00:00+00:00
