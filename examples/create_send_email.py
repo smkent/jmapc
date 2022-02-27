@@ -35,13 +35,6 @@ This email was created with the JMAP API and sent to yourself using the first
 identity's email address in your account.
 """.strip()
 
-
-# Create basic console logger
-logging.basicConfig()
-
-# Set jmapc log level to DEBUG
-log.setLevel(logging.INFO)  # DEBUG)
-
 # Create and configure client
 client = Client(
     host=os.environ["JMAP_HOST"],
