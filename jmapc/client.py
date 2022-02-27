@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import json
-import logging
 from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 
 import requests
 
 from . import constants, errors
+from .logging import log
 from .methods import (
     CoreEchoResponse,
     EmailGetResponse,
@@ -99,7 +99,7 @@ class Client:
         )
 
     def _api_request(self, request: Any) -> Any:
-        logging.debug(f"Sending JMAP request {json.dumps(request)}")
+        log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = requests.post(
             self.session.api_url,
             auth=(self._user, self._password),
@@ -107,7 +107,7 @@ class Client:
             data=json.dumps(request),
         )
         r.raise_for_status()
-        logging.debug(f"Received JMAP response {r.text}")
+        log.debug(f"Received JMAP response {r.text}")
         return self._parse_responses(r.json())
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
