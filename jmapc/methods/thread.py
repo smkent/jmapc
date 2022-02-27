@@ -12,9 +12,8 @@ from .base import Get, GetResponse
 
 @dataclass
 class ThreadGet(Get):
-    def __post_init__(self) -> None:
-        self.name = "Thread/get"
-        self.using = set([constants.JMAP_URN_MAIL])
+    name = "Thread/get"
+    using = set([constants.JMAP_URN_MAIL])
 
 
 @dataclass
