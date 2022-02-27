@@ -4,7 +4,7 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)][pypi]
 [![Build](https://img.shields.io/github/checks-status/smkent/jmapc/master?label=build)][gh-actions]
 [![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)][codecov]
-[![GitHub watchers](https://img.shields.io/github/watchers/smkent/jmapc?style=social)][repo]
+[![GitHub stars](https://img.shields.io/github/stars/smkent/jmapc?style=social)][repo]
 
 jmapc is in initial development.
 
