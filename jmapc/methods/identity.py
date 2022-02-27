@@ -12,13 +12,9 @@ from .base import Get, GetResponse
 
 @dataclass
 class IdentityGet(Get):
-    @classmethod
-    def name(cls) -> str:
-        return "Identity/get"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_SUBMISSION])
+    def __post_init__(self) -> None:
+        self.name = "Identity/get"
+        self.using = set([constants.JMAP_URN_SUBMISSION])
 
     ids: Optional[ListOrRef[str]] = None
 
