@@ -10,13 +10,9 @@ from .base import Set, SetResponse
 
 @dataclass
 class EmailSubmissionSet(Set):
-    @classmethod
-    def name(cls) -> str:
-        return "EmailSubmission/set"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_SUBMISSION])
+    def __post_init__(self) -> None:
+        self.name = "EmailSubmission/set"
+        self.using = set([constants.JMAP_URN_SUBMISSION])
 
     create: Optional[Dict[str, EmailSubmission]] = None
     on_success_update_email: Optional[Dict[str, Any]] = None

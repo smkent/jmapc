@@ -2,10 +2,20 @@ from datetime import datetime, timezone
 
 import responses
 
-from jmapc import Client, Email, EmailAddress, EmailBodyPart, EmailBodyValue
+from jmapc import (
+    Client,
+    Comparator,
+    Email,
+    EmailAddress,
+    EmailBodyPart,
+    EmailBodyValue,
+    EmailQueryFilterCondition,
+)
 from jmapc.methods import (
     EmailGet,
     EmailGetResponse,
+    EmailQuery,
+    EmailQueryResponse,
     EmailSet,
     EmailSetResponse,
 )
@@ -216,4 +226,66 @@ def test_email_set(
         not_created=None,
         not_updated=None,
         not_destroyed=None,
+    )
+
+
+def test_email_query(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/query",
+                {
+                    "accountId": "u1138",
+                    "collapseThreads": True,
+                    "filter": {
+                        "after": "1994-08-24T12:01:02Z",
+                        "inMailbox": "MBX1",
+                    },
+                    "limit": 10,
+                    "sort": [
+                        {
+                            "anchorOffset": 0,
+                            "calculateTotal": False,
+                            "isAscending": False,
+                            "position": 0,
+                            "property": "receivedAt",
+                        }
+                    ],
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/query",
+                {
+                    "accountId": "u1138",
+                    "ids": ["M1000", "M1234"],
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        EmailQuery(
+            collapse_threads=True,
+            filter=EmailQueryFilterCondition(
+                in_mailbox="MBX1",
+                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+            ),
+            sort=[Comparator(property="receivedAt", is_ascending=False)],
+            limit=10,
+        )
+    ) == EmailQueryResponse(
+        account_id="u1138",
+        ids=["M1000", "M1234"],
     )

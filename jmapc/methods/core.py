@@ -8,13 +8,9 @@ from .base import Method, Response
 
 @dataclass
 class CoreEcho(Method):
-    @classmethod
-    def name(cls) -> str:
-        return "Core/echo"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set()
+    def __post_init__(self) -> None:
+        self.name = "Core/echo"
+        self.using = set()
 
     def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         return self.data or dict()

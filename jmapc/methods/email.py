@@ -12,13 +12,9 @@ from .base import Get, GetResponse, Query, QueryResponse, Set, SetResponse
 
 @dataclass
 class EmailGet(Get):
-    @classmethod
-    def name(cls) -> str:
-        return "Email/get"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
+    def __post_init__(self) -> None:
+        self.name = "Email/get"
+        self.using = set([constants.JMAP_URN_MAIL])
 
     body_properties: Optional[List[str]] = None
     fetch_text_body_values: Optional[bool] = None
@@ -36,13 +32,9 @@ class EmailGetResponse(GetResponse):
 
 @dataclass
 class EmailSet(Set):
-    @classmethod
-    def name(cls) -> str:
-        return "Email/set"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
+    def __post_init__(self) -> None:
+        self.name = "Email/set"
+        self.using = set([constants.JMAP_URN_MAIL])
 
     create: Optional[Dict[str, Email]] = None
 
@@ -55,13 +47,9 @@ class EmailSetResponse(SetResponse):
 
 @dataclass
 class EmailQuery(Query):
-    @classmethod
-    def name(cls) -> str:
-        return "Email/query"
-
-    @classmethod
-    def using(cls) -> set[str]:
-        return set([constants.JMAP_URN_MAIL])
+    def __post_init__(self) -> None:
+        self.name = "Email/query"
+        self.using = set([constants.JMAP_URN_MAIL])
 
     filter: Optional[EmailQueryFilter] = None
     collapse_threads: Optional[bool] = None

@@ -1,5 +1,6 @@
 from .base import Method, Response
 from .core import CoreEcho, CoreEchoResponse
+from .custom import CustomMethod, CustomResponse
 from .email import (
     EmailGet,
     EmailGetResponse,
@@ -21,6 +22,8 @@ from .thread import ThreadGet, ThreadGetResponse
 __all__ = [
     "CoreEcho",
     "CoreEchoResponse",
+    "CustomMethod",
+    "CustomResponse",
     "EmailGet",
     "EmailGetResponse",
     "EmailQuery",

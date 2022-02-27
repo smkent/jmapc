@@ -9,6 +9,7 @@ from . import constants, errors
 from .logging import log
 from .methods import (
     CoreEchoResponse,
+    CustomResponse,
     EmailGetResponse,
     EmailQueryResponse,
     EmailSetResponse,
@@ -31,7 +32,7 @@ MethodCallResponseOrList = Union[
 
 
 class Client:
-    METHOD_RESPONSES: Dict[str, Type[Union[errors.Error, Response]]] = {
+    METHOD_RESPONSE_TYPES: Dict[str, Type[MethodResponseOrError]] = {
         "Core/echo": CoreEchoResponse,
         "Email/get": EmailGetResponse,
         "Email/query": EmailQueryResponse,
@@ -68,13 +69,13 @@ class Client:
     def method_call(
         self, method: Method, flatten_single_response: bool = True
     ) -> MethodCallResponseOrList:
-        using = list(set([constants.JMAP_URN_CORE]).union(method.using()))
+        using = list(set([constants.JMAP_URN_CORE]).union(method.using))
         results = self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
                     [
-                        method.name(),
+                        method.name,
                         method.to_dict(account_id=self.account_id),
                         "uno",
                     ]
@@ -96,16 +97,14 @@ class Client:
             calls = [(str(i), method) for i, method in enumerate(just_calls)]
         calls = cast(MethodList, calls)
         using = list(
-            set([constants.JMAP_URN_CORE]).union(
-                *[c[1].using() for c in calls]
-            )
+            set([constants.JMAP_URN_CORE]).union(*[c[1].using for c in calls])
         )
         return self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
                     [
-                        c[1].name(),
+                        c[1].name,
                         c[1].to_dict(account_id=self.account_id),
                         c[0],
                     ]
@@ -126,7 +125,13 @@ class Client:
         log.debug(f"Received JMAP response {r.text}")
         return self._parse_responses(r.json())
 
+    def _response_type(self, method_name: str) -> Type[MethodResponseOrError]:
+        if method_name in self.METHOD_RESPONSE_TYPES:
+            return self.METHOD_RESPONSE_TYPES[method_name]
+        return CustomResponse
+
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
+
         method_responses = cast(
             List[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),
@@ -136,7 +141,7 @@ class Client:
             responses.append(
                 (
                     method_id,
-                    self.METHOD_RESPONSES[name].from_dict(response),
+                    self._response_type(name).from_dict(response),
                 )
             )
         return responses
