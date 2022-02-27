@@ -1,8 +1,8 @@
 # jmapc: A [JMAP][jmapio] client library for Python
 
-![PyPI](https://img.shields.io/pypi/v/jmapc)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)
-[![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)](https://codecov.io/gh/smkent/jmapc)
+[![PyPI](https://img.shields.io/pypi/v/jmapc)][pypi]
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)][pypi]
+[![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)][codecov]
 
 jmapc is in initial development.
 
@@ -67,8 +67,10 @@ Identity 67890 is for Ness at ness-alternate@onett.example.com
 Created from [smkent/cookie-python][cookie-python] using
 [cookiecutter][cookiecutter]
 
+[codecov]: https://codecov.io/gh/smkent/jmapc
 [cookie-python]: https://github.com/smkent/cookie-python
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
+[jmapc-pypi]: https://pypi.org/project/jmapc/
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation
-[jmapc-pypi]: https://pypi.org/project/jmapc/
+[pypi]: https://pypi.org/project/jmapc/
