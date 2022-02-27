@@ -77,7 +77,9 @@ class Client:
         )
         return result[0][1]
 
-    def method_calls(self, calls: Union[list[Method], MethodList]) -> Any:
+    def method_calls(
+        self, calls: Union[list[Method], MethodList]
+    ) -> MethodResponseList:
         if isinstance(calls[0], Method):
             just_calls = cast(List[Method], calls)
             calls = [(str(i), method) for i, method in enumerate(just_calls)]
@@ -101,7 +103,7 @@ class Client:
             },
         )
 
-    def _api_request(self, request: Any) -> Any:
+    def _api_request(self, request: Any) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = requests.post(
             self.session.api_url,

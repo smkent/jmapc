@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 from typing import Dict, List, Optional
 
 from dataclasses_json import DataClassJsonMixin, config
@@ -37,7 +38,7 @@ class Address(DataClassJsonMixin):
     parameters: Optional[Dict[str, str]] = None
 
 
-class UndoStatus:
+class UndoStatus(Enum):
     PENDING = "pending"
     FINAL = "final"
     CANCELED = "canceled"
@@ -50,13 +51,13 @@ class DeliveryStatus(Model):
     displayed: Optional[Displayed] = None
 
 
-class Delivered:
+class Delivered(Enum):
     QUEUED = "queued"
     YES = "yes"
     NO = "no"
     UNKNOWN = "unknown"
 
 
-class Displayed:
+class Displayed(Enum):
     UNKNOWN = "unknown"
     YES = "yes"

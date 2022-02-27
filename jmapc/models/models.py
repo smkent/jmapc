@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
 from typing import List, Optional, TypeVar, Union
 
 from ..ref import ResultReference
@@ -34,7 +35,7 @@ class FilterOperator(Model):
     operator: Operator
 
 
-class Operator:
+class Operator(Enum):
     AND = "AND"
     OR = "OR"
     NOT = "NOT"

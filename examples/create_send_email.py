@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
 import os
 
 from jmapc import (
@@ -16,7 +15,6 @@ from jmapc import (
     MailboxQueryFilterCondition,
     ResultReference,
 )
-from jmapc.logging import log
 from jmapc.methods import (
     EmailSet,
     EmailSubmissionSet,
