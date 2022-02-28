@@ -9,6 +9,7 @@ from jmapc import (
     EmailAddress,
     EmailBodyPart,
     EmailBodyValue,
+    EmailHeader,
     EmailQueryFilterCondition,
 )
 from jmapc.methods import (
@@ -137,6 +138,7 @@ def test_email_set(
         mailbox_ids={"MBX1": True},
         body_values=dict(body=EmailBodyValue(value="See you there!")),
         text_body=[EmailBodyPart(part_id="body", type="text/plain")],
+        headers=[EmailHeader(name="X-Onett-Sanctuary", value="Giant Step")],
     )
 
     expected_request = {
@@ -171,6 +173,7 @@ def test_email_set(
                             "textBody": [
                                 {"partId": "body", "type": "text/plain"}
                             ],
+                            "header:X-Onett-Sanctuary": "Giant Step",
                         }
                     },
                 },

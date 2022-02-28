@@ -1,6 +1,6 @@
 from dataclasses import fields
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import dataclasses_json
 import dateutil.parser
@@ -27,26 +27,54 @@ class Model(dataclasses_json.DataClassJsonMixin):
         exclude=lambda f: f is None,  # type: ignore
     )["dataclasses_json"]
 
-    def _fix_refs(
+    def _fix_result_ref(
+        self, data: Dict[str, dataclasses_json.core.Json], key: str
+    ) -> Dict[str, dataclasses_json.core.Json]:
+        ResultReference.from_dict(data[key])
+        new_key = f"#{key}"
+        if new_key in data:
+            raise Exception(f"Reference key {new_key} already exists")
+        data[new_key] = data[key]
+        del data[key]
+        return data
+
+    def _fix_headers(
+        self,
+        data: Dict[str, dataclasses_json.core.Json],
+        key: str,
+        value: List[Dict[str, str]],
+    ) -> Dict[str, dataclasses_json.core.Json]:
+        for header in value:
+            try:
+                header_key = header["name"]
+                header_value = header["value"]
+                data[f"header:{header_key}"] = header_value
+            except ValueError:
+                continue
+        del data[key]
+        return data
+
+    def _postprocess(
         self, data: Dict[str, dataclasses_json.core.Json]
     ) -> Dict[str, dataclasses_json.core.Json]:
-        for k in [key for key in data.keys() if not key.startswith("#")]:
-            v = data[k]
-            if isinstance(v, dict):
-                if len(v.keys()) == len(fields(ResultReference)):
+        for key in [key for key in data.keys() if not key.startswith("#")]:
+            value = data[key]
+            if isinstance(value, dict):
+                if len(value.keys()) == len(fields(ResultReference)):
                     try:
-                        ResultReference.from_dict(v)
-                        new_key = f"#{k}"
-                        if new_key in data:
-                            raise Exception(
-                                f"Reference key {new_key} already exists"
-                            )
-                        data[new_key] = v
-                        del data[k]
+                        data = self._fix_result_ref(data, key)
                         continue
                     except KeyError:
                         pass
-                data[k] = self._fix_refs(v)
+                data[key] = self._postprocess(value)
+            elif (
+                key == "headers"
+                and isinstance(value, list)
+                and len(value) > 0
+                and isinstance(value[0], dict)
+                and set(value[0].keys()) == set(["name", "value"])
+            ):
+                data = self._fix_headers(data, key, value)
         return data
 
     def to_dict(
@@ -55,5 +83,5 @@ class Model(dataclasses_json.DataClassJsonMixin):
         if account_id:
             self.account_id: Optional[str] = account_id
         result = super().to_dict(*args, **kwargs)
-        result = self._fix_refs(result)
+        result = self._postprocess(result)
         return result
