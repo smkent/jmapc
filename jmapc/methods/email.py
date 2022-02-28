@@ -39,8 +39,8 @@ class EmailSet(Set):
 
 @dataclass
 class EmailSetResponse(SetResponse):
-    created: Optional[Dict[str, Email]]
-    updated: Optional[Dict[str, Email]]
+    created: Optional[Dict[str, Optional[Email]]]
+    updated: Optional[Dict[str, Optional[Email]]]
 
 
 @dataclass
