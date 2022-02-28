@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import functools
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type, cast
 
@@ -28,14 +27,6 @@ class Error(ErrorCollector):
         type_attr = getattr(self, "_type", None)
         if type_attr:
             self.type = type_attr
-
-    @staticmethod
-    @functools.lru_cache(maxsize=None)
-    def _errors_map() -> Dict[str, Type[Error]]:
-        errors_map: Dict[str, Type[Error]] = dict()
-        for cls in Error.__subclasses__():
-            errors_map[cls.type] = cls
-        return errors_map
 
     @classmethod
     def from_dict(cls, *args: Any, **kwargs: Any) -> Error:
