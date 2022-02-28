@@ -8,9 +8,7 @@ import dateutil.parser
 from .ref import ResultReference
 
 
-def datetime_encode(dt: Optional[datetime]) -> Optional[str]:
-    if not dt:
-        return None
+def datetime_encode(dt: datetime) -> str:
     return f"{dt.replace(tzinfo=None).isoformat()}Z"
 
 
@@ -32,8 +30,6 @@ class Model(dataclasses_json.DataClassJsonMixin):
     ) -> Dict[str, dataclasses_json.core.Json]:
         ResultReference.from_dict(data[key])
         new_key = f"#{key}"
-        if new_key in data:
-            raise Exception(f"Reference key {new_key} already exists")
         data[new_key] = data[key]
         del data[key]
         return data
@@ -45,12 +41,9 @@ class Model(dataclasses_json.DataClassJsonMixin):
         value: List[Dict[str, str]],
     ) -> Dict[str, dataclasses_json.core.Json]:
         for header in value:
-            try:
-                header_key = header["name"]
-                header_value = header["value"]
-                data[f"header:{header_key}"] = header_value
-            except ValueError:
-                continue
+            header_key = header["name"]
+            header_value = header["value"]
+            data[f"header:{header_key}"] = header_value
         del data[key]
         return data
 
