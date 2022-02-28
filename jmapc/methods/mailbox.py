@@ -18,6 +18,8 @@ class MailboxGet(Get):
 
 @dataclass
 class MailboxGetResponse(GetResponse):
+    name = "Mailbox/get"
+
     data: List[Mailbox] = field(metadata=config(field_name="list"))
 
 
@@ -31,4 +33,6 @@ class MailboxQuery(Query):
 
 @dataclass
 class MailboxQueryResponse(QueryResponse):
+    name = "Mailbox/query"
+
     ids: ListOrRef[str]

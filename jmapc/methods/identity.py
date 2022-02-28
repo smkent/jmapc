@@ -20,4 +20,6 @@ class IdentityGet(Get):
 
 @dataclass
 class IdentityGetResponse(GetResponse):
+    name = "Identity/get"
+
     data: List[Identity] = field(metadata=config(field_name="list"))

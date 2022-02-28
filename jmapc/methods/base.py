@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Type, Union, cast
 
+from ..errors import Error
 from ..models import Comparator, ListOrRef, SetError, StrOrRef
 from ..serializer import Model
 
 
-@dataclass
 class MethodBase(Model):
-    pass
+    name = ""
 
 
 class Method(MethodBase):
-    name = ""
     using: set[str] = set()
 
 
@@ -22,8 +21,19 @@ class MethodWithAccount(Method):
     account_id: Optional[str] = field(init=False, default=None)
 
 
+class ResponseCollector(MethodBase):
+    response_types: Dict[str, Type[Union[Error, Response]]] = {}
+
+    @classmethod
+    def __init_subclass__(cls) -> None:
+        if cls.name:
+            ResponseCollector.response_types[cls.name] = cast(
+                Type[Response], cls
+            )
+
+
 @dataclass
-class Response(MethodBase):
+class Response(ResponseCollector):
     pass
 
 

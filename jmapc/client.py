@@ -7,20 +7,7 @@ import requests
 
 from . import constants, errors
 from .logging import log
-from .methods import (
-    CoreEchoResponse,
-    CustomResponse,
-    EmailGetResponse,
-    EmailQueryResponse,
-    EmailSetResponse,
-    EmailSubmissionSetResponse,
-    IdentityGetResponse,
-    MailboxGetResponse,
-    MailboxQueryResponse,
-    Method,
-    Response,
-    ThreadGetResponse,
-)
+from .methods import CustomResponse, Method, Response
 from .session import Session
 
 MethodList = List[Tuple[str, Method]]
@@ -32,19 +19,6 @@ MethodCallResponseOrList = Union[
 
 
 class Client:
-    METHOD_RESPONSE_TYPES: Dict[str, Type[MethodResponseOrError]] = {
-        "Core/echo": CoreEchoResponse,
-        "Email/get": EmailGetResponse,
-        "Email/query": EmailQueryResponse,
-        "Email/set": EmailSetResponse,
-        "EmailSubmission/set": EmailSubmissionSetResponse,
-        "Identity/get": IdentityGetResponse,
-        "Mailbox/get": MailboxGetResponse,
-        "Mailbox/query": MailboxQueryResponse,
-        "Thread/get": ThreadGetResponse,
-        "error": errors.Error,
-    }
-
     def __init__(self, host: str, user: str, password: str) -> None:
         self._host: str = host
         self._user: str = user
@@ -126,8 +100,10 @@ class Client:
         return self._parse_responses(r.json())
 
     def _response_type(self, method_name: str) -> Type[MethodResponseOrError]:
-        if method_name in self.METHOD_RESPONSE_TYPES:
-            return self.METHOD_RESPONSE_TYPES[method_name]
+        if method_name == "error":
+            return errors.Error
+        if method_name in Response.response_types:
+            return Response.response_types[method_name]
         return CustomResponse
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:

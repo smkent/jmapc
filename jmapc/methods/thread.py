@@ -18,4 +18,6 @@ class ThreadGet(Get):
 
 @dataclass
 class ThreadGetResponse(GetResponse):
+    name = "Thread/get"
+
     data: List[Thread] = field(metadata=config(field_name="list"))

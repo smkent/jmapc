@@ -26,6 +26,8 @@ class EmailGet(Get):
 
 @dataclass
 class EmailGetResponse(GetResponse):
+    name = "Email/get"
+
     data: List[Email] = field(metadata=config(field_name="list"))
 
 
@@ -39,6 +41,8 @@ class EmailSet(Set):
 
 @dataclass
 class EmailSetResponse(SetResponse):
+    name = "Email/set"
+
     created: Optional[Dict[str, Optional[Email]]]
     updated: Optional[Dict[str, Optional[Email]]]
 
@@ -54,4 +58,6 @@ class EmailQuery(Query):
 
 @dataclass
 class EmailQueryResponse(QueryResponse):
+    name = "Email/query"
+
     ids: ListOrRef[str]
