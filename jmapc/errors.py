@@ -1,89 +1,96 @@
 from __future__ import annotations
 
+import functools
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type, cast
 
 from .serializer import Model
 
 __all__ = ["Error", "ServerFail"]
 
 
+class ErrorCollector(Model):
+    error_types: Dict[str, Type[Error]] = {}
+
+    @classmethod
+    def __init_subclass__(cls) -> None:
+        error_class = cast(Type["Error"], cls)
+        type_attr = getattr(error_class, "type", None)
+        if type_attr:
+            ErrorCollector.error_types[type_attr] = error_class
+
+
 @dataclass
-class Error(Model):
+class Error(ErrorCollector):
     type: str
 
     @staticmethod
+    @functools.lru_cache(maxsize=None)
     def _errors_map() -> Dict[str, Type[Error]]:
-        return {
-            "accountNotFound": AccountNotFound,
-            "accountNotSupportedByMethod": AccountNotSupportedByMethod,
-            "accountReadOnly": AccountReadOnly,
-            "invalidArguments": InvalidArguments,
-            "invalidResultReference": InvalidResultReference,
-            "forbidden": Forbidden,
-            "serverFail": ServerFail,
-            "serverPartialFail": ServerPartialFail,
-            "serverUnavailable": ServerUnavailable,
-            "unknownMethod": UnknownMethod,
-        }
+        errors_map: Dict[str, Type[Error]] = dict()
+        for cls in Error.__subclasses__():
+            errors_map[cls.type] = cls
+        return errors_map
 
     @classmethod
     def from_dict(cls, *args: Any, **kwargs: Any) -> Error:
         res = super().from_dict(*args, **kwargs)
         if cls == Error:
-            errors_map = cls._errors_map()
-            if res.type in errors_map:
-                return errors_map[res.type].from_dict(*args, **kwargs)
+            res_type = ErrorCollector.error_types.get(res.type)
+            if res_type:
+                return res_type.from_dict(*args, **kwargs)
             return res
         return res
 
 
 @dataclass
 class AccountNotFound(Error):
-    pass
+    type = "accountNotFound"
 
 
 @dataclass
 class AccountNotSupportedByMethod(Error):
-    pass
+    type = "accountNotSupportedByMethod"
 
 
 @dataclass
 class AccountReadOnly(Error):
-    pass
+    type = "accountReadOnly"
 
 
 @dataclass
 class InvalidArguments(Error):
+    type = "invalidArguments"
     arguments: Optional[List[str]] = None
     description: Optional[str] = None
 
 
 @dataclass
 class InvalidResultReference(Error):
-    pass
+    type = "invalidResultReference"
 
 
 @dataclass
 class Forbidden(Error):
-    pass
+    type = "forbidden"
 
 
 @dataclass
 class ServerFail(Error):
+    type = "serverFail"
     description: Optional[str] = None
 
 
 @dataclass
 class ServerPartialFail(Error):
-    pass
+    type = "serverPartialFail"
 
 
 @dataclass
 class ServerUnavailable(Error):
-    pass
+    type = "serverUnavailable"
 
 
 @dataclass
 class UnknownMethod(Error):
-    pass
+    type = "unknownMethod"
