@@ -44,4 +44,4 @@ class Operator(Enum):
 @dataclass
 class SetError(Model):
     type: str
-    description: Optional[str]
+    description: Optional[str] = None
