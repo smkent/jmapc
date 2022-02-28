@@ -51,11 +51,11 @@ def test_identity_get(
                 id="0001",
                 name="Ness",
                 email="ness@onett.example.net",
-                replyTo=None,
+                reply_to=None,
                 bcc=None,
-                textSignature="",
-                htmlSignature="",
-                mayDelete=False,
+                text_signature="",
+                html_signature="",
+                may_delete=False,
             )
         ],
     )
