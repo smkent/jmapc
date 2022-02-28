@@ -9,6 +9,7 @@ from jmapc import (
     EmailAddress,
     EmailBodyPart,
     EmailBodyValue,
+    EmailHeader,
     EmailSubmission,
     Envelope,
     Identity,
@@ -98,6 +99,9 @@ results = client.method_calls(
                     ),
                     text_body=[
                         EmailBodyPart(part_id="body", type="text/plain")
+                    ],
+                    headers=[
+                        EmailHeader(name="X-jmapc-example-header", value="yes")
                     ],
                 )
             )

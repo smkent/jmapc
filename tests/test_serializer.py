@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import pytest
 from dataclasses_json import config
 
-from jmapc import ResultReference
+from jmapc import EmailHeader, ResultReference
 from jmapc.models import ListOrRef
 from jmapc.serializer import Model, datetime_decode, datetime_encode
 
@@ -37,6 +37,38 @@ def test_serialize_result_reference() -> None:
     to_dict = d.to_dict()
     assert to_dict == {
         "#ids": {"name": "Some/method", "path": "/ids", "resultOf": "method0"}
+    }
+
+
+def test_serialize_header() -> None:
+    @dataclass
+    class TestModel(Model):
+        headers: List[EmailHeader]
+
+    d = TestModel(
+        headers=[
+            EmailHeader(name="name", value="value"),
+        ],
+    )
+    to_dict = d.to_dict()
+    assert to_dict == {
+        "header:name": "value",
+    }
+
+
+def test_serialize_header_2() -> None:
+    @dataclass
+    class TestModel(Model):
+        headers: List[EmailHeader]
+
+    d = TestModel(
+        headers=[
+            EmailHeader(name="name", value="value"),
+        ],
+    )
+    to_dict = d.to_dict()
+    assert to_dict == {
+        "header:name": "value",
     }
 
 
