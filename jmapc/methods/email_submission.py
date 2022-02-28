@@ -20,5 +20,7 @@ class EmailSubmissionSet(Set):
 
 @dataclass
 class EmailSubmissionSetResponse(SetResponse):
+    name = "EmailSubmission/set"
+
     created: Optional[Dict[str, Optional[EmailSubmission]]]
     updated: Optional[Dict[str, Optional[EmailSubmission]]]
