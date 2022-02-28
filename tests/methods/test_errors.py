@@ -16,69 +16,63 @@ from ..utils import expect_jmap_call
             {
                 "type": "accountNotFound",
             },
-            errors.AccountNotFound(type="accountNotFound"),
+            errors.AccountNotFound(),
         ),
         (
             {
                 "type": "accountNotSupportedByMethod",
             },
-            errors.AccountNotSupportedByMethod(
-                type="accountNotSupportedByMethod"
-            ),
+            errors.AccountNotSupportedByMethod(),
         ),
         (
             {
                 "type": "accountReadOnly",
             },
-            errors.AccountReadOnly(type="accountReadOnly"),
+            errors.AccountReadOnly(),
         ),
         (
             {
                 "type": "invalidArguments",
                 "arguments": ["ids"],
             },
-            errors.InvalidArguments(
-                type="invalidArguments", arguments=["ids"]
-            ),
+            errors.InvalidArguments(arguments=["ids"]),
         ),
         (
             {
                 "type": "invalidResultReference",
             },
-            errors.InvalidResultReference(type="invalidResultReference"),
+            errors.InvalidResultReference(),
         ),
         (
             {
                 "type": "forbidden",
             },
-            errors.Forbidden(type="forbidden"),
+            errors.Forbidden(),
         ),
         (
             {
                 "type": "serverFail",
                 "description": "Something went wrong",
             },
-            errors.ServerFail(
-                type="serverFail", description="Something went wrong"
-            ),
+            errors.ServerFail(description="Something went wrong"),
         ),
         (
             {
                 "type": "serverPartialFail",
             },
-            errors.ServerPartialFail(type="serverPartialFail"),
+            errors.ServerPartialFail(),
         ),
         (
             {
                 "type": "serverUnavailable",
             },
-            errors.ServerUnavailable(type="serverUnavailable"),
+            errors.ServerUnavailable(),
         ),
         (
             {
                 "type": "unknownMethod",
             },
-            errors.UnknownMethod(type="unknownMethod"),
+            errors.UnknownMethod(),
         ),
         (
             {

@@ -15,14 +15,19 @@ class ErrorCollector(Model):
     @classmethod
     def __init_subclass__(cls) -> None:
         error_class = cast(Type["Error"], cls)
-        type_attr = getattr(error_class, "type", None)
+        type_attr = getattr(error_class, "_type", None)
         if type_attr:
             ErrorCollector.error_types[type_attr] = error_class
 
 
 @dataclass
 class Error(ErrorCollector):
-    type: str
+    type: str = ""
+
+    def __post_init__(self) -> None:
+        type_attr = getattr(self, "_type", None)
+        if type_attr:
+            self.type = type_attr
 
     @staticmethod
     @functools.lru_cache(maxsize=None)
@@ -45,52 +50,52 @@ class Error(ErrorCollector):
 
 @dataclass
 class AccountNotFound(Error):
-    type = "accountNotFound"
+    _type = "accountNotFound"
 
 
 @dataclass
 class AccountNotSupportedByMethod(Error):
-    type = "accountNotSupportedByMethod"
+    _type = "accountNotSupportedByMethod"
 
 
 @dataclass
 class AccountReadOnly(Error):
-    type = "accountReadOnly"
+    _type = "accountReadOnly"
 
 
 @dataclass
 class InvalidArguments(Error):
-    type = "invalidArguments"
+    _type = "invalidArguments"
     arguments: Optional[List[str]] = None
     description: Optional[str] = None
 
 
 @dataclass
 class InvalidResultReference(Error):
-    type = "invalidResultReference"
+    _type = "invalidResultReference"
 
 
 @dataclass
 class Forbidden(Error):
-    type = "forbidden"
+    _type = "forbidden"
 
 
 @dataclass
 class ServerFail(Error):
-    type = "serverFail"
+    _type = "serverFail"
     description: Optional[str] = None
 
 
 @dataclass
 class ServerPartialFail(Error):
-    type = "serverPartialFail"
+    _type = "serverPartialFail"
 
 
 @dataclass
 class ServerUnavailable(Error):
-    type = "serverUnavailable"
+    _type = "serverUnavailable"
 
 
 @dataclass
 class UnknownMethod(Error):
-    type = "unknownMethod"
+    _type = "unknownMethod"
