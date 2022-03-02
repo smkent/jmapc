@@ -6,6 +6,8 @@
 [![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)][codecov]
 [![GitHub stars](https://img.shields.io/github/stars/smkent/jmapc?style=social)][repo]
 
+[![jmapc][logo]](#)
+
 jmapc is in initial development.
 
 Currently implemented:
@@ -73,6 +75,7 @@ Created from [smkent/cookie-python][cookie-python] using
 [cookie-python]: https://github.com/smkent/cookie-python
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amaster
+[logo]: https://raw.github.com/smkent/jmapc/master/img/jmapc.png
 [jmapc-pypi]: https://pypi.org/project/jmapc/
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation
