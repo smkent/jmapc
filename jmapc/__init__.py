@@ -1,4 +1,5 @@
 from . import errors, methods, models
+from .__version__ import __version__ as version
 from .client import Client
 from .errors import Error
 from .models import (
@@ -67,4 +68,5 @@ __all__ = [
     "log",
     "methods",
     "models",
+    "version",
 ]
