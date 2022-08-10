@@ -44,6 +44,7 @@ class MailboxSet(Set):
     using = set([constants.JMAP_URN_MAIL])
 
     create: Optional[Dict[str, Mailbox]] = None
+    on_destroy_remove_emails: bool = False
 
 
 @dataclass
