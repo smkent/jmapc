@@ -102,4 +102,9 @@ class Query(MethodWithAccount):
 
 @dataclass
 class QueryResponse(ResponseWithAccount):
-    pass
+    query_state: str
+    can_calculate_changes: bool
+    position: int
+    ids: ListOrRef[str]
+    total: Optional[int] = None
+    limit: Optional[int] = None

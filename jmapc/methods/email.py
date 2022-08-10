@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Email, EmailQueryFilter, ListOrRef
+from ..models import Email, EmailQueryFilter
 from .base import (
     Changes,
     ChangesResponse,
@@ -79,5 +79,3 @@ class EmailQuery(Query):
 @dataclass
 class EmailQueryResponse(QueryResponse):
     name = "Email/query"
-
-    ids: ListOrRef[str]

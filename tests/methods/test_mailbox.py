@@ -177,6 +177,11 @@ def test_mailbox_query(
                 {
                     "accountId": "u1138",
                     "ids": ["MBX1", "MBX5"],
+                    "queryState": "4000",
+                    "canCalculateChanges": True,
+                    "position": 42,
+                    "total": 9001,
+                    "limit": 256,
                 },
                 "uno",
             ]
@@ -188,6 +193,11 @@ def test_mailbox_query(
     ) == MailboxQueryResponse(
         account_id="u1138",
         ids=["MBX1", "MBX5"],
+        query_state="4000",
+        can_calculate_changes=True,
+        position=42,
+        total=9001,
+        limit=256,
     )
 
 

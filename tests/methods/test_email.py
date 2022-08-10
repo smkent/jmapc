@@ -325,6 +325,11 @@ def test_email_query(
                 {
                     "accountId": "u1138",
                     "ids": ["M1000", "M1234"],
+                    "queryState": "5000",
+                    "canCalculateChanges": True,
+                    "position": 42,
+                    "total": 9001,
+                    "limit": 256,
                 },
                 "uno",
             ]
@@ -344,4 +349,9 @@ def test_email_query(
     ) == EmailQueryResponse(
         account_id="u1138",
         ids=["M1000", "M1234"],
+        query_state="5000",
+        can_calculate_changes=True,
+        position=42,
+        total=9001,
+        limit=256,
     )
