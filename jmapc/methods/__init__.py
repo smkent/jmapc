@@ -16,6 +16,8 @@ from .mailbox import (
     MailboxGetResponse,
     MailboxQuery,
     MailboxQueryResponse,
+    MailboxSet,
+    MailboxSetResponse,
 )
 from .thread import ThreadGet, ThreadGetResponse
 
