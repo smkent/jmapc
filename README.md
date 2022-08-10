@@ -22,6 +22,7 @@ Currently implemented:
   * `Identity/get`
   * `Mailbox/get`
   * `Mailbox/query`
+  * `Mailbox/set`
   * `Thread/get`
   * Arbitrary methods via the `CustomMethod` class
 * Combined requests with support for result references

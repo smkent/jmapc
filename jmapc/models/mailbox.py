@@ -38,4 +38,6 @@ class MailboxQueryFilterOperator(Model):
     conditions: List[MailboxQueryFilter]
 
 
-MailboxQueryFilter = Union[MailboxQueryFilterCondition, MailboxQueryFilterOperator]
+MailboxQueryFilter = Union[
+    MailboxQueryFilterCondition, MailboxQueryFilterOperator
+]
