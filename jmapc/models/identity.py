@@ -9,7 +9,6 @@ from .models import EmailAddress
 
 @dataclass
 class Identity(Model):
-    id: str
     name: str
     email: str
     reply_to: Optional[str]
@@ -17,3 +16,4 @@ class Identity(Model):
     text_signature: Optional[str]
     html_signature: Optional[str]
     may_delete: bool
+    id: Optional[str] = None

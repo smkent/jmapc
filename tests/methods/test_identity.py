@@ -6,6 +6,8 @@ from jmapc.methods import (
     IdentityChangesResponse,
     IdentityGet,
     IdentityGetResponse,
+    IdentitySet,
+    IdentitySetResponse,
 )
 
 from ..utils import expect_jmap_call
@@ -114,4 +116,101 @@ def test_identity_get(
                 may_delete=False,
             )
         ],
+    )
+
+
+def test_identity_set(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Identity/set",
+                {
+                    "accountId": "u1138",
+                    "create": {
+                        "new_id": {
+                            "name": "Mr. Saturn",
+                            "email": "mr.saturn@saturn.valley.example.net",
+                            "mayDelete": False,
+                            "textSignature": "Boing",
+                            "htmlSignature": "<i>Boing</i>",
+                        }
+                    },
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Identity/set",
+                {
+                    "accountId": "u1138",
+                    "oldState": "1",
+                    "newState": "2",
+                    "created": {
+                        "new_id": {
+                            "name": "Mr. Saturn",
+                            "email": "mr.saturn@saturn.valley.example.net",
+                            "mayDelete": False,
+                            "textSignature": "Boing",
+                            "htmlSignature": "<i>Boing</i>",
+                            "replyTo": None,
+                            "bcc": None,
+                            "id": "0002",
+                        },
+                    },
+                    "updated": None,
+                    "destroyed": None,
+                    "notCreated": None,
+                    "notDestroyed": None,
+                    "notUpdated": None,
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+
+    assert client.method_call(
+        IdentitySet(
+            create=dict(
+                new_id=Identity(
+                    name="Mr. Saturn",
+                    email="mr.saturn@saturn.valley.example.net",
+                    reply_to=None,
+                    bcc=None,
+                    text_signature="Boing",
+                    html_signature="<i>Boing</i>",
+                    may_delete=False,
+                )
+            )
+        )
+    ) == IdentitySetResponse(
+        account_id="u1138",
+        old_state="1",
+        new_state="2",
+        created=dict(
+            new_id=Identity(
+                id="0002",
+                name="Mr. Saturn",
+                email="mr.saturn@saturn.valley.example.net",
+                reply_to=None,
+                bcc=None,
+                text_signature="Boing",
+                html_signature="<i>Boing</i>",
+                may_delete=False,
+            )
+        ),
+        updated=None,
+        destroyed=None,
+        not_created=None,
+        not_updated=None,
+        not_destroyed=None,
     )
