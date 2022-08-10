@@ -8,6 +8,8 @@ from jmapc.methods import (
     MailboxGetResponse,
     MailboxQuery,
     MailboxQueryResponse,
+    MailboxSet,
+    MailboxSetResponse,
 )
 
 from ..utils import expect_jmap_call
@@ -186,4 +188,98 @@ def test_mailbox_query(
     ) == MailboxQueryResponse(
         account_id="u1138",
         ids=["MBX1", "MBX5"],
+    )
+
+
+def test_mailbox_set(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Mailbox/set",
+                {
+                    "accountId": "u1138",
+                    "create": {
+                        "mailbox": {
+                            "name": "Saturn Valley Newsletter",
+                            "isSubscribed": False,
+                            "sortOrder": 0,
+                        }
+                    },
+                    "onDestroyRemoveEmails": False,
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Mailbox/set",
+                {
+                    "accountId": "u1138",
+                    "oldState": "1",
+                    "newState": "2",
+                    "created": {
+                        "mailbox": {
+                            "showAsLabel": True,
+                            "totalThreads": 0,
+                            "unreadThreads": 0,
+                            "isSeenShared": False,
+                            "unreadEmails": 0,
+                            "myRights": {
+                                "maySubmit": True,
+                                "maySetKeywords": True,
+                                "mayAddItems": True,
+                                "mayAdmin": True,
+                                "mayRemoveItems": True,
+                                "mayDelete": True,
+                                "maySetSeen": True,
+                                "mayCreateChild": True,
+                                "mayRename": True,
+                                "mayReadItems": True,
+                            },
+                            "totalEmails": 0,
+                            "id": "MBX9000",
+                        },
+                    },
+                    "updated": None,
+                    "destroyed": None,
+                    "notCreated": None,
+                    "notDestroyed": None,
+                    "notUpdated": None,
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+
+    assert client.method_call(
+        MailboxSet(
+            create=dict(mailbox=Mailbox(name="Saturn Valley Newsletter"))
+        )
+    ) == MailboxSetResponse(
+        account_id="u1138",
+        old_state="1",
+        new_state="2",
+        created=dict(
+            mailbox=Mailbox(
+                id="MBX9000",
+                total_emails=0,
+                unread_emails=0,
+                total_threads=0,
+                unread_threads=0,
+            )
+        ),
+        updated=None,
+        destroyed=None,
+        not_created=None,
+        not_updated=None,
+        not_destroyed=None,
     )

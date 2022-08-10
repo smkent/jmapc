@@ -30,6 +30,8 @@ from .mailbox import (
     MailboxGetResponse,
     MailboxQuery,
     MailboxQueryResponse,
+    MailboxSet,
+    MailboxSetResponse,
 )
 from .thread import (
     ThreadChanges,
@@ -65,6 +67,8 @@ __all__ = [
     "MailboxGetResponse",
     "MailboxQuery",
     "MailboxQueryResponse",
+    "MailboxSet",
+    "MailboxSetResponse",
     "Method",
     "Response",
     "ThreadChanges",

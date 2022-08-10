@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from dataclasses_json import config
 
@@ -14,6 +14,8 @@ from .base import (
     GetResponse,
     Query,
     QueryResponse,
+    Set,
+    SetResponse,
 )
 
 
@@ -54,3 +56,21 @@ class MailboxQueryResponse(QueryResponse):
     name = "Mailbox/query"
 
     ids: ListOrRef[str]
+
+
+@dataclass
+class MailboxSet(Set):
+    name = "Mailbox/set"
+    using = set([constants.JMAP_URN_MAIL])
+
+    create: Optional[Dict[str, Mailbox]] = None
+    on_destroy_remove_emails: bool = False
+
+
+@dataclass
+class MailboxSetResponse(SetResponse):
+    name = "Mailbox/set"
+    using = set([constants.JMAP_URN_MAIL])
+
+    created: Optional[Dict[str, Optional[Mailbox]]]
+    updated: Optional[Dict[str, Optional[Mailbox]]]

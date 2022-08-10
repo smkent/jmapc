@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 import requests
 
 from . import constants, errors
+from .auth import BearerAuth
 from .logging import log
 from .methods import CustomResponse, Method, Response
 from .session import Session
@@ -16,29 +17,49 @@ MethodResponseList = List[Tuple[str, MethodResponseOrError]]
 MethodCallResponseOrList = Union[
     MethodResponseOrError, List[MethodResponseOrError]
 ]
+RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 
 
 class Client:
-    def __init__(self, host: str, user: str, password: str) -> None:
+    @classmethod
+    def create_with_api_token(cls, host: str, api_token: str) -> Client:
+        return cls(host, auth=BearerAuth(api_token))
+
+    @classmethod
+    def create_with_password(
+        cls, host: str, user: str, password: str
+    ) -> Client:
+        return cls(
+            host,
+            auth=requests.auth.HTTPBasicAuth(username=user, password=password),
+        )
+
+    def __init__(self, host: str, auth: Optional[RequestsAuth] = None) -> None:
         self._host: str = host
-        self._user: str = user
-        self._password: str = password
-        self._session: Optional[Session] = None
+        self._auth: Optional[RequestsAuth] = auth
+        self._jmap_session: Optional[Session] = None
+        self._requests_session: Optional[requests.Session] = None
 
     @property
-    def session(self) -> Session:
-        if not self._session:
-            r = requests.get(
-                f"https://{self._host}/.well-known/jmap",
-                auth=(self._user, self._password),
+    def requests_session(self) -> requests.Session:
+        if not self._requests_session:
+            self._requests_session = requests.Session()
+            self._requests_session.auth = self._auth
+        return self._requests_session
+
+    @property
+    def jmap_session(self) -> Session:
+        if not self._jmap_session:
+            r = self.requests_session.get(
+                f"https://{self._host}/.well-known/jmap"
             )
             r.raise_for_status()
-            self._session = Session.from_dict(r.json())
-        return self._session
+            self._jmap_session = Session.from_dict(r.json())
+        return self._jmap_session
 
     @property
     def account_id(self) -> str:
-        return self.session.primary_accounts.mail
+        return self.jmap_session.primary_accounts.mail
 
     def method_call(
         self, method: Method, flatten_single_response: bool = True
@@ -89,9 +110,8 @@ class Client:
 
     def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
-        r = requests.post(
-            self.session.api_url,
-            auth=(self._user, self._password),
+        r = self.requests_session.post(
+            self.jmap_session.api_url,
             headers={"Content-Type": "application/json"},
             data=json.dumps(request),
         )

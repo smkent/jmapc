@@ -11,14 +11,14 @@ from .models import Operator, StrOrRef
 
 @dataclass
 class Mailbox(Model):
-    id: str = field(metadata=config(field_name="Id"))
-    name: str
-    sort_order: int
-    total_emails: int
-    unread_emails: int
-    total_threads: int
-    unread_threads: int
-    is_subscribed: bool
+    id: Optional[str] = field(metadata=config(field_name="Id"), default=None)
+    name: Optional[str] = None
+    sort_order: Optional[int] = 0
+    total_emails: Optional[int] = None
+    unread_emails: Optional[int] = None
+    total_threads: Optional[int] = None
+    unread_threads: Optional[int] = None
+    is_subscribed: Optional[bool] = False
     role: Optional[str] = None
     parent_id: Optional[str] = field(
         metadata=config(field_name="parentId"), default=None
