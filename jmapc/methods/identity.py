@@ -7,7 +7,18 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import Identity, ListOrRef
-from .base import Get, GetResponse
+from .base import Changes, ChangesResponse, Get, GetResponse
+
+
+@dataclass
+class IdentityChanges(Changes):
+    name = "Identity/changes"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+
+@dataclass
+class IdentityChangesResponse(ChangesResponse):
+    name = "Identity/changes"
 
 
 @dataclass

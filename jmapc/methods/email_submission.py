@@ -5,7 +5,18 @@ from typing import Any, Dict, List, Optional
 
 from .. import constants
 from ..models import EmailSubmission
-from .base import Set, SetResponse
+from .base import Changes, ChangesResponse, Set, SetResponse
+
+
+@dataclass
+class EmailSubmissionChanges(Changes):
+    name = "EmailSubmission/changes"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+
+@dataclass
+class EmailSubmissionChangesResponse(ChangesResponse):
+    name = "EmailSubmission/changes"
 
 
 @dataclass

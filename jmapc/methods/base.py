@@ -43,6 +43,22 @@ class ResponseWithAccount(Response):
 
 
 @dataclass
+class Changes(MethodWithAccount):
+    since_state: str
+    max_changes: Optional[int] = None
+
+
+@dataclass
+class ChangesResponse(ResponseWithAccount):
+    old_state: str
+    new_state: str
+    has_more_changes: bool
+    created: List[str]
+    updated: List[str]
+    destroyed: List[str]
+
+
+@dataclass
 class Get(MethodWithAccount):
     ids: Optional[ListOrRef[str]]
     properties: Optional[List[str]] = None

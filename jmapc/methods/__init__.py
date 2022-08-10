@@ -2,6 +2,8 @@ from .base import Method, Response
 from .core import CoreEcho, CoreEchoResponse
 from .custom import CustomMethod, CustomResponse
 from .email import (
+    EmailChanges,
+    EmailChangesResponse,
     EmailGet,
     EmailGetResponse,
     EmailQuery,
@@ -9,9 +11,21 @@ from .email import (
     EmailSet,
     EmailSetResponse,
 )
-from .email_submission import EmailSubmissionSet, EmailSubmissionSetResponse
-from .identity import IdentityGet, IdentityGetResponse
+from .email_submission import (
+    EmailSubmissionChanges,
+    EmailSubmissionChangesResponse,
+    EmailSubmissionSet,
+    EmailSubmissionSetResponse,
+)
+from .identity import (
+    IdentityChanges,
+    IdentityChangesResponse,
+    IdentityGet,
+    IdentityGetResponse,
+)
 from .mailbox import (
+    MailboxChanges,
+    MailboxChangesResponse,
     MailboxGet,
     MailboxGetResponse,
     MailboxQuery,
@@ -19,23 +33,36 @@ from .mailbox import (
     MailboxSet,
     MailboxSetResponse,
 )
-from .thread import ThreadGet, ThreadGetResponse
+from .thread import (
+    ThreadChanges,
+    ThreadChangesResponse,
+    ThreadGet,
+    ThreadGetResponse,
+)
 
 __all__ = [
     "CoreEcho",
     "CoreEchoResponse",
     "CustomMethod",
     "CustomResponse",
+    "EmailChanges",
+    "EmailChangesResponse",
     "EmailGet",
     "EmailGetResponse",
     "EmailQuery",
     "EmailQueryResponse",
     "EmailSet",
     "EmailSetResponse",
+    "EmailSubmissionChanges",
+    "EmailSubmissionChangesResponse",
     "EmailSubmissionSet",
     "EmailSubmissionSetResponse",
+    "IdentityChanges",
+    "IdentityChangesResponse",
     "IdentityGet",
     "IdentityGetResponse",
+    "MailboxChanges",
+    "MailboxChangesResponse",
     "MailboxGet",
     "MailboxGetResponse",
     "MailboxQuery",
@@ -44,6 +71,8 @@ __all__ = [
     "MailboxSetResponse",
     "Method",
     "Response",
+    "ThreadChanges",
+    "ThreadChangesResponse",
     "ThreadGet",
     "ThreadGetResponse",
 ]

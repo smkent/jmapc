@@ -7,7 +7,27 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import Email, EmailQueryFilter, ListOrRef
-from .base import Get, GetResponse, Query, QueryResponse, Set, SetResponse
+from .base import (
+    Changes,
+    ChangesResponse,
+    Get,
+    GetResponse,
+    Query,
+    QueryResponse,
+    Set,
+    SetResponse,
+)
+
+
+@dataclass
+class EmailChanges(Changes):
+    name = "Email/changes"
+    using = set([constants.JMAP_URN_MAIL])
+
+
+@dataclass
+class EmailChangesResponse(ChangesResponse):
+    name = "Email/changes"
 
 
 @dataclass

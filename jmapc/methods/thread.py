@@ -7,7 +7,18 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import Thread
-from .base import Get, GetResponse
+from .base import Changes, ChangesResponse, Get, GetResponse
+
+
+@dataclass
+class ThreadChanges(Changes):
+    name = "Thread/changes"
+    using = set([constants.JMAP_URN_MAIL])
+
+
+@dataclass
+class ThreadChangesResponse(ChangesResponse):
+    name = "Thread/changes"
 
 
 @dataclass
