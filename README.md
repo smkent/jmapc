@@ -54,8 +54,7 @@ Any of the included examples can be invoked with `poetry run`:
 
 ```sh
 JMAP_HOST=jmap.example.com \
-JMAP_USER=ness \
-JMAP_PASSWORD=pk_fire \
+JMAP_API_TOKEN=ness__pk_fire \
 poetry run examples/identity_get.py
 ```
 
