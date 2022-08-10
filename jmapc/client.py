@@ -24,13 +24,20 @@ class Client:
         self._user: str = user
         self._password: str = password
         self._jmap_session: Optional[Session] = None
+        self._requests_session: Optional[requests.Session] = None
+
+    @property
+    def requests_session(self) -> requests.Session:
+        if not self._requests_session:
+            self._requests_session = requests.Session()
+            self._requests_session.auth = (self._user, self._password)
+        return self._requests_session
 
     @property
     def jmap_session(self) -> Session:
         if not self._jmap_session:
-            r = requests.get(
-                f"https://{self._host}/.well-known/jmap",
-                auth=(self._user, self._password),
+            r = self.requests_session.get(
+                f"https://{self._host}/.well-known/jmap"
             )
             r.raise_for_status()
             self._jmap_session = Session.from_dict(r.json())
@@ -89,9 +96,8 @@ class Client:
 
     def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
-        r = requests.post(
+        r = self.requests_session.post(
             self.jmap_session.api_url,
-            auth=(self._user, self._password),
             headers={"Content-Type": "application/json"},
             data=json.dumps(request),
         )
