@@ -54,22 +54,6 @@ class EmailGetResponse(GetResponse):
 
 
 @dataclass
-class EmailSet(Set):
-    name = "Email/set"
-    using = set([constants.JMAP_URN_MAIL])
-
-    create: Optional[Dict[str, Email]] = None
-
-
-@dataclass
-class EmailSetResponse(SetResponse):
-    name = "Email/set"
-
-    created: Optional[Dict[str, Optional[Email]]]
-    updated: Optional[Dict[str, Optional[Email]]]
-
-
-@dataclass
 class EmailQuery(Query):
     name = "Email/query"
     using = set([constants.JMAP_URN_MAIL])
@@ -95,3 +79,19 @@ class EmailQueryChanges(QueryChanges):
 @dataclass
 class EmailQueryChangesResponse(QueryChangesResponse):
     name = "Email/queryChanges"
+
+
+@dataclass
+class EmailSet(Set):
+    name = "Email/set"
+    using = set([constants.JMAP_URN_MAIL])
+
+    create: Optional[Dict[str, Email]] = None
+
+
+@dataclass
+class EmailSetResponse(SetResponse):
+    name = "Email/set"
+
+    created: Optional[Dict[str, Optional[Email]]]
+    updated: Optional[Dict[str, Optional[Email]]]
