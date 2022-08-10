@@ -18,6 +18,7 @@ Currently implemented:
   * `Email/changes`
   * `Email/get`
   * `Email/query`
+  * `Email/queryChanges`
   * `Email/set`
   * `EmailSubmission/changes`
   * `EmailSubmission/set`

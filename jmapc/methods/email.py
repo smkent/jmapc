@@ -13,6 +13,8 @@ from .base import (
     Get,
     GetResponse,
     Query,
+    QueryChanges,
+    QueryChangesResponse,
     QueryResponse,
     Set,
     SetResponse,
@@ -79,3 +81,17 @@ class EmailQuery(Query):
 @dataclass
 class EmailQueryResponse(QueryResponse):
     name = "Email/query"
+
+
+@dataclass
+class EmailQueryChanges(QueryChanges):
+    name = "Email/queryChanges"
+    using = set([constants.JMAP_URN_MAIL])
+
+    filter: Optional[EmailQueryFilter] = None
+    collapse_threads: Optional[bool] = None
+
+
+@dataclass
+class EmailQueryChangesResponse(QueryChangesResponse):
+    name = "Email/queryChanges"
