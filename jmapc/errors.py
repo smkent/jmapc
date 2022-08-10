@@ -55,6 +55,11 @@ class AccountReadOnly(Error):
 
 
 @dataclass
+class CannotCalculateChanges(Error):
+    _type = "cannotCalculateChanges"
+
+
+@dataclass
 class InvalidArguments(Error):
     _type = "invalidArguments"
     arguments: Optional[List[str]] = None

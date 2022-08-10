@@ -13,6 +13,8 @@ from jmapc import (
     EmailQueryFilterCondition,
 )
 from jmapc.methods import (
+    EmailChanges,
+    EmailChangesResponse,
     EmailGet,
     EmailGetResponse,
     EmailQuery,
@@ -22,6 +24,57 @@ from jmapc.methods import (
 )
 
 from ..utils import expect_jmap_call
+
+
+def test_email_changes(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/changes",
+                {
+                    "accountId": "u1138",
+                    "sinceState": "2999",
+                    "maxChanges": 47,
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/changes",
+                {
+                    "accountId": "u1138",
+                    "oldState": "2999",
+                    "newState": "3000",
+                    "hasMoreChanges": False,
+                    "created": ["f0001", "f0002"],
+                    "updated": [],
+                    "destroyed": ["f0003"],
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        EmailChanges(since_state="2999", max_changes=47)
+    ) == EmailChangesResponse(
+        account_id="u1138",
+        old_state="2999",
+        new_state="3000",
+        has_more_changes=False,
+        created=["f0001", "f0002"],
+        updated=[],
+        destroyed=["f0003"],
+    )
 
 
 def test_email_get(

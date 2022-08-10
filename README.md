@@ -15,13 +15,18 @@ Currently implemented:
 * Basic models
 * Request methods:
   * `Core/echo`
+  * `Email/changes`
   * `Email/get`
   * `Email/query`
   * `Email/set`
+  * `EmailSubmission/changes`
   * `EmailSubmission/set`
+  * `Identity/changes`
   * `Identity/get`
+  * `Mailbox/changes`
   * `Mailbox/get`
   * `Mailbox/query`
+  * `Thread/changes`
   * `Thread/get`
   * Arbitrary methods via the `CustomMethod` class
 * Combined requests with support for result references

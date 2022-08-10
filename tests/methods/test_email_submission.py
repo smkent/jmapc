@@ -12,6 +12,8 @@ from jmapc import (
 )
 from jmapc.methods import (
     EmailSetResponse,
+    EmailSubmissionChanges,
+    EmailSubmissionChangesResponse,
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
 )
@@ -53,6 +55,57 @@ email_submission_set_response = {
     "notUpdated": None,
     "notDestroyed": None,
 }
+
+
+def test_email_submission_changes(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/changes",
+                {
+                    "accountId": "u1138",
+                    "sinceState": "2999",
+                    "maxChanges": 47,
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/changes",
+                {
+                    "accountId": "u1138",
+                    "oldState": "2999",
+                    "newState": "3000",
+                    "hasMoreChanges": False,
+                    "created": ["S0001", "S0002"],
+                    "updated": [],
+                    "destroyed": ["S0003"],
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        EmailSubmissionChanges(since_state="2999", max_changes=47)
+    ) == EmailSubmissionChangesResponse(
+        account_id="u1138",
+        old_state="2999",
+        new_state="3000",
+        has_more_changes=False,
+        created=["S0001", "S0002"],
+        updated=[],
+        destroyed=["S0003"],
+    )
 
 
 def test_email_submission_set(
