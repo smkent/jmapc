@@ -24,6 +24,8 @@ from .identity import (
     IdentityChangesResponse,
     IdentityGet,
     IdentityGetResponse,
+    IdentitySet,
+    IdentitySetResponse,
 )
 from .mailbox import (
     MailboxChanges,
@@ -67,6 +69,8 @@ __all__ = [
     "IdentityChangesResponse",
     "IdentityGet",
     "IdentityGetResponse",
+    "IdentitySet",
+    "IdentitySetResponse",
     "MailboxChanges",
     "MailboxChangesResponse",
     "MailboxGet",

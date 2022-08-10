@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from dataclasses_json import config
 
 from .. import constants
 from ..models import Identity, ListOrRef
-from .base import Changes, ChangesResponse, Get, GetResponse
+from .base import Changes, ChangesResponse, Get, GetResponse, Set, SetResponse
 
 
 @dataclass
@@ -34,3 +34,19 @@ class IdentityGetResponse(GetResponse):
     name = "Identity/get"
 
     data: List[Identity] = field(metadata=config(field_name="list"))
+
+
+@dataclass
+class IdentitySet(Set):
+    name = "Identity/set"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+    create: Optional[Dict[str, Identity]] = None
+
+
+@dataclass
+class IdentitySetResponse(SetResponse):
+    name = "Identity/set"
+
+    created: Optional[Dict[str, Optional[Identity]]]
+    updated: Optional[Dict[str, Optional[Identity]]]
