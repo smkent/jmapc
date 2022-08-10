@@ -18,6 +18,7 @@ Currently implemented:
   * `Email/changes`
   * `Email/get`
   * `Email/query`
+  * `Email/queryChanges`
   * `Email/set`
   * `EmailSubmission/changes`
   * `EmailSubmission/set`
@@ -26,6 +27,7 @@ Currently implemented:
   * `Mailbox/changes`
   * `Mailbox/get`
   * `Mailbox/query`
+  * `Mailbox/queryChanges`
   * `Mailbox/set`
   * `Thread/changes`
   * `Thread/get`

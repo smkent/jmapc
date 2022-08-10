@@ -3,6 +3,7 @@ from .__version__ import __version__ as version
 from .client import Client
 from .errors import Error
 from .models import (
+    AddedItem,
     Address,
     Comparator,
     Delivered,
@@ -34,6 +35,7 @@ from .models import (
 from .ref import ResultReference
 
 __all__ = [
+    "AddedItem",
     "Address",
     "Client",
     "Comparator",

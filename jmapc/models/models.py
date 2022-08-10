@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Optional, TypeVar, Union
+
+from dataclasses_json import config
 
 from ..ref import ResultReference
 from ..serializer import Model
@@ -10,6 +12,12 @@ from ..serializer import Model
 T = TypeVar("T")
 StrOrRef = Union[str, ResultReference]
 ListOrRef = Union[List[T], ResultReference]
+
+
+@dataclass
+class AddedItem(Model):
+    id: str = field(metadata=config(field_name="Id"))
+    index: int
 
 
 @dataclass

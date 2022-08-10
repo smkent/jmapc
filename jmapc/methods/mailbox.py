@@ -6,13 +6,15 @@ from typing import Dict, List, Optional
 from dataclasses_json import config
 
 from .. import constants
-from ..models import ListOrRef, Mailbox, MailboxQueryFilter
+from ..models import Mailbox, MailboxQueryFilter
 from .base import (
     Changes,
     ChangesResponse,
     Get,
     GetResponse,
     Query,
+    QueryChanges,
+    QueryChangesResponse,
     QueryResponse,
     Set,
     SetResponse,
@@ -55,7 +57,18 @@ class MailboxQuery(Query):
 class MailboxQueryResponse(QueryResponse):
     name = "Mailbox/query"
 
-    ids: ListOrRef[str]
+
+@dataclass
+class MailboxQueryChanges(QueryChanges):
+    name = "Mailbox/queryChanges"
+    using = set([constants.JMAP_URN_MAIL])
+
+    filter: Optional[MailboxQueryFilter] = None
+
+
+@dataclass
+class MailboxQueryChangesResponse(QueryChangesResponse):
+    name = "Mailbox/queryChanges"
 
 
 @dataclass

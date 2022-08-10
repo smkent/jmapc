@@ -6,13 +6,15 @@ from typing import Dict, List, Optional
 from dataclasses_json import config
 
 from .. import constants
-from ..models import Email, EmailQueryFilter, ListOrRef
+from ..models import Email, EmailQueryFilter
 from .base import (
     Changes,
     ChangesResponse,
     Get,
     GetResponse,
     Query,
+    QueryChanges,
+    QueryChangesResponse,
     QueryResponse,
     Set,
     SetResponse,
@@ -52,6 +54,34 @@ class EmailGetResponse(GetResponse):
 
 
 @dataclass
+class EmailQuery(Query):
+    name = "Email/query"
+    using = set([constants.JMAP_URN_MAIL])
+
+    filter: Optional[EmailQueryFilter] = None
+    collapse_threads: Optional[bool] = None
+
+
+@dataclass
+class EmailQueryResponse(QueryResponse):
+    name = "Email/query"
+
+
+@dataclass
+class EmailQueryChanges(QueryChanges):
+    name = "Email/queryChanges"
+    using = set([constants.JMAP_URN_MAIL])
+
+    filter: Optional[EmailQueryFilter] = None
+    collapse_threads: Optional[bool] = None
+
+
+@dataclass
+class EmailQueryChangesResponse(QueryChangesResponse):
+    name = "Email/queryChanges"
+
+
+@dataclass
 class EmailSet(Set):
     name = "Email/set"
     using = set([constants.JMAP_URN_MAIL])
@@ -65,19 +95,3 @@ class EmailSetResponse(SetResponse):
 
     created: Optional[Dict[str, Optional[Email]]]
     updated: Optional[Dict[str, Optional[Email]]]
-
-
-@dataclass
-class EmailQuery(Query):
-    name = "Email/query"
-    using = set([constants.JMAP_URN_MAIL])
-
-    filter: Optional[EmailQueryFilter] = None
-    collapse_threads: Optional[bool] = None
-
-
-@dataclass
-class EmailQueryResponse(QueryResponse):
-    name = "Email/query"
-
-    ids: ListOrRef[str]

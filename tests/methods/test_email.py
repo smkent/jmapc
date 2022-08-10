@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import responses
 
 from jmapc import (
+    AddedItem,
     Client,
     Comparator,
     Email,
@@ -18,6 +19,8 @@ from jmapc.methods import (
     EmailGet,
     EmailGetResponse,
     EmailQuery,
+    EmailQueryChanges,
+    EmailQueryChangesResponse,
     EmailQueryResponse,
     EmailSet,
     EmailSetResponse,
@@ -176,6 +179,159 @@ def test_email_get(
     )
 
 
+def test_email_query(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/query",
+                {
+                    "accountId": "u1138",
+                    "collapseThreads": True,
+                    "filter": {
+                        "after": "1994-08-24T12:01:02Z",
+                        "inMailbox": "MBX1",
+                    },
+                    "limit": 10,
+                    "sort": [
+                        {
+                            "anchorOffset": 0,
+                            "calculateTotal": False,
+                            "isAscending": False,
+                            "position": 0,
+                            "property": "receivedAt",
+                        }
+                    ],
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/query",
+                {
+                    "accountId": "u1138",
+                    "ids": ["M1000", "M1234"],
+                    "queryState": "5000",
+                    "canCalculateChanges": True,
+                    "position": 42,
+                    "total": 9001,
+                    "limit": 256,
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        EmailQuery(
+            collapse_threads=True,
+            filter=EmailQueryFilterCondition(
+                in_mailbox="MBX1",
+                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+            ),
+            sort=[Comparator(property="receivedAt", is_ascending=False)],
+            limit=10,
+        )
+    ) == EmailQueryResponse(
+        account_id="u1138",
+        ids=["M1000", "M1234"],
+        query_state="5000",
+        can_calculate_changes=True,
+        position=42,
+        total=9001,
+        limit=256,
+    )
+
+
+def test_email_query_changes(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "inMailbox": "MBX1",
+                        "after": "1994-08-24T12:01:02Z",
+                    },
+                    "sort": [
+                        {
+                            "anchorOffset": 0,
+                            "calculateTotal": False,
+                            "isAscending": False,
+                            "position": 0,
+                            "property": "receivedAt",
+                        }
+                    ],
+                    "sinceQueryState": "1000",
+                    "calculateTotal": False,
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "oldQueryState": "1000",
+                    "newQueryState": "1003",
+                    "added": [
+                        {
+                            "id": "M8002",
+                            "index": 3,
+                        },
+                        {
+                            "id": "M8003",
+                            "index": 8,
+                        },
+                    ],
+                    "removed": ["M8001"],
+                    "total": 42,
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        EmailQueryChanges(
+            filter=EmailQueryFilterCondition(
+                in_mailbox="MBX1",
+                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+            ),
+            sort=[Comparator(property="receivedAt", is_ascending=False)],
+            since_query_state="1000",
+        )
+    ) == EmailQueryChangesResponse(
+        account_id="u1138",
+        old_query_state="1000",
+        new_query_state="1003",
+        removed=["M8001"],
+        added=[
+            AddedItem(id="M8002", index=3),
+            AddedItem(id="M8003", index=8),
+        ],
+        total=42,
+    )
+
+
 def test_email_set(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
@@ -282,66 +438,4 @@ def test_email_set(
         not_created=None,
         not_updated=None,
         not_destroyed=None,
-    )
-
-
-def test_email_query(
-    client: Client, http_responses: responses.RequestsMock
-) -> None:
-    expected_request = {
-        "methodCalls": [
-            [
-                "Email/query",
-                {
-                    "accountId": "u1138",
-                    "collapseThreads": True,
-                    "filter": {
-                        "after": "1994-08-24T12:01:02Z",
-                        "inMailbox": "MBX1",
-                    },
-                    "limit": 10,
-                    "sort": [
-                        {
-                            "anchorOffset": 0,
-                            "calculateTotal": False,
-                            "isAscending": False,
-                            "position": 0,
-                            "property": "receivedAt",
-                        }
-                    ],
-                },
-                "uno",
-            ]
-        ],
-        "using": [
-            "urn:ietf:params:jmap:core",
-            "urn:ietf:params:jmap:mail",
-        ],
-    }
-    response = {
-        "methodResponses": [
-            [
-                "Email/query",
-                {
-                    "accountId": "u1138",
-                    "ids": ["M1000", "M1234"],
-                },
-                "uno",
-            ]
-        ]
-    }
-    expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
-        EmailQuery(
-            collapse_threads=True,
-            filter=EmailQueryFilterCondition(
-                in_mailbox="MBX1",
-                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
-            ),
-            sort=[Comparator(property="receivedAt", is_ascending=False)],
-            limit=10,
-        )
-    ) == EmailQueryResponse(
-        account_id="u1138",
-        ids=["M1000", "M1234"],
     )

@@ -24,6 +24,7 @@ from .mailbox import (
     MailboxQueryFilterOperator,
 )
 from .models import (
+    AddedItem,
     Comparator,
     EmailAddress,
     ListOrRef,
@@ -34,6 +35,7 @@ from .models import (
 from .thread import Thread, ThreadEmail
 
 __all__ = [
+    "AddedItem",
     "Address",
     "Comparator",
     "Delivered",
