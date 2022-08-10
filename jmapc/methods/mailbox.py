@@ -83,7 +83,6 @@ class MailboxSet(Set):
 @dataclass
 class MailboxSetResponse(SetResponse):
     name = "Mailbox/set"
-    using = set([constants.JMAP_URN_MAIL])
 
     created: Optional[Dict[str, Optional[Mailbox]]]
     updated: Optional[Dict[str, Optional[Mailbox]]]
