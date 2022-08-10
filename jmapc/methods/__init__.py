@@ -40,6 +40,8 @@ __all__ = [
     "MailboxGetResponse",
     "MailboxQuery",
     "MailboxQueryResponse",
+    "MailboxSet",
+    "MailboxSetResponse",
     "Method",
     "Response",
     "ThreadGet",
