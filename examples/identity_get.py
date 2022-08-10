@@ -6,10 +6,8 @@ from jmapc import Client
 from jmapc.methods import IdentityGet
 
 # Create and configure client
-client = Client(
-    host=os.environ["JMAP_HOST"],
-    user=os.environ["JMAP_USER"],
-    password=os.environ["JMAP_PASSWORD"],
+client = Client.create_with_api_token(
+    host=os.environ["JMAP_HOST"], api_token=os.environ["JMAP_API_TOKEN"]
 )
 
 # Prepare Identity/get request

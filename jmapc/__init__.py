@@ -1,4 +1,4 @@
-from . import errors, methods, models
+from . import auth, errors, methods, models
 from .__version__ import __version__ as version
 from .client import Client
 from .errors import Error
@@ -64,6 +64,7 @@ __all__ = [
     "Thread",
     "ThreadEmail",
     "UndoStatus",
+    "auth",
     "errors",
     "log",
     "methods",
