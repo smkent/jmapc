@@ -26,6 +26,7 @@ Currently implemented:
   * `Mailbox/changes`
   * `Mailbox/get`
   * `Mailbox/query`
+  * `Mailbox/queryChanges`
   * `Mailbox/set`
   * `Thread/changes`
   * `Thread/get`

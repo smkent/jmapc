@@ -1,12 +1,14 @@
 import responses
 
-from jmapc import Client, Mailbox, MailboxQueryFilterCondition
+from jmapc import AddedItem, Client, Mailbox, MailboxQueryFilterCondition
 from jmapc.methods import (
     MailboxChanges,
     MailboxChangesResponse,
     MailboxGet,
     MailboxGetResponse,
     MailboxQuery,
+    MailboxQueryChanges,
+    MailboxQueryChangesResponse,
     MailboxQueryResponse,
     MailboxSet,
     MailboxSetResponse,
@@ -198,6 +200,73 @@ def test_mailbox_query(
         position=42,
         total=9001,
         limit=256,
+    )
+
+
+def test_mailbox_query_changes(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Mailbox/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "name": "Inbox",
+                    },
+                    "sinceQueryState": "1000",
+                    "calculateTotal": False,
+                },
+                "uno",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Mailbox/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "oldQueryState": "1000",
+                    "newQueryState": "1003",
+                    "added": [
+                        {
+                            "id": "MBX8002",
+                            "index": 3,
+                        },
+                        {
+                            "id": "MBX8003",
+                            "index": 8,
+                        },
+                    ],
+                    "removed": ["MBX8001"],
+                    "total": 42,
+                },
+                "uno",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_call(
+        MailboxQueryChanges(
+            filter=MailboxQueryFilterCondition(name="Inbox"),
+            since_query_state="1000",
+        )
+    ) == MailboxQueryChangesResponse(
+        account_id="u1138",
+        old_query_state="1000",
+        new_query_state="1003",
+        removed=["MBX8001"],
+        added=[
+            AddedItem(id="MBX8002", index=3),
+            AddedItem(id="MBX8003", index=8),
+        ],
+        total=42,
     )
 
 

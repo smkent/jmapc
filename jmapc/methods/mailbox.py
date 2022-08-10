@@ -13,6 +13,8 @@ from .base import (
     Get,
     GetResponse,
     Query,
+    QueryChanges,
+    QueryChangesResponse,
     QueryResponse,
     Set,
     SetResponse,
@@ -54,6 +56,19 @@ class MailboxQuery(Query):
 @dataclass
 class MailboxQueryResponse(QueryResponse):
     name = "Mailbox/query"
+
+
+@dataclass
+class MailboxQueryChanges(QueryChanges):
+    name = "Mailbox/queryChanges"
+    using = set([constants.JMAP_URN_MAIL])
+
+    filter: Optional[MailboxQueryFilter] = None
+
+
+@dataclass
+class MailboxQueryChangesResponse(QueryChangesResponse):
+    name = "Mailbox/queryChanges"
 
 
 @dataclass
