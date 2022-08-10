@@ -23,22 +23,22 @@ class Client:
         self._host: str = host
         self._user: str = user
         self._password: str = password
-        self._session: Optional[Session] = None
+        self._jmap_session: Optional[Session] = None
 
     @property
-    def session(self) -> Session:
-        if not self._session:
+    def jmap_session(self) -> Session:
+        if not self._jmap_session:
             r = requests.get(
                 f"https://{self._host}/.well-known/jmap",
                 auth=(self._user, self._password),
             )
             r.raise_for_status()
-            self._session = Session.from_dict(r.json())
-        return self._session
+            self._jmap_session = Session.from_dict(r.json())
+        return self._jmap_session
 
     @property
     def account_id(self) -> str:
-        return self.session.primary_accounts.mail
+        return self.jmap_session.primary_accounts.mail
 
     def method_call(
         self, method: Method, flatten_single_response: bool = True
@@ -90,7 +90,7 @@ class Client:
     def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = requests.post(
-            self.session.api_url,
+            self.jmap_session.api_url,
             auth=(self._user, self._password),
             headers={"Content-Type": "application/json"},
             data=json.dumps(request),

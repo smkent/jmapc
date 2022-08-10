@@ -14,10 +14,10 @@ echo_test_data = dict(
 )
 
 
-def test_session(
+def test_jmap_session(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
-    assert client.session == Session(
+    assert client.jmap_session == Session(
         username="ness@onett.example.net",
         api_url="https://jmap-api.localhost/api",
         primary_accounts=SessionPrimaryAccount(
