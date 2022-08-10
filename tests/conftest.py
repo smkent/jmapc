@@ -31,11 +31,7 @@ def test_log() -> Iterable[None]:
 
 @pytest.fixture
 def client() -> Iterable[Client]:
-    yield Client(
-        host="jmap-example.localhost",
-        user="ness",
-        password="pk_fire",
-    )
+    yield Client(host="jmap-example.localhost", auth=("ness", "pk_fire"))
 
 
 @pytest.fixture

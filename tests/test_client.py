@@ -14,10 +14,22 @@ echo_test_data = dict(
 )
 
 
+@pytest.mark.parametrize(
+    "test_client",
+    (
+        Client("jmap-example.localhost", auth=("ness", "pk_fire")),
+        Client(
+            "jmap-example.localhost",
+            auth=requests.auth.HTTPBasicAuth(
+                username="ness", password="pk_fire"
+            ),
+        ),
+    ),
+)
 def test_jmap_session(
-    client: Client, http_responses: responses.RequestsMock
+    test_client: Client, http_responses: responses.RequestsMock
 ) -> None:
-    assert client.jmap_session == Session(
+    assert test_client.jmap_session == Session(
         username="ness@onett.example.net",
         api_url="https://jmap-api.localhost/api",
         primary_accounts=SessionPrimaryAccount(

@@ -16,13 +16,13 @@ MethodResponseList = List[Tuple[str, MethodResponseOrError]]
 MethodCallResponseOrList = Union[
     MethodResponseOrError, List[MethodResponseOrError]
 ]
+RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 
 
 class Client:
-    def __init__(self, host: str, user: str, password: str) -> None:
+    def __init__(self, host: str, auth: Optional[RequestsAuth] = None) -> None:
         self._host: str = host
-        self._user: str = user
-        self._password: str = password
+        self._auth: Optional[RequestsAuth] = auth
         self._jmap_session: Optional[Session] = None
         self._requests_session: Optional[requests.Session] = None
 
@@ -30,7 +30,7 @@ class Client:
     def requests_session(self) -> requests.Session:
         if not self._requests_session:
             self._requests_session = requests.Session()
-            self._requests_session.auth = (self._user, self._password)
+            self._requests_session.auth = self._auth
         return self._requests_session
 
     @property
