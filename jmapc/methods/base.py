@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Type, Union, cast
 
 from ..errors import Error
-from ..models import Comparator, ListOrRef, SetError, StrOrRef
+from ..models import AddedItem, Comparator, ListOrRef, SetError, StrOrRef
 from ..serializer import Model
 
 
@@ -108,3 +108,21 @@ class QueryResponse(ResponseWithAccount):
     ids: ListOrRef[str]
     total: Optional[int] = None
     limit: Optional[int] = None
+
+
+@dataclass
+class QueryChanges(MethodWithAccount):
+    sort: Optional[List[Comparator]] = None
+    since_query_state: Optional[str] = None
+    max_changes: Optional[int] = None
+    up_to_id: Optional[str] = None
+    calculate_total: bool = False
+
+
+@dataclass
+class QueryChangesResponse(ResponseWithAccount):
+    old_query_state: str
+    new_query_state: str
+    removed: List[str]
+    added: List[AddedItem]
+    total: Optional[int] = None
