@@ -3,6 +3,7 @@ import requests
 import responses
 
 from jmapc import Client
+from jmapc.auth import BearerAuth
 from jmapc.client import MethodCallResponseOrList, MethodList
 from jmapc.methods import CoreEcho, CoreEchoResponse
 from jmapc.session import Session, SessionPrimaryAccount
@@ -17,6 +18,12 @@ echo_test_data = dict(
 @pytest.mark.parametrize(
     "test_client",
     (
+        Client.create_with_api_token(
+            "jmap-example.localhost", api_token="ness__pk_fire"
+        ),
+        Client.create_with_password(
+            "jmap-example.localhost", user="ness", password="pk_fire"
+        ),
         Client("jmap-example.localhost", auth=("ness", "pk_fire")),
         Client(
             "jmap-example.localhost",
@@ -24,6 +31,7 @@ echo_test_data = dict(
                 username="ness", password="pk_fire"
             ),
         ),
+        Client("jmap-example.localhost", auth=BearerAuth("ness__pk_fire")),
     ),
 )
 def test_jmap_session(

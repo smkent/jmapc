@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 import requests
 
 from . import constants, errors
+from .auth import BearerAuth
 from .logging import log
 from .methods import CustomResponse, Method, Response
 from .session import Session
@@ -20,6 +21,19 @@ RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 
 
 class Client:
+    @classmethod
+    def create_with_api_token(cls, host: str, api_token: str) -> Client:
+        return cls(host, auth=BearerAuth(api_token))
+
+    @classmethod
+    def create_with_password(
+        cls, host: str, user: str, password: str
+    ) -> Client:
+        return cls(
+            host,
+            auth=requests.auth.HTTPBasicAuth(username=user, password=password),
+        )
+
     def __init__(self, host: str, auth: Optional[RequestsAuth] = None) -> None:
         self._host: str = host
         self._auth: Optional[RequestsAuth] = auth
