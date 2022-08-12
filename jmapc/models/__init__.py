@@ -16,6 +16,7 @@ from .email_submission import (
     Envelope,
     UndoStatus,
 )
+from .event import Event, StateChange, TypeState
 from .identity import Identity
 from .mailbox import (
     Mailbox,
@@ -51,6 +52,7 @@ __all__ = [
     "EmailQueryFilterOperator",
     "EmailSubmission",
     "Envelope",
+    "Event",
     "Identity",
     "ListOrRef",
     "Mailbox",
@@ -59,8 +61,10 @@ __all__ = [
     "MailboxQueryFilterOperator",
     "Operator",
     "SetError",
+    "StateChange",
     "StrOrRef",
     "Thread",
     "ThreadEmail",
+    "TypeState",
     "UndoStatus",
 ]

@@ -12,6 +12,7 @@ from .serializer import Model
 class Session(Model):
     username: str
     api_url: str = field(metadata=config(field_name="apiUrl"))
+    event_source_url: str = field(metadata=config(field_name="eventSourceUrl"))
     primary_accounts: SessionPrimaryAccount = field(
         metadata=config(field_name="primaryAccounts")
     )

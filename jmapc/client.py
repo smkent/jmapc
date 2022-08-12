@@ -1,14 +1,28 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
+from dataclasses import asdict, dataclass
+from typing import (
+    Any,
+    Dict,
+    Generator,
+    List,
+    Literal,
+    Optional,
+    Tuple,
+    Type,
+    Union,
+    cast,
+)
 
 import requests
+import sseclient
 
 from . import constants, errors
 from .auth import BearerAuth
 from .logging import log
 from .methods import CustomResponse, Method, Response
+from .models import Event
 from .session import Session
 
 MethodList = List[Tuple[str, Method]]
@@ -20,25 +34,61 @@ MethodCallResponseOrList = Union[
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 
 
+@dataclass
+class EventSourceConfig:
+    types: str = "*"
+    closeafter: Literal["state", "no"] = "no"
+    ping: int = 0
+
+
 class Client:
     @classmethod
-    def create_with_api_token(cls, host: str, api_token: str) -> Client:
-        return cls(host, auth=BearerAuth(api_token))
+    def create_with_api_token(
+        cls, host: str, api_token: str, *args: Any, **kwargs: Any
+    ) -> Client:
+        kwargs["auth"] = BearerAuth(api_token)
+        return cls(host, *args, **kwargs)
 
     @classmethod
     def create_with_password(
-        cls, host: str, user: str, password: str
+        cls, host: str, user: str, password: str, *args: Any, **kwargs: Any
     ) -> Client:
-        return cls(
-            host,
-            auth=requests.auth.HTTPBasicAuth(username=user, password=password),
+        kwargs["auth"] = requests.auth.HTTPBasicAuth(
+            username=user, password=password
         )
+        return cls(host, *args, **kwargs)
 
-    def __init__(self, host: str, auth: Optional[RequestsAuth] = None) -> None:
+    def __init__(
+        self,
+        host: str,
+        auth: Optional[RequestsAuth] = None,
+        last_event_id: Optional[str] = None,
+        event_source_config: Optional[EventSourceConfig] = None,
+    ) -> None:
         self._host: str = host
         self._auth: Optional[RequestsAuth] = auth
+        self._last_event_id: Optional[str] = last_event_id
+        self._event_source_config: EventSourceConfig = (
+            event_source_config or EventSourceConfig()
+        )
         self._jmap_session: Optional[Session] = None
         self._requests_session: Optional[requests.Session] = None
+        self._events: Optional[sseclient.SSEClient] = None
+
+    @property
+    def events(self) -> Generator[Event, None, None]:
+        if not self._events:
+            self._events = sseclient.SSEClient(
+                self.jmap_session.event_source_url.format(
+                    **asdict(self._event_source_config)
+                ),
+                auth=self.requests_session.auth,
+                last_id=self._last_event_id,
+            )
+        for event in self._events:
+            if not event.id or event.event != "state":
+                continue
+            yield Event.load_from_sseclient_event(event)
 
     @property
     def requests_session(self) -> requests.Session:

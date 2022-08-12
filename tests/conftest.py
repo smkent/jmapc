@@ -43,6 +43,10 @@ def http_responses() -> Iterable[responses.RequestsMock]:
             body=json.dumps(
                 {
                     "apiUrl": "https://jmap-api.localhost/api",
+                    "eventSourceUrl": (
+                        "https://jmap-api.localhost/events/"
+                        "{types}/{closeafter}/{ping}"
+                    ),
                     "username": "ness@onett.example.net",
                     "primary_accounts": {
                         "urn:ietf:params:jmap:core": "u1138",
