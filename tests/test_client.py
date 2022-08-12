@@ -10,7 +10,6 @@ from jmapc.client import (
     Invocation,
     InvocationOrMethod,
     MethodCallResponseOrList,
-    MethodList,
 )
 from jmapc.methods import (
     CoreEcho,
@@ -63,97 +62,6 @@ def test_jmap_session(
             submission="u1138",
         ),
     )
-
-
-@pytest.mark.parametrize(
-    ["flatten_single_response", "expected_response"],
-    [
-        (True, CoreEchoResponse(data=echo_test_data)),
-        (False, [CoreEchoResponse(data=echo_test_data)]),
-    ],
-)
-def test_method_call(
-    client: Client,
-    http_responses: responses.RequestsMock,
-    flatten_single_response: bool,
-    expected_response: MethodCallResponseOrList,
-) -> None:
-    expected_request = {
-        "methodCalls": [
-            [
-                "Core/echo",
-                echo_test_data,
-                "uno",
-            ],
-        ],
-        "using": ["urn:ietf:params:jmap:core"],
-    }
-    response = {
-        "methodResponses": [
-            [
-                "Core/echo",
-                echo_test_data,
-                "uno",
-            ],
-        ],
-    }
-    expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
-        CoreEcho(data=echo_test_data)
-    ) == CoreEchoResponse(data=echo_test_data)
-
-
-@pytest.mark.parametrize(
-    "method_params",
-    [
-        [CoreEcho(data=echo_test_data), CoreEcho(data=echo_test_data)],
-        [
-            ("0", CoreEcho(data=echo_test_data)),
-            ("1", CoreEcho(data=echo_test_data)),
-        ],
-    ],
-    ids=["methods_only", "custom_ids"],
-)
-def test_method_calls(
-    client: Client,
-    http_responses: responses.RequestsMock,
-    method_params: MethodList,
-) -> None:
-    expected_request = {
-        "methodCalls": [
-            [
-                "Core/echo",
-                echo_test_data,
-                "0",
-            ],
-            [
-                "Core/echo",
-                echo_test_data,
-                "1",
-            ],
-        ],
-        "using": ["urn:ietf:params:jmap:core"],
-    }
-    response = {
-        "methodResponses": [
-            [
-                "Core/echo",
-                echo_test_data,
-                "0",
-            ],
-            [
-                "Core/echo",
-                echo_test_data,
-                "1",
-            ],
-        ],
-    }
-    expect_jmap_call(http_responses, expected_request, response)
-    expected_response = CoreEchoResponse(data=echo_test_data)
-    assert client.method_calls(method_params) == [
-        ("0", expected_response),
-        ("1", expected_response),
-    ]
 
 
 @pytest.mark.parametrize(
@@ -309,8 +217,10 @@ def test_client_request_single_with_multiple_responses(
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
-    with pytest.raises(RuntimeError):
-        client.request(method_params)
+    assert client.request(method_params) == [
+        CoreEchoResponse(data=echo_test_data),
+        CoreEchoResponse(data=echo_test_data),
+    ]
 
 
 def test_error_unauthorized(
@@ -322,5 +232,5 @@ def test_error_unauthorized(
         status=401,
     )
     with pytest.raises(requests.exceptions.HTTPError) as e:
-        client.method_call(CoreEcho(data=echo_test_data))
+        client.request(CoreEcho(data=echo_test_data))
     assert e.value.response.status_code == 401

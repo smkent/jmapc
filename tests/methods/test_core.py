@@ -15,7 +15,7 @@ def test_core_echo(
             [
                 "Core/echo",
                 test_data,
-                "uno",
+                "single.Core/echo",
             ],
         ],
         "using": ["urn:ietf:params:jmap:core"],
@@ -25,12 +25,12 @@ def test_core_echo(
             [
                 "Core/echo",
                 test_data,
-                "uno",
+                "single.Core/echo",
             ],
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
     echo = CoreEcho(data=test_data)
     assert echo.to_dict() == test_data
-    resp = client.method_call(echo)
+    resp = client.request(echo)
     assert resp == CoreEchoResponse(data=test_data)

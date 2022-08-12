@@ -19,7 +19,7 @@ def test_custom_method(
             [
                 "Custom/method",
                 test_data,
-                "uno",
+                "single.Custom/method",
             ],
         ],
         "using": ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail"],
@@ -29,7 +29,7 @@ def test_custom_method(
             [
                 "Custom/method",
                 test_data,
-                "uno",
+                "single.Custom/method",
             ],
         ],
     }
@@ -38,5 +38,5 @@ def test_custom_method(
     method.name = "Custom/method"
     method.using = set([constants.JMAP_URN_MAIL])
     assert method.to_dict() == test_data
-    resp = client.method_call(method)
+    resp = client.request(method)
     assert resp == CustomResponse(account_id="u1138", data=test_data)

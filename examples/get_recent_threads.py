@@ -8,7 +8,7 @@ from jmapc import (
     Comparator,
     EmailQueryFilterCondition,
     MailboxQueryFilterCondition,
-    ResultReference,
+    Ref,
 )
 from jmapc.methods import (
     EmailGet,
@@ -24,20 +24,14 @@ client = Client.create_with_api_token(
 )
 
 # Retrieve the Mailbox ID for the Inbox
-results = client.method_calls(
+results = client.request(
     [
         MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox")),
-        MailboxGet(
-            ids=ResultReference(
-                name=MailboxQuery.name,
-                path="/ids",
-                result_of="0",
-            ),
-        ),
+        MailboxGet(ids=Ref(path="/ids")),
     ]
 )
-# From results, second result, result object, retrieve Mailbox data
-mailbox_data = results[1][1].data
+# From results, second result, MailboxGet instance, retrieve Mailbox data
+mailbox_data = results[1].response.data
 if not mailbox_data:
     raise Exception("Inbox not found on the server")
 
@@ -49,7 +43,7 @@ print(f"Inbox has Mailbox ID {mailbox_id}")
 
 # Search for the 5 most recent thread IDs in the Inbox, limited to emails
 # received within the last 7 days
-results = client.method_calls(
+results = client.request(
     [
         # Find email IDs for emails in the Inbox
         EmailQuery(
@@ -62,27 +56,14 @@ results = client.method_calls(
             limit=5,
         ),
         # Use Email/query results to retrieve thread IDs for each email ID
-        EmailGet(
-            ids=ResultReference(
-                name=EmailQuery.name,
-                path="/ids",
-                result_of="0",
-            ),
-            properties=["threadId"],
-        ),
+        EmailGet(ids=Ref(path="/ids"), properties=["threadId"]),
         # Use Email/get results to retrieve email counts for each thread ID
-        ThreadGet(
-            ids=ResultReference(
-                name=EmailGet.name,
-                path="/list/*/threadId",
-                result_of="1",
-            )
-        ),
+        ThreadGet(ids=Ref(path="/list/*/threadId")),
     ]
 )
 
-# From results, third result, result object, retrieve Threads data
-for thread in results[2][1].data:
+# From results, third result, ThreadGet instance, retrieve Threads data
+for thread in results[2].response.data:
     print(f"Thread {thread.id} has {len(thread.email_ids)} emails")
 
 # Example output:

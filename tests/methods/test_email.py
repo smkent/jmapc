@@ -41,7 +41,7 @@ def test_email_changes(
                     "sinceState": "2999",
                     "maxChanges": 47,
                 },
-                "uno",
+                "single.Email/changes",
             ]
         ],
         "using": [
@@ -62,12 +62,12 @@ def test_email_changes(
                     "updated": [],
                     "destroyed": ["f0003"],
                 },
-                "uno",
+                "single.Email/changes",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailChanges(since_state="2999", max_changes=47)
     ) == EmailChangesResponse(
         account_id="u1138",
@@ -95,7 +95,7 @@ def test_email_get(
                     "fetchAllBodyValues": False,
                     "maxBodyValueBytes": 42,
                 },
-                "uno",
+                "single.Email/get",
             ]
         ],
         "using": [
@@ -138,12 +138,12 @@ def test_email_get(
                     "not_found": [],
                     "state": "2187",
                 },
-                "uno",
+                "single.Email/get",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailGet(
             ids=["f0001", "f1000"],
             fetch_text_body_values=False,
@@ -204,7 +204,7 @@ def test_email_query(
                         }
                     ],
                 },
-                "uno",
+                "single.Email/query",
             ]
         ],
         "using": [
@@ -225,12 +225,12 @@ def test_email_query(
                     "total": 9001,
                     "limit": 256,
                 },
-                "uno",
+                "single.Email/query",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailQuery(
             collapse_threads=True,
             filter=EmailQueryFilterCondition(
@@ -276,7 +276,7 @@ def test_email_query_changes(
                     "sinceQueryState": "1000",
                     "calculateTotal": False,
                 },
-                "uno",
+                "single.Email/queryChanges",
             ]
         ],
         "using": [
@@ -305,12 +305,12 @@ def test_email_query_changes(
                     "removed": ["M8001"],
                     "total": 42,
                 },
-                "uno",
+                "single.Email/queryChanges",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailQueryChanges(
             filter=EmailQueryFilterCondition(
                 in_mailbox="MBX1",
@@ -386,7 +386,7 @@ def test_email_set(
                         }
                     },
                 },
-                "uno",
+                "single.Email/set",
             ]
         ],
         "using": [
@@ -416,13 +416,13 @@ def test_email_set(
                     "oldState": "1",
                     "updated": None,
                 },
-                "uno",
+                "single.Email/set",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
 
-    assert client.method_call(
+    assert client.request(
         EmailSet(create=dict(draft=draft))
     ) == EmailSetResponse(
         account_id="u1138",

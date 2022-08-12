@@ -121,60 +121,10 @@ class Client:
     def account_id(self) -> str:
         return self.jmap_session.primary_accounts.mail
 
-    def method_call(
-        self, method: Method, flatten_single_response: bool = True
-    ) -> MethodCallResponseOrList:
-        using = list(set([constants.JMAP_URN_CORE]).union(method.using))
-        results = self._api_request(
-            {
-                "using": sorted(using),
-                "methodCalls": [
-                    [
-                        method.name,
-                        method.to_dict(account_id=self.account_id),
-                        "uno",
-                    ]
-                ],
-            },
-        )
-        # One method call may result in multiple responses for that call.
-        # If there is a single response, return the response object.
-        # Otherwise, return the list of responses.
-        if len(results) == 1:
-            return results[0][1]
-        return [result[1] for result in results]
-
-    def method_calls(
-        self, calls: Union[list[Method], MethodList]
-    ) -> MethodResponseList:
-        if isinstance(calls[0], Method):
-            just_calls = cast(List[Method], calls)
-            calls = [(str(i), method) for i, method in enumerate(just_calls)]
-        calls = cast(MethodList, calls)
-        using = list(
-            set([constants.JMAP_URN_CORE]).union(*[c[1].using for c in calls])
-        )
-        return self._api_request(
-            {
-                "using": sorted(using),
-                "methodCalls": [
-                    [
-                        c[1].name,
-                        c[1].to_dict(account_id=self.account_id),
-                        c[0],
-                    ]
-                    for c in calls
-                ],
-            },
-        )
-
-    def _preprocess_refs(
-        self, method_calls: List[Invocation]
-    ) -> List[Invocation]:
-        pass
-
     @overload
-    def request(self, calls: Method) -> MethodResponseOrError:
+    def request(
+        self, calls: Method
+    ) -> Union[List[MethodResponseOrError], MethodResponseOrError]:
         ...
 
     @overload
@@ -186,7 +136,10 @@ class Client:
     def request(
         self,
         calls: Union[List[InvocationOrMethod], InvocationOrMethod],
-    ) -> Union[List[InvocationResponse], MethodResponseOrError]:
+    ) -> Union[
+        List[InvocationResponse],
+        Union[List[MethodResponseOrError], MethodResponseOrError],
+    ]:
         calls_list = calls if isinstance(calls, list) else [calls]
         method_calls: List[Invocation] = []
         # Create Invocations for Methods
@@ -205,7 +158,7 @@ class Client:
             )
         )
         # Execute request
-        result = self._api_request_new(
+        result = self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
@@ -223,19 +176,11 @@ class Client:
         )
         if isinstance(calls, Method):
             if len(result) > 1:
-                # If request() was invoked with a single method, raise an error
-                # if multiple method responses were received. It is possible
-                # for this to happen in the JMAP spec; however, request()
-                # should be called with a single-element Method list to enable
-                # multiple responses.
-                raise RuntimeError(
-                    f"{len(result)} results received for single method call "
-                    f"{method_calls[0].method.name}"
-                )
+                return [r.response for r in result]
             return result[0].response
         return result
 
-    def _api_request_new(
+    def _api_request(
         self, request: Dict[str, Any]
     ) -> List[InvocationResponse]:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
@@ -263,35 +208,9 @@ class Client:
             for name, response, method_id in method_responses
         ]
 
-    def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
-        log.debug(f"Sending JMAP request {json.dumps(request)}")
-        r = self.requests_session.post(
-            self.jmap_session.api_url,
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(request),
-        )
-        r.raise_for_status()
-        log.debug(f"Received JMAP response {r.text}")
-        return self._parse_responses(r.json())
-
     def _response_type(self, method_name: str) -> Type[MethodResponseOrError]:
         if method_name == "error":
             return errors.Error
         if method_name in Response.response_types:
             return Response.response_types[method_name]
         return CustomResponse
-
-    def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
-        method_responses = cast(
-            List[Tuple[str, Dict[str, Any], str]],
-            data.get("methodResponses", []),
-        )
-        responses: MethodResponseList = []
-        for name, response, method_id in method_responses:
-            responses.append(
-                (
-                    method_id,
-                    self._response_type(name).from_dict(response),
-                )
-            )
-        return responses

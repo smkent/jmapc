@@ -23,7 +23,7 @@ def test_thread_changes(
                     "sinceState": "2999",
                     "maxChanges": 47,
                 },
-                "uno",
+                "single.Thread/changes",
             ]
         ],
         "using": [
@@ -44,12 +44,12 @@ def test_thread_changes(
                     "updated": [],
                     "destroyed": ["T0003"],
                 },
-                "uno",
+                "single.Thread/changes",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         ThreadChanges(since_state="2999", max_changes=47)
     ) == ThreadChangesResponse(
         account_id="u1138",
@@ -70,7 +70,7 @@ def test_thread_get(
             [
                 "Thread/get",
                 {"accountId": "u1138", "ids": ["T1", "T1000"]},
-                "uno",
+                "single.Thread/get",
             ]
         ],
         "using": [
@@ -103,12 +103,12 @@ def test_thread_get(
                     "not_found": [],
                     "state": "2187",
                 },
-                "uno",
+                "single.Thread/get",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    jmap_response = client.method_call(ThreadGet(ids=["T1", "T1000"]))
+    jmap_response = client.request(ThreadGet(ids=["T1", "T1000"]))
     assert jmap_response == ThreadGetResponse(
         account_id="u1138",
         state="2187",

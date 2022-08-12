@@ -92,15 +92,15 @@ def test_method_error(
     test_data = dict(param1="yes", another_param="ok")
     expected_request = {
         "methodCalls": [
-            ["Core/echo", test_data, "uno"],
+            ["Core/echo", test_data, "single.Core/echo"],
         ],
         "using": ["urn:ietf:params:jmap:core"],
     }
     response = {
         "methodResponses": [
-            ["error", method_response, "uno"],
+            ["error", method_response, "single.Core/echo"],
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
-    resp = client.method_call(CoreEcho(data=test_data))
+    resp = client.request(CoreEcho(data=test_data))
     assert resp == expected_error
