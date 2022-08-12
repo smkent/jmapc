@@ -1,6 +1,6 @@
 from . import auth, errors, methods, models
 from .__version__ import __version__ as version
-from .client import Client
+from .client import Client, EventSourceConfig
 from .errors import Error
 from .models import (
     AddedItem,
@@ -19,6 +19,7 @@ from .models import (
     EmailQueryFilterOperator,
     EmailSubmission,
     Envelope,
+    Event,
     Identity,
     ListOrRef,
     Mailbox,
@@ -27,9 +28,11 @@ from .models import (
     MailboxQueryFilterOperator,
     Operator,
     SetError,
+    StateChange,
     StrOrRef,
     Thread,
     ThreadEmail,
+    TypeState,
     UndoStatus,
 )
 from .ref import ResultReference
@@ -53,6 +56,8 @@ __all__ = [
     "EmailSubmission",
     "Envelope",
     "Error",
+    "Event",
+    "EventSourceConfig",
     "Identity",
     "ListOrRef",
     "Mailbox",
@@ -62,9 +67,11 @@ __all__ = [
     "Operator",
     "ResultReference",
     "SetError",
+    "StateChange",
     "StrOrRef",
     "Thread",
     "ThreadEmail",
+    "TypeState",
     "UndoStatus",
     "auth",
     "errors",

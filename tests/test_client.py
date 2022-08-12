@@ -40,6 +40,9 @@ def test_jmap_session(
     assert test_client.jmap_session == Session(
         username="ness@onett.example.net",
         api_url="https://jmap-api.localhost/api",
+        event_source_url=(
+            "https://jmap-api.localhost/events/{types}/{closeafter}/{ping}"
+        ),
         primary_accounts=SessionPrimaryAccount(
             core="u1138",
             mail="u1138",

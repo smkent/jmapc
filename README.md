@@ -35,6 +35,7 @@ Currently implemented:
   * Arbitrary methods via the `CustomMethod` class
 * Combined requests with support for result references
 * Basic JMAP method response error handling
+* EventSource event handling
 * Unit tests for basic functionality and methods
 
 Todo list:
