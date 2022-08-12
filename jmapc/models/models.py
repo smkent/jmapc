@@ -6,12 +6,12 @@ from typing import List, Optional, TypeVar, Union
 
 from dataclasses_json import config
 
-from ..ref import ResultReference
+from ..ref import Ref, ResultReference
 from ..serializer import Model
 
 T = TypeVar("T")
-StrOrRef = Union[str, ResultReference]
-ListOrRef = Union[List[T], ResultReference]
+StrOrRef = Union[str, ResultReference, Ref]
+ListOrRef = Union[List[T], ResultReference, Ref]
 
 
 @dataclass

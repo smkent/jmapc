@@ -13,6 +13,7 @@ from typing import (
     Type,
     Union,
     cast,
+    overload,
 )
 
 import requests
@@ -21,7 +22,13 @@ import sseclient
 from . import constants, errors
 from .auth import BearerAuth
 from .logging import log
-from .methods import CustomResponse, Method, Response
+from .methods import (
+    CustomResponse,
+    Invocation,
+    InvocationResponse,
+    Method,
+    Response,
+)
 from .models import Event
 from .session import Session
 
@@ -34,19 +41,7 @@ MethodCallResponseOrList = Union[
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 
 
-@dataclass
-class MethodCall:
-    call: Method
-    id: Optional[str] = None
-
-
-MethodOrMethodCall = Union[Method, MethodCall]
-
-
-@dataclass
-class MethodCallResponse:
-    response: MethodResponseOrError
-    id: Optional[str] = None
+InvocationOrMethod = Union[Method, Invocation]
 
 
 @dataclass
@@ -174,34 +169,49 @@ class Client:
         )
 
     def _preprocess_refs(
-        self, method_calls: List[MethodCall]
-    ) -> List[MethodCall]:
+        self, method_calls: List[Invocation]
+    ) -> List[Invocation]:
         pass
 
-    def method_calls_new(
-        self, calls: Union[list[MethodOrMethodCall], MethodOrMethodCall]
-    ) -> List[MethodCallResponse]:
-        if not isinstance(calls, list):
-            calls = [calls]
+    @overload
+    def request(self, calls: Method) -> MethodResponseOrError:
+        ...
 
-        method_calls: List[MethodCall] = []
-        for i, c in enumerate(calls):
-            if isinstance(c, MethodCall):
+    @overload
+    def request(
+        self, calls: List[InvocationOrMethod]
+    ) -> List[InvocationResponse]:
+        ...
+
+    def request(
+        self,
+        calls: Union[List[InvocationOrMethod], InvocationOrMethod],
+    ) -> Union[List[InvocationResponse], MethodResponseOrError]:
+        calls_list = calls if isinstance(calls, list) else [calls]
+        method_calls: List[Invocation] = []
+        # Create Invocations for Methods
+        for i, c in enumerate(calls_list):
+            if isinstance(c, Invocation):
                 method_calls.append(c)
                 continue
-            method_calls.append(MethodCall(call=c, id=f"{i}"))
+            method_call_id = (
+                f"{i}.{c.name}" if len(calls_list) > 1 else f"single.{c.name}"
+            )
+            method_calls.append(Invocation(id=method_call_id, method=c))
+        # Collect set of JMAP URNs used by all methods in this request
         using = list(
             set([constants.JMAP_URN_CORE]).union(
-                *[c.call.using for c in method_calls]
+                *[c.method.using for c in method_calls]
             )
         )
-        return self._api_request_new(
+        # Execute request
+        result = self._api_request_new(
             {
                 "using": sorted(using),
                 "methodCalls": [
                     [
-                        c.call.name,
-                        c.call.to_dict(
+                        c.method.name,
+                        c.method.to_dict(
                             account_id=self.account_id,
                             method_calls_slice=method_calls[:i],
                         ),
@@ -211,10 +221,23 @@ class Client:
                 ],
             },
         )
+        if isinstance(calls, Method):
+            if len(result) > 1:
+                # If request() was invoked with a single method, raise an error
+                # if multiple method responses were received. It is possible
+                # for this to happen in the JMAP spec; however, request()
+                # should be called with a single-element Method list to enable
+                # multiple responses.
+                raise RuntimeError(
+                    f"{len(result)} results received for single method call "
+                    f"{method_calls[0].method.name}"
+                )
+            return result[0].response
+        return result
 
     def _api_request_new(
         self, request: Dict[str, Any]
-    ) -> List[MethodCallResponse]:
+    ) -> List[InvocationResponse]:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = self.requests_session.post(
             self.jmap_session.api_url,
@@ -223,24 +246,22 @@ class Client:
         )
         r.raise_for_status()
         log.debug(f"Received JMAP response {r.text}")
-        return self._parse_responses_new(r.json())
+        return self._parse_method_responses(r.json())
 
-    def _parse_responses_new(
+    def _parse_method_responses(
         self, data: dict[str, Any]
-    ) -> List[MethodCallResponse]:
+    ) -> List[InvocationResponse]:
         method_responses = cast(
             List[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),
         )
-        responses: List[MethodCallResponse] = []
-        for name, response, method_id in method_responses:
-            responses.append(
-                MethodCallResponse(
-                    id=method_id,
-                    response=self._response_type(name).from_dict(response),
-                )
+        return [
+            InvocationResponse(
+                id=method_id,
+                response=self._response_type(name).from_dict(response),
             )
-        return responses
+            for name, response, method_id in method_responses
+        ]
 
     def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
