@@ -110,6 +110,11 @@ def test_event_source(
             data=json.dumps({"changed": {"u1138": {"Email": "1001"}}}),
         ),
         sseclient.Event(
+            id="8001.5",
+            event="ping",
+            data="ignore-me",
+        ),
+        sseclient.Event(
             id="8002",
             event="state",
             data=json.dumps(
@@ -125,6 +130,11 @@ def test_event_source(
                     }
                 }
             ),
+        ),
+        sseclient.Event(
+            id="",
+            event="ping",
+            data="also-ignore-me",
         ),
         sseclient.Event(
             id="8003",
