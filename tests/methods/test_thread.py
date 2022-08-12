@@ -108,9 +108,8 @@ def test_thread_get(
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
-        ThreadGet(ids=["T1", "T1000"])
-    ) == ThreadGetResponse(
+    jmap_response = client.method_call(ThreadGet(ids=["T1", "T1000"]))
+    assert jmap_response == ThreadGetResponse(
         account_id="u1138",
         state="2187",
         not_found=[],
@@ -125,3 +124,5 @@ def test_thread_get(
             ),
         ],
     )
+    assert isinstance(jmap_response, ThreadGetResponse)
+    assert [len(thread) for thread in jmap_response.data] == [3, 1]
