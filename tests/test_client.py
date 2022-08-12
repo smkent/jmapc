@@ -4,8 +4,18 @@ import responses
 
 from jmapc import Client
 from jmapc.auth import BearerAuth
-from jmapc.client import MethodCallResponseOrList, MethodList
-from jmapc.methods import CoreEcho, CoreEchoResponse
+from jmapc.client import (
+    MethodCallResponse,
+    MethodCallResponseOrList,
+    MethodList,
+)
+from jmapc.methods import (
+    CoreEcho,
+    CoreEchoResponse,
+    MailboxGet,
+    MailboxGetResponse,
+)
+from jmapc.ref import Ref
 from jmapc.session import Session, SessionPrimaryAccount
 
 from .utils import expect_jmap_call
@@ -139,6 +149,76 @@ def test_method_calls(
     assert client.method_calls(method_params) == [
         ("0", expected_response),
         ("1", expected_response),
+    ]
+
+
+@pytest.mark.parametrize(
+    "method_params",
+    [
+        [CoreEcho(data=echo_test_data), MailboxGet(ids=Ref(path="/nope"))],
+    ],
+    ids=["methods_only"],
+)
+def test_method_calls_new(
+    client: Client,
+    http_responses: responses.RequestsMock,
+    method_params: MethodList,
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "0",
+            ],
+            [
+                "Mailbox/get",
+                {
+                    "accountId": "u1138",
+                    "#ids": {
+                        "name": "Core/echo",
+                        "path": "/nope",
+                        "resultOf": "0",
+                    },
+                },
+                "1",
+            ],
+        ],
+        "using": ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail"],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "0",
+            ],
+            [
+                "Mailbox/get",
+                {
+                    "accountId": "u1138",
+                    "list": [],
+                    "not_found": [],
+                    "state": "1000",
+                },
+                "1",
+            ],
+        ],
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.method_calls_new(method_params) == [
+        MethodCallResponse(
+            response=CoreEchoResponse(data=echo_test_data), id="0"
+        ),
+        MethodCallResponse(
+            response=MailboxGetResponse(
+                account_id="u1138",
+                not_found=[],
+                data=[],
+                state="1000",
+            ),
+            id="1",
+        ),
     ]
 
 

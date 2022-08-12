@@ -35,6 +35,21 @@ RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 
 
 @dataclass
+class MethodCall:
+    call: Method
+    id: Optional[str] = None
+
+
+MethodOrMethodCall = Union[Method, MethodCall]
+
+
+@dataclass
+class MethodCallResponse:
+    response: MethodResponseOrError
+    id: Optional[str] = None
+
+
+@dataclass
 class EventSourceConfig:
     types: str = "*"
     closeafter: Literal["state", "no"] = "no"
@@ -158,6 +173,75 @@ class Client:
             },
         )
 
+    def _preprocess_refs(
+        self, method_calls: List[MethodCall]
+    ) -> List[MethodCall]:
+        pass
+
+    def method_calls_new(
+        self, calls: Union[list[MethodOrMethodCall], MethodOrMethodCall]
+    ) -> List[MethodCallResponse]:
+        if not isinstance(calls, list):
+            calls = [calls]
+
+        method_calls: List[MethodCall] = []
+        for i, c in enumerate(calls):
+            if isinstance(c, MethodCall):
+                method_calls.append(c)
+                continue
+            method_calls.append(MethodCall(call=c, id=f"{i}"))
+        using = list(
+            set([constants.JMAP_URN_CORE]).union(
+                *[c.call.using for c in method_calls]
+            )
+        )
+        return self._api_request_new(
+            {
+                "using": sorted(using),
+                "methodCalls": [
+                    [
+                        c.call.name,
+                        c.call.to_dict(
+                            account_id=self.account_id,
+                            method_calls_slice=method_calls[:i],
+                        ),
+                        c.id,
+                    ]
+                    for i, c in enumerate(method_calls)
+                ],
+            },
+        )
+
+    def _api_request_new(
+        self, request: Dict[str, Any]
+    ) -> List[MethodCallResponse]:
+        log.debug(f"Sending JMAP request {json.dumps(request)}")
+        r = self.requests_session.post(
+            self.jmap_session.api_url,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(request),
+        )
+        r.raise_for_status()
+        log.debug(f"Received JMAP response {r.text}")
+        return self._parse_responses_new(r.json())
+
+    def _parse_responses_new(
+        self, data: dict[str, Any]
+    ) -> List[MethodCallResponse]:
+        method_responses = cast(
+            List[Tuple[str, Dict[str, Any], str]],
+            data.get("methodResponses", []),
+        )
+        responses: List[MethodCallResponse] = []
+        for name, response, method_id in method_responses:
+            responses.append(
+                MethodCallResponse(
+                    id=method_id,
+                    response=self._response_type(name).from_dict(response),
+                )
+            )
+        return responses
+
     def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = self.requests_session.post(
@@ -177,7 +261,6 @@ class Client:
         return CustomResponse
 
     def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
-
         method_responses = cast(
             List[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),

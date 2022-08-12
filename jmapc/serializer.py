@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 import dataclasses_json
 import dateutil.parser
 
-from .ref import ResultReference
+from .ref import REF_SENTINEL, Ref, ResultReference
 
 
 def datetime_encode(dt: datetime) -> str:
@@ -26,12 +26,29 @@ class Model(dataclasses_json.DataClassJsonMixin):
     )["dataclasses_json"]
 
     def _fix_result_ref(
-        self, data: Dict[str, dataclasses_json.core.Json], key: str
+        self,
+        data: Dict[str, dataclasses_json.core.Json],
+        key: str,
+        method_calls_slice: Optional[List[Any]] = None,
     ) -> Dict[str, dataclasses_json.core.Json]:
-        ResultReference.from_dict(data[key])
+        ref_type = data[key].get(REF_SENTINEL)
+        if ref_type == "ResultReference":
+            rr = ResultReference.from_dict(data[key])
+        elif ref_type == "Ref":
+            r = Ref.from_dict(data[key])
+            rr = ResultReference(
+                name=method_calls_slice[r.method_call_index].call.name,
+                path=r.path,
+                result_of=method_calls_slice[r.method_call_index].id,
+            )
+        else:
+            return data
+        data[key] = rr.to_dict()
         new_key = f"#{key}"
         data[new_key] = data[key]
         del data[key]
+        assert isinstance(data[new_key], dict)
+        del data[new_key]["__ref"]
         return data
 
     def _fix_headers(
@@ -48,14 +65,18 @@ class Model(dataclasses_json.DataClassJsonMixin):
         return data
 
     def _postprocess(
-        self, data: Dict[str, dataclasses_json.core.Json]
+        self,
+        data: Dict[str, dataclasses_json.core.Json],
+        method_calls_slice: Optional[List[Any]] = None,
     ) -> Dict[str, dataclasses_json.core.Json]:
         for key in [key for key in data.keys() if not key.startswith("#")]:
             value = data[key]
             if isinstance(value, dict):
-                if len(value.keys()) == len(fields(ResultReference)):
+                if REF_SENTINEL in value:
                     try:
-                        data = self._fix_result_ref(data, key)
+                        data = self._fix_result_ref(
+                            data, key, method_calls_slice=method_calls_slice
+                        )
                         continue
                     except KeyError:
                         pass
@@ -71,10 +92,14 @@ class Model(dataclasses_json.DataClassJsonMixin):
         return data
 
     def to_dict(
-        self, *args: Any, account_id: Optional[str] = None, **kwargs: Any
+        self,
+        *args: Any,
+        account_id: Optional[str] = None,
+        method_calls_slice: Optional[List[Any]] = None,
+        **kwargs: Any,
     ) -> Dict[str, dataclasses_json.core.Json]:
         if account_id:
             self.account_id: Optional[str] = account_id
         result = super().to_dict(*args, **kwargs)
-        result = self._postprocess(result)
+        result = self._postprocess(result, method_calls_slice)
         return result
