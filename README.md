@@ -31,10 +31,6 @@ Currently implemented:
 * EventSource event handling
 * Unit tests for basic functionality and methods
 
-Todo list:
-
-* Write documentation
-
 ## Installation
 
 [jmapc is available on PyPI][jmapc-pypi]:
