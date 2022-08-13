@@ -22,16 +22,9 @@ Currently implemented:
   * `Email/set`
   * `EmailSubmission/changes`
   * `EmailSubmission/set`
-  * `Identity/changes`
-  * `Identity/get`
-  * `Identity/set`
-  * `Mailbox/changes`
-  * `Mailbox/get`
-  * `Mailbox/query`
-  * `Mailbox/queryChanges`
-  * `Mailbox/set`
-  * `Thread/changes`
-  * `Thread/get`
+  * `Identity/*` (`get`, `changes`, `set`)
+  * `Mailbox/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
+  * `Thread/*` (`get`, `changes`)
   * Arbitrary methods via the `CustomMethod` class
 * Combined requests with support for result references
 * Basic JMAP method response error handling
