@@ -129,7 +129,7 @@ class Client:
         raise_errors: Literal[False] = False,
         single_response: Literal[True] = True,
     ) -> MethodResponseOrError:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def request(
@@ -138,7 +138,7 @@ class Client:
         raise_errors: Literal[False] = False,
         single_response: Literal[False] = False,
     ) -> Union[List[MethodResponseOrError], MethodResponseOrError]:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def request(
@@ -147,7 +147,7 @@ class Client:
         raise_errors: Literal[True],
         single_response: Literal[True],
     ) -> Response:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def request(
@@ -156,7 +156,7 @@ class Client:
         raise_errors: Literal[True],
         single_response: Literal[False] = False,
     ) -> Union[List[Response], Response]:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def request(
@@ -164,7 +164,7 @@ class Client:
         calls: List[InvocationOrMethod],
         raise_errors: Literal[False] = False,
     ) -> List[InvocationResponse]:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def request(
@@ -172,7 +172,7 @@ class Client:
         calls: List[InvocationOrMethod],
         raise_errors: Literal[True],
     ) -> List[InvocationResponse]:
-        ...
+        ...  # pragma: no cover
 
     def request(
         self,
