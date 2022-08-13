@@ -27,7 +27,7 @@ client = Client.create_with_api_token(
 results = client.request(
     [
         MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox")),
-        MailboxGet(ids=Ref(path="/ids")),
+        MailboxGet(ids=Ref("/ids")),
     ]
 )
 # From results, second result, MailboxGet instance, retrieve Mailbox data
@@ -56,9 +56,9 @@ results = client.request(
             limit=5,
         ),
         # Use Email/query results to retrieve thread IDs for each email ID
-        EmailGet(ids=Ref(path="/ids"), properties=["threadId"]),
+        EmailGet(ids=Ref("/ids"), properties=["threadId"]),
         # Use Email/get results to retrieve email counts for each thread ID
-        ThreadGet(ids=Ref(path="/list/*/threadId")),
+        ThreadGet(ids=Ref("/list/*/threadId")),
     ]
 )
 

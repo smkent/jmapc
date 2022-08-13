@@ -26,6 +26,7 @@ from .methods import (
     CustomResponse,
     Invocation,
     InvocationResponse,
+    InvocationResponseOrError,
     Method,
     Response,
 )
@@ -123,23 +124,74 @@ class Client:
 
     @overload
     def request(
-        self, calls: Method
+        self,
+        calls: Method,
+        raise_errors: Literal[False] = False,
+        single_response: Literal[True] = True,
+    ) -> MethodResponseOrError:
+        ...
+
+    @overload
+    def request(
+        self,
+        calls: Method,
+        raise_errors: Literal[False] = False,
+        single_response: Literal[False] = False,
     ) -> Union[List[MethodResponseOrError], MethodResponseOrError]:
         ...
 
     @overload
     def request(
-        self, calls: List[InvocationOrMethod]
+        self,
+        calls: Method,
+        raise_errors: Literal[True],
+        single_response: Literal[True],
+    ) -> Response:
+        ...
+
+    @overload
+    def request(
+        self,
+        calls: Method,
+        raise_errors: Literal[True],
+        single_response: Literal[False] = False,
+    ) -> Union[List[Response], Response]:
+        ...
+
+    @overload
+    def request(
+        self,
+        calls: List[InvocationOrMethod],
+        raise_errors: Literal[False] = False,
+    ) -> List[InvocationResponse]:
+        ...
+
+    @overload
+    def request(
+        self,
+        calls: List[InvocationOrMethod],
+        raise_errors: Literal[True],
     ) -> List[InvocationResponse]:
         ...
 
     def request(
         self,
-        calls: Union[List[InvocationOrMethod], InvocationOrMethod],
+        calls: Union[List[InvocationOrMethod], Method],
+        raise_errors: bool = False,
+        single_response: bool = False,
     ) -> Union[
+        List[InvocationResponseOrError],
         List[InvocationResponse],
         Union[List[MethodResponseOrError], MethodResponseOrError],
+        Union[List[Response], Response],
     ]:
+        if isinstance(calls, list):
+            if single_response:
+                raise ValueError(
+                    "single_response cannot be used with "
+                    "multiple JMAP request methods"
+                )
+
         calls_list = calls if isinstance(calls, list) else [calls]
         method_calls: List[Invocation] = []
         # Create Invocations for Methods
@@ -158,7 +210,9 @@ class Client:
             )
         )
         # Execute request
-        result = self._api_request(
+        result: Union[
+            List[InvocationResponseOrError], List[InvocationResponse]
+        ] = self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
@@ -174,15 +228,29 @@ class Client:
                 ],
             },
         )
+        if raise_errors:
+            if any(isinstance(r.response, errors.Error) for r in result):
+                raise RuntimeError("Errors found")
+            result = [
+                InvocationResponse(
+                    id=r.id, response=cast(Response, r.response)
+                )
+                for r in result
+            ]
         if isinstance(calls, Method):
             if len(result) > 1:
+                if single_response:
+                    raise RuntimeError(
+                        f"{len(result)} results received for single method "
+                        f"call {method_calls[0].method.name}"
+                    )
                 return [r.response for r in result]
             return result[0].response
         return result
 
     def _api_request(
         self, request: Dict[str, Any]
-    ) -> List[InvocationResponse]:
+    ) -> List[InvocationResponseOrError]:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = self.requests_session.post(
             self.jmap_session.api_url,
@@ -195,13 +263,13 @@ class Client:
 
     def _parse_method_responses(
         self, data: dict[str, Any]
-    ) -> List[InvocationResponse]:
+    ) -> List[InvocationResponseOrError]:
         method_responses = cast(
             List[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),
         )
         return [
-            InvocationResponse(
+            InvocationResponseOrError(
                 id=method_id,
                 response=self._response_type(name).from_dict(response),
             )

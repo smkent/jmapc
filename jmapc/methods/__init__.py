@@ -1,4 +1,10 @@
-from .base import Invocation, InvocationResponse, Method, Response
+from .base import (
+    Invocation,
+    InvocationResponse,
+    InvocationResponseOrError,
+    Method,
+    Response,
+)
 from .core import CoreEcho, CoreEchoResponse
 from .custom import CustomMethod, CustomResponse
 from .email import (
@@ -73,6 +79,7 @@ __all__ = [
     "IdentitySetResponse",
     "Invocation",
     "InvocationResponse",
+    "InvocationResponseOrError",
     "MailboxChanges",
     "MailboxChangesResponse",
     "MailboxGet",

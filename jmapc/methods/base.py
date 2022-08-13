@@ -43,15 +43,23 @@ class ResponseWithAccount(Response):
 
 
 @dataclass
-class Invocation:
+class InvocationBase:
     id: str
+
+
+@dataclass
+class Invocation(InvocationBase):
     method: Method
 
 
 @dataclass
-class InvocationResponse:
-    id: str
+class InvocationResponseOrError(InvocationBase):
     response: Union[Error, Response]
+
+
+@dataclass
+class InvocationResponse(InvocationResponseOrError):
+    response: Response
 
 
 @dataclass

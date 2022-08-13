@@ -16,7 +16,7 @@ client = Client.create_with_api_token(
 # Mailbox/query method to retrieve the Inbox mailbox details
 methods = [
     MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox")),
-    MailboxGet(ids=Ref(path="/ids")),
+    MailboxGet(ids=Ref("/ids")),
 ]
 
 # Call JMAP API with the prepared request

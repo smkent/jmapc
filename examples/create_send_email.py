@@ -43,7 +43,7 @@ client = Client.create_with_api_token(
 results = client.request(
     [
         MailboxQuery(filter=MailboxQueryFilterCondition(name="Drafts")),
-        MailboxGet(ids=Ref(path="/ids")),
+        MailboxGet(ids=Ref("/ids")),
         IdentityGet(),
     ]
 )
