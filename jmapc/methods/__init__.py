@@ -22,6 +22,8 @@ from .email import (
 from .email_submission import (
     EmailSubmissionChanges,
     EmailSubmissionChangesResponse,
+    EmailSubmissionGet,
+    EmailSubmissionGetResponse,
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
 )
@@ -69,6 +71,8 @@ __all__ = [
     "EmailSetResponse",
     "EmailSubmissionChanges",
     "EmailSubmissionChangesResponse",
+    "EmailSubmissionGet",
+    "EmailSubmissionGetResponse",
     "EmailSubmissionSet",
     "EmailSubmissionSetResponse",
     "IdentityChanges",

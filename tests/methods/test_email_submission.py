@@ -14,6 +14,8 @@ from jmapc.methods import (
     EmailSetResponse,
     EmailSubmissionChanges,
     EmailSubmissionChangesResponse,
+    EmailSubmissionGet,
+    EmailSubmissionGetResponse,
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
 )
@@ -105,6 +107,62 @@ def test_email_submission_changes(
         created=["S0001", "S0002"],
         updated=[],
         destroyed=["S0003"],
+    )
+
+
+def test_email_submission_get(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/get",
+                {
+                    "accountId": "u1138",
+                    "ids": ["S2000"],
+                },
+                "single.EmailSubmission/get",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/get",
+                {
+                    "accountId": "u1138",
+                    "state": "2187",
+                    "notFound": [],
+                    "list": [
+                        {
+                            "id": "S2000",
+                            "undoStatus": "final",
+                            "sendAt": "1994-08-24T12:01:02Z",
+                        }
+                    ],
+                },
+                "single.EmailSubmission/get",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailSubmissionGet(ids=["S2000"])
+    ) == EmailSubmissionGetResponse(
+        account_id="u1138",
+        state="2187",
+        not_found=[],
+        data=[
+            EmailSubmission(
+                id="S2000",
+                undo_status=UndoStatus.FINAL,
+                send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+            ),
+        ],
     )
 
 
