@@ -10,6 +10,8 @@ from ..models import Email, EmailQueryFilter
 from .base import (
     Changes,
     ChangesResponse,
+    Copy,
+    CopyResponse,
     Get,
     GetResponse,
     Query,
@@ -30,6 +32,21 @@ class EmailChanges(Changes):
 @dataclass
 class EmailChangesResponse(ChangesResponse):
     name = "Email/changes"
+
+
+@dataclass
+class EmailCopy(Copy):
+    name = "Email/copy"
+    using = set([constants.JMAP_URN_MAIL])
+
+    create: Optional[Dict[str, Email]] = None
+
+
+@dataclass
+class EmailCopyResponse(CopyResponse):
+    name = "Email/copy"
+
+    created: Optional[Dict[str, Email]] = None
 
 
 @dataclass

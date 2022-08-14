@@ -79,6 +79,23 @@ class ChangesResponse(ResponseWithAccount):
 
 
 @dataclass
+class Copy(MethodWithAccount):
+    from_account_id: str
+    if_from_in_state: Optional[str] = None
+    if_in_state: Optional[str] = None
+    on_success_destroy_original: bool = False
+    destroy_from_if_in_state: Optional[str] = None
+
+
+@dataclass
+class CopyResponse(ResponseWithAccount):
+    from_account_id: str
+    old_state: str
+    new_state: str
+    not_created: Optional[Dict[str, SetError]]
+
+
+@dataclass
 class Get(MethodWithAccount):
     ids: Optional[ListOrRef[str]]
     properties: Optional[List[str]] = None

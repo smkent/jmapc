@@ -16,6 +16,8 @@ from jmapc import (
 from jmapc.methods import (
     EmailChanges,
     EmailChangesResponse,
+    EmailCopy,
+    EmailCopyResponse,
     EmailGet,
     EmailGetResponse,
     EmailQuery,
@@ -77,6 +79,73 @@ def test_email_changes(
         created=["f0001", "f0002"],
         updated=[],
         destroyed=["f0003"],
+    )
+
+
+def test_email_copy(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/copy",
+                {
+                    "fromAccountId": "u2187",
+                    "ifFromInState": "1000",
+                    "ifInState": "2000",
+                    "accountId": "u1138",
+                    "create": {
+                        "M1001": {
+                            "id": "M1001",
+                        }
+                    },
+                    "onSuccessDestroyOriginal": False,
+                    "destroyFromIfInState": "1001",
+                },
+                "single.Email/copy",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/copy",
+                {
+                    "fromAccountId": "u2187",
+                    "accountId": "u1138",
+                    "created": {
+                        "M1002": {
+                            "id": "M1002",
+                        }
+                    },
+                    "oldState": "1",
+                    "newState": "2",
+                    "notCreated": None,
+                },
+                "single.Email/copy",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailCopy(
+            from_account_id="u2187",
+            if_from_in_state="1000",
+            if_in_state="2000",
+            create={"M1001": Email(id="M1001")},
+            destroy_from_if_in_state="1001",
+        )
+    ) == EmailCopyResponse(
+        account_id="u1138",
+        from_account_id="u2187",
+        old_state="1",
+        new_state="2",
+        created={"M1002": Email(id="M1002")},
+        not_created=None,
     )
 
 

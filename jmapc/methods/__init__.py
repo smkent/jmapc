@@ -10,6 +10,8 @@ from .custom import CustomMethod, CustomResponse
 from .email import (
     EmailChanges,
     EmailChangesResponse,
+    EmailCopy,
+    EmailCopyResponse,
     EmailGet,
     EmailGetResponse,
     EmailQuery,
@@ -65,6 +67,8 @@ __all__ = [
     "CustomResponse",
     "EmailChanges",
     "EmailChangesResponse",
+    "EmailCopy",
+    "EmailCopyResponse",
     "EmailGet",
     "EmailGetResponse",
     "EmailQuery",
