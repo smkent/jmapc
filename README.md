@@ -73,7 +73,7 @@ Created from [smkent/cookie-python][cookie-python] using
 [cookie-python]: https://github.com/smkent/cookie-python
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amaster
-[logo]: https://raw.github.com/smkent/jmapc/master/img/jmapc.png
+[logo]: https://raw.github.com/smkent/jmapc/master/docs/logo.png
 [jmapc-pypi]: https://pypi.org/project/jmapc/
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation

@@ -1,0 +1,39 @@
+repo_name: smkent/jmapc
+repo_url: https://github.com/smkent/jmapc
+site_name: jmapc documentation
+theme:
+  logo: logo.png
+  language: en
+  name: material
+  palette:
+  # Palette toggle for dark mode
+  - scheme: slate
+    primary: lime
+    accent: indigo
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to light mode
+  # Palette toggle for light mode
+  - scheme: default
+    primary: lime
+    accent: indigo
+    toggle:
+      icon: material/lightbulb
+      name: Switch to dark mode
+  features:
+    - navigation.instant
+nav:
+  - index.md
+  - Code Reference: reference/
+plugins:
+- search
+- gen-files:
+    scripts:
+      - docs/gen_ref_pages.py
+- literate-nav:
+    nav_file: SUMMARY.md
+- section-index
+- mkdocstrings:
+    default_handler: python
+    watch:
+      - jmapc
