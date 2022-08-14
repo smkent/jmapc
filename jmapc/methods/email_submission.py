@@ -1,11 +1,24 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from dataclasses_json import config
+
 from .. import constants
-from ..models import EmailSubmission
-from .base import Changes, ChangesResponse, Set, SetResponse
+from ..models import EmailSubmission, EmailSubmissionQueryFilter
+from .base import (
+    Changes,
+    ChangesResponse,
+    Get,
+    GetResponse,
+    Query,
+    QueryChanges,
+    QueryChangesResponse,
+    QueryResponse,
+    Set,
+    SetResponse,
+)
 
 
 @dataclass
@@ -17,6 +30,45 @@ class EmailSubmissionChanges(Changes):
 @dataclass
 class EmailSubmissionChangesResponse(ChangesResponse):
     name = "EmailSubmission/changes"
+
+
+@dataclass
+class EmailSubmissionGet(Get):
+    name = "EmailSubmission/get"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+
+@dataclass
+class EmailSubmissionGetResponse(GetResponse):
+    name = "EmailSubmission/get"
+
+    data: List[EmailSubmission] = field(metadata=config(field_name="list"))
+
+
+@dataclass
+class EmailSubmissionQuery(Query):
+    name = "EmailSubmission/query"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+    filter: Optional[EmailSubmissionQueryFilter] = None
+
+
+@dataclass
+class EmailSubmissionQueryResponse(QueryResponse):
+    name = "EmailSubmission/query"
+
+
+@dataclass
+class EmailSubmissionQueryChanges(QueryChanges):
+    name = "EmailSubmission/queryChanges"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+    filter: Optional[EmailSubmissionQueryFilter] = None
+
+
+@dataclass
+class EmailSubmissionQueryChangesResponse(QueryChangesResponse):
+    name = "EmailSubmission/queryChanges"
 
 
 @dataclass

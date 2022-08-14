@@ -221,6 +221,7 @@ class Client:
                         c.method.to_dict(
                             account_id=self.account_id,
                             method_calls_slice=method_calls[:i],
+                            encode_json=True,
                         ),
                         c.id,
                     ]

@@ -20,8 +20,7 @@ Currently implemented:
   * `Email/query`
   * `Email/queryChanges`
   * `Email/set`
-  * `EmailSubmission/changes`
-  * `EmailSubmission/set`
+  * `EmailSubmission/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
   * `Identity/*` (`get`, `changes`, `set`)
   * `Mailbox/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
   * `Thread/*` (`get`, `changes`)

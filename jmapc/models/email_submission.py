@@ -3,11 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from dataclasses_json import DataClassJsonMixin, config
 
 from ..serializer import Model, datetime_decode, datetime_encode
+from .models import Operator
 
 
 @dataclass
@@ -22,6 +23,7 @@ class EmailSubmission(Model):
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
     undo_status: Optional[UndoStatus] = None
+    delivery_status: Optional[Dict[str, DeliveryStatus]] = None
     dsn_blob_ids: Optional[List[str]] = None
     mdn_blob_ids: Optional[List[str]] = None
 
@@ -46,9 +48,9 @@ class UndoStatus(Enum):
 
 @dataclass
 class DeliveryStatus(Model):
-    smtp_reply: Optional[str] = None
-    delivered: Optional[Delivered] = None
-    displayed: Optional[Displayed] = None
+    smtp_reply: str
+    delivered: Delivered
+    displayed: Displayed
 
 
 class Delivered(Enum):
@@ -61,3 +63,30 @@ class Delivered(Enum):
 class Displayed(Enum):
     UNKNOWN = "unknown"
     YES = "yes"
+
+
+@dataclass
+class EmailSubmissionQueryFilterCondition(Model):
+    identity_ids: Optional[List[str]] = None
+    email_ids: Optional[List[str]] = None
+    thread_ids: Optional[List[str]] = None
+    undo_status: Optional[UndoStatus] = None
+    before: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+    after: Optional[datetime] = field(
+        default=None,
+        metadata=config(encoder=datetime_encode, decoder=datetime_decode),
+    )
+
+
+@dataclass
+class EmailSubmissionQueryFilterOperator(Model):
+    operator: Operator
+    conditions: List[EmailSubmissionQueryFilter]
+
+
+EmailSubmissionQueryFilter = Union[
+    EmailSubmissionQueryFilterCondition, EmailSubmissionQueryFilterOperator
+]

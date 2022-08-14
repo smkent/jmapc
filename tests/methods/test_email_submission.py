@@ -3,9 +3,11 @@ from datetime import datetime, timezone
 import responses
 
 from jmapc import (
+    AddedItem,
     Address,
     Client,
     EmailSubmission,
+    EmailSubmissionQueryFilterCondition,
     Envelope,
     SetError,
     UndoStatus,
@@ -14,6 +16,12 @@ from jmapc.methods import (
     EmailSetResponse,
     EmailSubmissionChanges,
     EmailSubmissionChangesResponse,
+    EmailSubmissionGet,
+    EmailSubmissionGetResponse,
+    EmailSubmissionQuery,
+    EmailSubmissionQueryChanges,
+    EmailSubmissionQueryChangesResponse,
+    EmailSubmissionQueryResponse,
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
 )
@@ -105,6 +113,187 @@ def test_email_submission_changes(
         created=["S0001", "S0002"],
         updated=[],
         destroyed=["S0003"],
+    )
+
+
+def test_email_submission_get(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/get",
+                {
+                    "accountId": "u1138",
+                    "ids": ["S2000"],
+                },
+                "single.EmailSubmission/get",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/get",
+                {
+                    "accountId": "u1138",
+                    "state": "2187",
+                    "notFound": [],
+                    "list": [
+                        {
+                            "id": "S2000",
+                            "undoStatus": "final",
+                            "sendAt": "1994-08-24T12:01:02Z",
+                        }
+                    ],
+                },
+                "single.EmailSubmission/get",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailSubmissionGet(ids=["S2000"])
+    ) == EmailSubmissionGetResponse(
+        account_id="u1138",
+        state="2187",
+        not_found=[],
+        data=[
+            EmailSubmission(
+                id="S2000",
+                undo_status=UndoStatus.FINAL,
+                send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+            ),
+        ],
+    )
+
+
+def test_email_submission_query(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/query",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "undoStatus": "final",
+                    },
+                },
+                "single.EmailSubmission/query",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/query",
+                {
+                    "accountId": "u1138",
+                    "ids": ["S2000", "S2001"],
+                    "queryState": "4000",
+                    "canCalculateChanges": True,
+                    "position": 42,
+                    "total": 9001,
+                    "limit": 256,
+                },
+                "single.EmailSubmission/query",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailSubmissionQuery(
+            filter=EmailSubmissionQueryFilterCondition(
+                undo_status=UndoStatus.FINAL,
+            )
+        )
+    ) == EmailSubmissionQueryResponse(
+        account_id="u1138",
+        ids=["S2000", "S2001"],
+        query_state="4000",
+        can_calculate_changes=True,
+        position=42,
+        total=9001,
+        limit=256,
+    )
+
+
+def test_email_submission_query_changes(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "undoStatus": "final",
+                    },
+                    "sinceQueryState": "1000",
+                    "calculateTotal": False,
+                },
+                "single.EmailSubmission/queryChanges",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "oldQueryState": "1000",
+                    "newQueryState": "1003",
+                    "added": [
+                        {
+                            "id": "S2000",
+                            "index": 3,
+                        },
+                        {
+                            "id": "S2001",
+                            "index": 8,
+                        },
+                    ],
+                    "removed": ["S2008"],
+                    "total": 42,
+                },
+                "single.EmailSubmission/queryChanges",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailSubmissionQueryChanges(
+            filter=EmailSubmissionQueryFilterCondition(
+                undo_status=UndoStatus.FINAL
+            ),
+            since_query_state="1000",
+        )
+    ) == EmailSubmissionQueryChangesResponse(
+        account_id="u1138",
+        old_query_state="1000",
+        new_query_state="1003",
+        removed=["S2008"],
+        added=[
+            AddedItem(id="S2000", index=3),
+            AddedItem(id="S2001", index=8),
+        ],
+        total=42,
     )
 
 
