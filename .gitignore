@@ -6,4 +6,5 @@
 .venv/
 bin/
 dist/
+site/
 coverage.xml
