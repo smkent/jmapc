@@ -9,8 +9,10 @@ from typing import (
     List,
     Literal,
     Optional,
+    Sequence,
     Tuple,
     Type,
+    TypeVar,
     Union,
     cast,
     overload,
@@ -28,21 +30,15 @@ from .methods import (
     InvocationResponse,
     InvocationResponseOrError,
     Method,
+    Request,
     Response,
+    ResponseOrError,
 )
 from .models import Event
 from .session import Session
 
-MethodList = List[Tuple[str, Method]]
-MethodResponseOrError = Union[errors.Error, Response]
-MethodResponseList = List[Tuple[str, MethodResponseOrError]]
-MethodCallResponseOrList = Union[
-    MethodResponseOrError, List[MethodResponseOrError]
-]
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
-
-
-InvocationOrMethod = Union[Method, Invocation]
+ClientType = TypeVar("ClientType", bound="Client")
 
 
 @dataclass
@@ -55,15 +51,24 @@ class EventSourceConfig:
 class Client:
     @classmethod
     def create_with_api_token(
-        cls, host: str, api_token: str, *args: Any, **kwargs: Any
-    ) -> Client:
+        cls: Type[ClientType],
+        host: str,
+        api_token: str,
+        *args: Any,
+        **kwargs: Any,
+    ) -> ClientType:
         kwargs["auth"] = BearerAuth(api_token)
         return cls(host, *args, **kwargs)
 
     @classmethod
     def create_with_password(
-        cls, host: str, user: str, password: str, *args: Any, **kwargs: Any
-    ) -> Client:
+        cls: Type[ClientType],
+        host: str,
+        user: str,
+        password: str,
+        *args: Any,
+        **kwargs: Any,
+    ) -> ClientType:
         kwargs["auth"] = requests.auth.HTTPBasicAuth(
             username=user, password=password
         )
@@ -128,7 +133,7 @@ class Client:
         calls: Method,
         raise_errors: Literal[False] = False,
         single_response: Literal[True] = True,
-    ) -> MethodResponseOrError:
+    ) -> ResponseOrError:
         ...  # pragma: no cover
 
     @overload
@@ -137,7 +142,7 @@ class Client:
         calls: Method,
         raise_errors: Literal[False] = False,
         single_response: Literal[False] = False,
-    ) -> Union[List[MethodResponseOrError], MethodResponseOrError]:
+    ) -> Union[Sequence[ResponseOrError], ResponseOrError]:
         ...  # pragma: no cover
 
     @overload
@@ -155,35 +160,35 @@ class Client:
         calls: Method,
         raise_errors: Literal[True],
         single_response: Literal[False] = False,
-    ) -> Union[List[Response], Response]:
+    ) -> Union[Sequence[Response], Response]:
         ...  # pragma: no cover
 
     @overload
     def request(
         self,
-        calls: List[InvocationOrMethod],
+        calls: Sequence[Request],
         raise_errors: Literal[False] = False,
-    ) -> List[InvocationResponse]:
+    ) -> Sequence[InvocationResponse]:
         ...  # pragma: no cover
 
     @overload
     def request(
         self,
-        calls: List[InvocationOrMethod],
+        calls: Sequence[Request],
         raise_errors: Literal[True],
-    ) -> List[InvocationResponse]:
+    ) -> Sequence[InvocationResponse]:
         ...  # pragma: no cover
 
     def request(
         self,
-        calls: Union[List[InvocationOrMethod], Method],
+        calls: Union[Sequence[Request], Sequence[Method], Method],
         raise_errors: bool = False,
         single_response: bool = False,
     ) -> Union[
-        List[InvocationResponseOrError],
-        List[InvocationResponse],
-        Union[List[MethodResponseOrError], MethodResponseOrError],
-        Union[List[Response], Response],
+        Sequence[InvocationResponseOrError],
+        Sequence[InvocationResponse],
+        Union[Sequence[ResponseOrError], ResponseOrError],
+        Union[Sequence[Response], Response],
     ]:
         if isinstance(calls, list):
             if single_response:
@@ -213,7 +218,7 @@ class Client:
         )
         # Execute request
         result: Union[
-            List[InvocationResponseOrError], List[InvocationResponse]
+            Sequence[InvocationResponseOrError], Sequence[InvocationResponse]
         ] = self._api_request(
             {
                 "using": sorted(using),
@@ -253,7 +258,7 @@ class Client:
 
     def _api_request(
         self, request: Dict[str, Any]
-    ) -> List[InvocationResponseOrError]:
+    ) -> Sequence[InvocationResponseOrError]:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = self.requests_session.post(
             self.jmap_session.api_url,
@@ -266,9 +271,9 @@ class Client:
 
     def _parse_method_responses(
         self, data: dict[str, Any]
-    ) -> List[InvocationResponseOrError]:
+    ) -> Sequence[InvocationResponseOrError]:
         method_responses = cast(
-            List[Tuple[str, Dict[str, Any], str]],
+            Sequence[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),
         )
 
@@ -280,7 +285,7 @@ class Client:
             for name, response, method_id in method_responses
         ]
 
-    def _response_type(self, method_name: str) -> Type[MethodResponseOrError]:
+    def _response_type(self, method_name: str) -> Type[ResponseOrError]:
         if method_name == "error":
             return errors.Error
         if method_name in Response.response_types:

@@ -3,7 +3,9 @@ from .base import (
     InvocationResponse,
     InvocationResponseOrError,
     Method,
+    Request,
     Response,
+    ResponseOrError,
 )
 from .core import CoreEcho, CoreEchoResponse
 from .custom import CustomMethod, CustomResponse
@@ -107,7 +109,9 @@ __all__ = [
     "MailboxSet",
     "MailboxSetResponse",
     "Method",
+    "Request",
     "Response",
+    "ResponseOrError",
     "ThreadChanges",
     "ThreadChangesResponse",
     "ThreadGet",

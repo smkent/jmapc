@@ -205,3 +205,7 @@ class QueryChangesResponse(ResponseWithAccount, QueryChangesMethod):
     removed: List[str]
     added: List[AddedItem]
     total: Optional[int] = None
+
+
+ResponseOrError = Union[Error, Response]
+Request = Union[Method, Invocation]

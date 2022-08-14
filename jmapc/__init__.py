@@ -2,6 +2,7 @@ from . import auth, errors, methods, models
 from .__version__ import __version__ as version
 from .client import Client, EventSourceConfig
 from .errors import Error
+from .methods import Request, ResponseOrError
 from .models import (
     AddedItem,
     Address,
@@ -72,6 +73,8 @@ __all__ = [
     "MailboxQueryFilterOperator",
     "Operator",
     "Ref",
+    "Request",
+    "ResponseOrError",
     "ResultReference",
     "SetError",
     "StateChange",
