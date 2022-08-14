@@ -11,7 +11,7 @@ from .models import Operator, StrOrRef
 
 @dataclass
 class Mailbox(Model):
-    id: Optional[str] = field(metadata=config(field_name="Id"), default=None)
+    id: Optional[str] = field(metadata=config(field_name="id"), default=None)
     name: Optional[str] = None
     sort_order: Optional[int] = 0
     total_emails: Optional[int] = None

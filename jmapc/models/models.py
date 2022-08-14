@@ -16,7 +16,7 @@ ListOrRef = Union[List[T], ResultReference, Ref]
 
 @dataclass
 class AddedItem(Model):
-    id: str = field(metadata=config(field_name="Id"))
+    id: str = field(metadata=config(field_name="id"))
     index: int
 
 

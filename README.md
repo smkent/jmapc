@@ -16,6 +16,7 @@ Currently implemented:
 * Request methods:
   * `Core/echo`
   * `Email/changes`
+  * `Email/copy`
   * `Email/get`
   * `Email/query`
   * `Email/queryChanges`
