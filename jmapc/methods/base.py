@@ -45,8 +45,6 @@ class ResponseCollector(MethodBase):
     def __init_subclass__(cls) -> None:
         with contextlib.suppress(ValueError):
             method_name = cls.get_method_name()
-            if not method_name:
-                return
             ResponseCollector.response_types[method_name] = cast(
                 Type[Response], cls
             )
