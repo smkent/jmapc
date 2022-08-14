@@ -163,6 +163,8 @@ def test_mailbox_query(
                     "filter": {
                         "name": "Inbox",
                     },
+                    "filterAsTree": False,
+                    "sortAsTree": False,
                 },
                 "single.Mailbox/query",
             ]

@@ -51,6 +51,8 @@ class MailboxQuery(Query):
     using = set([constants.JMAP_URN_MAIL])
 
     filter: Optional[MailboxQueryFilter] = None
+    sort_as_tree: bool = False
+    filter_as_tree: bool = False
 
 
 @dataclass
