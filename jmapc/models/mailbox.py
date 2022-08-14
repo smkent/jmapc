@@ -30,6 +30,8 @@ class MailboxQueryFilterCondition(Model):
     name: Optional[StrOrRef] = None
     role: Optional[StrOrRef] = None
     parent_id: Optional[StrOrRef] = None
+    has_any_role: Optional[bool] = None
+    is_subscribed: Optional[bool] = None
 
 
 @dataclass
