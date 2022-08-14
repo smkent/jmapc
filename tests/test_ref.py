@@ -42,7 +42,7 @@ def test_invalid_ref_object() -> None:
 def test_method_with_result_reference() -> None:
     method = MailboxGet(
         ids=ResultReference(
-            name=MailboxQuery.method_name(),
+            name=MailboxQuery.get_method_name(),
             path="/ids",
             result_of="0",
         ),

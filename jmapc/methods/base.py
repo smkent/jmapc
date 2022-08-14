@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from typing import Set as SetType
@@ -14,8 +15,12 @@ class MethodBase(Model):
     using: SetType[str] = set()
     model: Optional[str] = None
 
+    @property
+    def jmap_method_name(self) -> str:
+        return getattr(self, "jmap_method", None) or self.get_method_name()
+
     @classmethod
-    def method_name(cls) -> str:
+    def get_method_name(cls) -> str:
         if not cls.model:
             raise ValueError(f"Method {cls.__class__} has no model type")
         method_type = getattr(cls, "method_type", None)
@@ -38,12 +43,10 @@ class ResponseCollector(MethodBase):
 
     @classmethod
     def __init_subclass__(cls) -> None:
-        try:
-            method_name = getattr(cls, "method_name", None)
-            method_name = cls.method_name()
-        except ValueError:
-            return
-        if method_name:
+        with contextlib.suppress(ValueError):
+            method_name = cls.get_method_name()
+            if not method_name:
+                return
             ResponseCollector.response_types[method_name] = cast(
                 Type[Response], cls
             )
