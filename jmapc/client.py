@@ -13,6 +13,7 @@ from typing import (
     Type,
     Union,
     cast,
+    overload,
 )
 
 import requests
@@ -21,7 +22,14 @@ import sseclient
 from . import constants, errors
 from .auth import BearerAuth
 from .logging import log
-from .methods import CustomResponse, Method, Response
+from .methods import (
+    CustomResponse,
+    Invocation,
+    InvocationResponse,
+    InvocationResponseOrError,
+    Method,
+    Response,
+)
 from .models import Event
 from .session import Session
 
@@ -32,6 +40,9 @@ MethodCallResponseOrList = Union[
     MethodResponseOrError, List[MethodResponseOrError]
 ]
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
+
+
+InvocationOrMethod = Union[Method, Invocation]
 
 
 @dataclass
@@ -111,54 +122,135 @@ class Client:
     def account_id(self) -> str:
         return self.jmap_session.primary_accounts.mail
 
-    def method_call(
-        self, method: Method, flatten_single_response: bool = True
-    ) -> MethodCallResponseOrList:
-        using = list(set([constants.JMAP_URN_CORE]).union(method.using))
-        results = self._api_request(
-            {
-                "using": sorted(using),
-                "methodCalls": [
-                    [
-                        method.name,
-                        method.to_dict(account_id=self.account_id),
-                        "uno",
-                    ]
-                ],
-            },
-        )
-        # One method call may result in multiple responses for that call.
-        # If there is a single response, return the response object.
-        # Otherwise, return the list of responses.
-        if len(results) == 1:
-            return results[0][1]
-        return [result[1] for result in results]
+    @overload
+    def request(
+        self,
+        calls: Method,
+        raise_errors: Literal[False] = False,
+        single_response: Literal[True] = True,
+    ) -> MethodResponseOrError:
+        ...  # pragma: no cover
 
-    def method_calls(
-        self, calls: Union[list[Method], MethodList]
-    ) -> MethodResponseList:
-        if isinstance(calls[0], Method):
-            just_calls = cast(List[Method], calls)
-            calls = [(str(i), method) for i, method in enumerate(just_calls)]
-        calls = cast(MethodList, calls)
+    @overload
+    def request(
+        self,
+        calls: Method,
+        raise_errors: Literal[False] = False,
+        single_response: Literal[False] = False,
+    ) -> Union[List[MethodResponseOrError], MethodResponseOrError]:
+        ...  # pragma: no cover
+
+    @overload
+    def request(
+        self,
+        calls: Method,
+        raise_errors: Literal[True],
+        single_response: Literal[True],
+    ) -> Response:
+        ...  # pragma: no cover
+
+    @overload
+    def request(
+        self,
+        calls: Method,
+        raise_errors: Literal[True],
+        single_response: Literal[False] = False,
+    ) -> Union[List[Response], Response]:
+        ...  # pragma: no cover
+
+    @overload
+    def request(
+        self,
+        calls: List[InvocationOrMethod],
+        raise_errors: Literal[False] = False,
+    ) -> List[InvocationResponse]:
+        ...  # pragma: no cover
+
+    @overload
+    def request(
+        self,
+        calls: List[InvocationOrMethod],
+        raise_errors: Literal[True],
+    ) -> List[InvocationResponse]:
+        ...  # pragma: no cover
+
+    def request(
+        self,
+        calls: Union[List[InvocationOrMethod], Method],
+        raise_errors: bool = False,
+        single_response: bool = False,
+    ) -> Union[
+        List[InvocationResponseOrError],
+        List[InvocationResponse],
+        Union[List[MethodResponseOrError], MethodResponseOrError],
+        Union[List[Response], Response],
+    ]:
+        if isinstance(calls, list):
+            if single_response:
+                raise ValueError(
+                    "single_response cannot be used with "
+                    "multiple JMAP request methods"
+                )
+
+        calls_list = calls if isinstance(calls, list) else [calls]
+        method_calls: List[Invocation] = []
+        # Create Invocations for Methods
+        for i, c in enumerate(calls_list):
+            if isinstance(c, Invocation):
+                method_calls.append(c)
+                continue
+            method_call_id = (
+                f"{i}.{c.name}" if len(calls_list) > 1 else f"single.{c.name}"
+            )
+            method_calls.append(Invocation(id=method_call_id, method=c))
+        # Collect set of JMAP URNs used by all methods in this request
         using = list(
-            set([constants.JMAP_URN_CORE]).union(*[c[1].using for c in calls])
+            set([constants.JMAP_URN_CORE]).union(
+                *[c.method.using for c in method_calls]
+            )
         )
-        return self._api_request(
+        # Execute request
+        result: Union[
+            List[InvocationResponseOrError], List[InvocationResponse]
+        ] = self._api_request(
             {
                 "using": sorted(using),
                 "methodCalls": [
                     [
-                        c[1].name,
-                        c[1].to_dict(account_id=self.account_id),
-                        c[0],
+                        c.method.name,
+                        c.method.to_dict(
+                            account_id=self.account_id,
+                            method_calls_slice=method_calls[:i],
+                        ),
+                        c.id,
                     ]
-                    for c in calls
+                    for i, c in enumerate(method_calls)
                 ],
             },
         )
+        if raise_errors:
+            if any(isinstance(r.response, errors.Error) for r in result):
+                raise RuntimeError("Errors found")
+            result = [
+                InvocationResponse(
+                    id=r.id, response=cast(Response, r.response)
+                )
+                for r in result
+            ]
+        if isinstance(calls, Method):
+            if len(result) > 1:
+                if single_response:
+                    raise RuntimeError(
+                        f"{len(result)} results received for single method "
+                        f"call {method_calls[0].method.name}"
+                    )
+                return [r.response for r in result]
+            return result[0].response
+        return result
 
-    def _api_request(self, request: Dict[str, Any]) -> MethodResponseList:
+    def _api_request(
+        self, request: Dict[str, Any]
+    ) -> List[InvocationResponseOrError]:
         log.debug(f"Sending JMAP request {json.dumps(request)}")
         r = self.requests_session.post(
             self.jmap_session.api_url,
@@ -167,7 +259,22 @@ class Client:
         )
         r.raise_for_status()
         log.debug(f"Received JMAP response {r.text}")
-        return self._parse_responses(r.json())
+        return self._parse_method_responses(r.json())
+
+    def _parse_method_responses(
+        self, data: dict[str, Any]
+    ) -> List[InvocationResponseOrError]:
+        method_responses = cast(
+            List[Tuple[str, Dict[str, Any], str]],
+            data.get("methodResponses", []),
+        )
+        return [
+            InvocationResponseOrError(
+                id=method_id,
+                response=self._response_type(name).from_dict(response),
+            )
+            for name, response, method_id in method_responses
+        ]
 
     def _response_type(self, method_name: str) -> Type[MethodResponseOrError]:
         if method_name == "error":
@@ -175,19 +282,3 @@ class Client:
         if method_name in Response.response_types:
             return Response.response_types[method_name]
         return CustomResponse
-
-    def _parse_responses(self, data: dict[str, Any]) -> MethodResponseList:
-
-        method_responses = cast(
-            List[Tuple[str, Dict[str, Any], str]],
-            data.get("methodResponses", []),
-        )
-        responses: MethodResponseList = []
-        for name, response, method_id in method_responses:
-            responses.append(
-                (
-                    method_id,
-                    self._response_type(name).from_dict(response),
-                )
-            )
-        return responses

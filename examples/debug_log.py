@@ -20,9 +20,9 @@ client = Client.create_with_api_token(
 
 # Call JMAP API method
 # The request and response JSON content will be logged to the console
-client.method_call(CoreEcho(data=dict(hello="world")))
+client.request(CoreEcho(data=dict(hello="world")))
 
 # Example output:
 #
-# DEBUG:jmapc:Sending JMAP request {"using": ["urn:ietf:params:jmap:core"], "methodCalls": [["Core/echo", {"hello": "world"}, "uno"]]}    # noqa: E501
-# DEBUG:jmapc:Received JMAP response {"methodResponses":[["Core/echo",{"hello":"world"},"uno"]]}                                          # noqa: E501
+# DEBUG:jmapc:Sending JMAP request {"using": ["urn:ietf:params:jmap:core"], "methodCalls": [["Core/echo", {"hello": "world"}, "single.Core/echo"]]}    # noqa: E501
+# DEBUG:jmapc:Received JMAP response {"methodResponses":[["Core/echo",{"hello":"world"},"single.Core/echo"]]}                                          # noqa: E501

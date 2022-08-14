@@ -29,7 +29,7 @@ def test_mailbox_changes(
                     "sinceState": "2999",
                     "maxChanges": 47,
                 },
-                "uno",
+                "single.Mailbox/changes",
             ]
         ],
         "using": [
@@ -50,12 +50,12 @@ def test_mailbox_changes(
                     "updated": [],
                     "destroyed": ["MBX0003"],
                 },
-                "uno",
+                "single.Mailbox/changes",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         MailboxChanges(since_state="2999", max_changes=47)
     ) == MailboxChangesResponse(
         account_id="u1138",
@@ -76,7 +76,7 @@ def test_mailbox_get(
             [
                 "Mailbox/get",
                 {"accountId": "u1138", "ids": ["MBX1", "MBX1000"]},
-                "uno",
+                "single.Mailbox/get",
             ]
         ],
         "using": [
@@ -115,12 +115,12 @@ def test_mailbox_get(
                     "not_found": [],
                     "state": "2187",
                 },
-                "uno",
+                "single.Mailbox/get",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         MailboxGet(ids=["MBX1", "MBX1000"])
     ) == MailboxGetResponse(
         account_id="u1138",
@@ -164,7 +164,7 @@ def test_mailbox_query(
                         "name": "Inbox",
                     },
                 },
-                "uno",
+                "single.Mailbox/query",
             ]
         ],
         "using": [
@@ -185,12 +185,12 @@ def test_mailbox_query(
                     "total": 9001,
                     "limit": 256,
                 },
-                "uno",
+                "single.Mailbox/query",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox"))
     ) == MailboxQueryResponse(
         account_id="u1138",
@@ -218,7 +218,7 @@ def test_mailbox_query_changes(
                     "sinceQueryState": "1000",
                     "calculateTotal": False,
                 },
-                "uno",
+                "single.Mailbox/queryChanges",
             ]
         ],
         "using": [
@@ -247,12 +247,12 @@ def test_mailbox_query_changes(
                     "removed": ["MBX8001"],
                     "total": 42,
                 },
-                "uno",
+                "single.Mailbox/queryChanges",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         MailboxQueryChanges(
             filter=MailboxQueryFilterCondition(name="Inbox"),
             since_query_state="1000",
@@ -288,7 +288,7 @@ def test_mailbox_set(
                     },
                     "onDestroyRemoveEmails": False,
                 },
-                "uno",
+                "single.Mailbox/set",
             ]
         ],
         "using": [
@@ -333,13 +333,13 @@ def test_mailbox_set(
                     "notDestroyed": None,
                     "notUpdated": None,
                 },
-                "uno",
+                "single.Mailbox/set",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
 
-    assert client.method_call(
+    assert client.request(
         MailboxSet(
             create=dict(mailbox=Mailbox(name="Saturn Valley Newsletter"))
         )

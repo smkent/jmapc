@@ -9,6 +9,7 @@ from jmapc.methods import CoreEcho
 from ..utils import expect_jmap_call
 
 
+@pytest.mark.parametrize("raise_errors", [True, False])
 @pytest.mark.parametrize(
     ["method_response", "expected_error"],
     [
@@ -88,19 +89,24 @@ def test_method_error(
     http_responses: responses.RequestsMock,
     method_response: Dict[str, Any],
     expected_error: Error,
+    raise_errors: bool,
 ) -> None:
     test_data = dict(param1="yes", another_param="ok")
     expected_request = {
         "methodCalls": [
-            ["Core/echo", test_data, "uno"],
+            ["Core/echo", test_data, "single.Core/echo"],
         ],
         "using": ["urn:ietf:params:jmap:core"],
     }
     response = {
         "methodResponses": [
-            ["error", method_response, "uno"],
+            ["error", method_response, "single.Core/echo"],
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
-    resp = client.method_call(CoreEcho(data=test_data))
-    assert resp == expected_error
+    if raise_errors:
+        with pytest.raises(RuntimeError):
+            client.request(CoreEcho(data=test_data), raise_errors=True)
+    else:
+        resp = client.request(CoreEcho(data=test_data), raise_errors=False)
+        assert resp == expected_error

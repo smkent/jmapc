@@ -43,6 +43,26 @@ class ResponseWithAccount(Response):
 
 
 @dataclass
+class InvocationBase:
+    id: str
+
+
+@dataclass
+class Invocation(InvocationBase):
+    method: Method
+
+
+@dataclass
+class InvocationResponseOrError(InvocationBase):
+    response: Union[Error, Response]
+
+
+@dataclass
+class InvocationResponse(InvocationResponseOrError):
+    response: Response
+
+
+@dataclass
 class Changes(MethodWithAccount):
     since_state: str
     max_changes: Optional[int] = None

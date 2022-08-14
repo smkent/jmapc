@@ -15,7 +15,7 @@ client = Client.create_with_api_token(
 method = IdentityGet()
 
 # Call JMAP API with the prepared request
-result = client.method_call(method)
+result = client.request(method)
 
 # Print some information about each retrieved identity
 for identity in result.data:

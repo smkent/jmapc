@@ -69,7 +69,7 @@ def test_email_submission_changes(
                     "sinceState": "2999",
                     "maxChanges": 47,
                 },
-                "uno",
+                "single.EmailSubmission/changes",
             ]
         ],
         "using": [
@@ -90,12 +90,12 @@ def test_email_submission_changes(
                     "updated": [],
                     "destroyed": ["S0003"],
                 },
-                "uno",
+                "single.EmailSubmission/changes",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailSubmissionChanges(since_state="2999", max_changes=47)
     ) == EmailSubmissionChangesResponse(
         account_id="u1138",
@@ -119,7 +119,7 @@ def test_email_submission_set(
                     "accountId": "u1138",
                     "create": expected_request_create,
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ]
         ],
         "using": [
@@ -132,12 +132,12 @@ def test_email_submission_set(
             [
                 "EmailSubmission/set",
                 email_submission_set_response,
-                "uno",
+                "single.EmailSubmission/set",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailSubmissionSet(
             create=dict(
                 emailToSend=EmailSubmission(
@@ -181,7 +181,7 @@ def test_email_submission_set_on_success_destroy_email(
                     "create": expected_request_create,
                     "onSuccessDestroyEmail": ["#emailToSend"],
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ]
         ],
         "using": [
@@ -194,7 +194,7 @@ def test_email_submission_set_on_success_destroy_email(
             [
                 "EmailSubmission/set",
                 email_submission_set_response,
-                "uno",
+                "single.EmailSubmission/set",
             ],
             [
                 "Email/set",
@@ -209,12 +209,12 @@ def test_email_submission_set_on_success_destroy_email(
                     "notUpdated": None,
                     "notDestroyed": None,
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ],
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailSubmissionSet(
             on_success_destroy_email=["#emailToSend"],
             create=dict(
@@ -276,7 +276,7 @@ def test_email_submission_set_on_success_update_email(
                         "keywords/$draft": None,
                     },
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ]
         ],
         "using": [
@@ -289,7 +289,7 @@ def test_email_submission_set_on_success_update_email(
             [
                 "EmailSubmission/set",
                 email_submission_set_response,
-                "uno",
+                "single.EmailSubmission/set",
             ],
             [
                 "Email/set",
@@ -306,12 +306,12 @@ def test_email_submission_set_on_success_update_email(
                     "notUpdated": None,
                     "notDestroyed": None,
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ],
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailSubmissionSet(
             on_success_update_email={
                 "keywords/$draft": None,
@@ -376,7 +376,7 @@ def test_email_submission_set_update_email_error(
                         "mailboxIds/MBX5": None,
                     },
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ]
         ],
         "using": [
@@ -389,7 +389,7 @@ def test_email_submission_set_update_email_error(
             [
                 "EmailSubmission/set",
                 email_submission_set_response,
-                "uno",
+                "single.EmailSubmission/set",
             ],
             [
                 "Email/set",
@@ -409,12 +409,12 @@ def test_email_submission_set_update_email_error(
                     },
                     "notDestroyed": None,
                 },
-                "uno",
+                "single.EmailSubmission/set",
             ],
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         EmailSubmissionSet(
             on_success_update_email={
                 "keywords/$draft": None,

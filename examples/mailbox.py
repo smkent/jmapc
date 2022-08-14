@@ -2,7 +2,7 @@
 
 import os
 
-from jmapc import Client, MailboxQueryFilterCondition, ResultReference
+from jmapc import Client, MailboxQueryFilterCondition, Ref
 from jmapc.methods import MailboxGet, MailboxQuery
 
 # Create and configure client
@@ -12,28 +12,22 @@ client = Client.create_with_api_token(
 
 # Prepare two methods to be submitted in one request
 # The first method, Mailbox/query, will locate the ID of the Inbox folder
-# The second method, Mailbox/get, uses a result reference to retrieve the Inbox
-# mailbox details
+# The second method, Mailbox/get, uses a result reference to the preceding
+# Mailbox/query method to retrieve the Inbox mailbox details
 methods = [
     MailboxQuery(filter=MailboxQueryFilterCondition(name="Inbox")),
-    MailboxGet(
-        ids=ResultReference(
-            name=MailboxQuery.name,
-            path="/ids",
-            result_of="0",
-        ),
-    ),
+    MailboxGet(ids=Ref("/ids")),
 ]
 
 # Call JMAP API with the prepared request
-results = client.method_calls(methods)
+results = client.request(methods)
 
-# Retrieve the result tuple for the second method. The result tuple contains
-# the client-provided method ID, and the result data model.
+# Retrieve the InvocationResponse for the second method. The InvocationResponse
+# contains the client-provided method ID, and the result data model.
 method_2_result = results[1]
 
-# Retrieve the result data model from the result tuple
-method_2_result_data = method_2_result[1]
+# Retrieve the result data model from the InvocationResponse instance
+method_2_result_data = method_2_result.response
 
 # Retrieve the Mailbox data from the result data model
 mailboxes = method_2_result_data.data

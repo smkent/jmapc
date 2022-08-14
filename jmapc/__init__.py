@@ -35,7 +35,7 @@ from .models import (
     TypeState,
     UndoStatus,
 )
-from .ref import ResultReference
+from .ref import Ref, ResultReference
 
 __all__ = [
     "AddedItem",
@@ -65,6 +65,7 @@ __all__ = [
     "MailboxQueryFilterCondition",
     "MailboxQueryFilterOperator",
     "Operator",
+    "Ref",
     "ResultReference",
     "SetError",
     "StateChange",

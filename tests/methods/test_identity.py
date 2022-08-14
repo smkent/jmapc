@@ -25,7 +25,7 @@ def test_identity_changes(
                     "sinceState": "2999",
                     "maxChanges": 47,
                 },
-                "uno",
+                "single.Identity/changes",
             ]
         ],
         "using": [
@@ -46,12 +46,12 @@ def test_identity_changes(
                     "updated": [],
                     "destroyed": ["0003"],
                 },
-                "uno",
+                "single.Identity/changes",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
+    assert client.request(
         IdentityChanges(since_state="2999", max_changes=47)
     ) == IdentityChangesResponse(
         account_id="u1138",
@@ -68,7 +68,9 @@ def test_identity_get(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
     expected_request = {
-        "methodCalls": [["Identity/get", {"accountId": "u1138"}, "uno"]],
+        "methodCalls": [
+            ["Identity/get", {"accountId": "u1138"}, "single.Identity/get"]
+        ],
         "using": [
             "urn:ietf:params:jmap:core",
             "urn:ietf:params:jmap:submission",
@@ -95,12 +97,12 @@ def test_identity_get(
                     "not_found": [],
                     "state": "2187",
                 },
-                "uno",
+                "single.Identity/",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(IdentityGet()) == IdentityGetResponse(
+    assert client.request(IdentityGet()) == IdentityGetResponse(
         account_id="u1138",
         state="2187",
         not_found=[],
@@ -138,7 +140,7 @@ def test_identity_set(
                         }
                     },
                 },
-                "uno",
+                "single.Identity/set",
             ]
         ],
         "using": [
@@ -172,13 +174,13 @@ def test_identity_set(
                     "notDestroyed": None,
                     "notUpdated": None,
                 },
-                "uno",
+                "single.Identity/set",
             ]
         ]
     }
     expect_jmap_call(http_responses, expected_request, response)
 
-    assert client.method_call(
+    assert client.request(
         IdentitySet(
             create=dict(
                 new_id=Identity(

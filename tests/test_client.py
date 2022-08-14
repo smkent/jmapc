@@ -1,11 +1,20 @@
+from typing import List
+
 import pytest
 import requests
 import responses
 
 from jmapc import Client
 from jmapc.auth import BearerAuth
-from jmapc.client import MethodCallResponseOrList, MethodList
-from jmapc.methods import CoreEcho, CoreEchoResponse
+from jmapc.client import Invocation, InvocationOrMethod
+from jmapc.methods import (
+    CoreEcho,
+    CoreEchoResponse,
+    InvocationResponseOrError,
+    MailboxGet,
+    MailboxGetResponse,
+)
+from jmapc.ref import Ref, ResultReference
 from jmapc.session import Session, SessionPrimaryAccount
 
 from .utils import expect_jmap_call
@@ -52,70 +61,109 @@ def test_jmap_session(
 
 
 @pytest.mark.parametrize(
-    ["flatten_single_response", "expected_response"],
+    "method_params",
     [
-        (True, CoreEchoResponse(data=echo_test_data)),
-        (False, [CoreEchoResponse(data=echo_test_data)]),
+        [CoreEcho(data=echo_test_data), MailboxGet(ids=Ref("/example"))],
+        [
+            Invocation(method=CoreEcho(data=echo_test_data), id="0.Core/echo"),
+            Invocation(
+                method=MailboxGet(ids=Ref(path="/example")), id="1.Mailbox/get"
+            ),
+        ],
+        [
+            Invocation(method=CoreEcho(data=echo_test_data), id="0.Core/echo"),
+            MailboxGet(ids=Ref("/example", method="0.Core/echo")),
+        ],
+        [
+            CoreEcho(data=echo_test_data),
+            MailboxGet(
+                ids=ResultReference(
+                    path="/example", result_of="0.Core/echo", name="Core/echo"
+                )
+            ),
+        ],
+    ],
+    ids=[
+        "methods_only",
+        "invocations_only",
+        "method_and_invocation",
+        "methods_with_manual_reference",
     ],
 )
-def test_method_call(
+def test_client_request(
     client: Client,
     http_responses: responses.RequestsMock,
-    flatten_single_response: bool,
-    expected_response: MethodCallResponseOrList,
+    method_params: List[InvocationOrMethod],
 ) -> None:
     expected_request = {
         "methodCalls": [
             [
                 "Core/echo",
                 echo_test_data,
-                "uno",
+                "0.Core/echo",
+            ],
+            [
+                "Mailbox/get",
+                {
+                    "accountId": "u1138",
+                    "#ids": {
+                        "name": "Core/echo",
+                        "path": "/example",
+                        "resultOf": "0.Core/echo",
+                    },
+                },
+                "1.Mailbox/get",
             ],
         ],
-        "using": ["urn:ietf:params:jmap:core"],
+        "using": ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail"],
     }
     response = {
         "methodResponses": [
             [
                 "Core/echo",
                 echo_test_data,
-                "uno",
+                "0.Core/echo",
+            ],
+            [
+                "Mailbox/get",
+                {
+                    "accountId": "u1138",
+                    "list": [],
+                    "not_found": [],
+                    "state": "1000",
+                },
+                "1.Mailbox/get",
             ],
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
-    assert client.method_call(
-        CoreEcho(data=echo_test_data)
-    ) == CoreEchoResponse(data=echo_test_data)
+    assert client.request(method_params) == [
+        InvocationResponseOrError(
+            response=CoreEchoResponse(data=echo_test_data), id="0.Core/echo"
+        ),
+        InvocationResponseOrError(
+            response=MailboxGetResponse(
+                account_id="u1138",
+                not_found=[],
+                data=[],
+                state="1000",
+            ),
+            id="1.Mailbox/get",
+        ),
+    ]
 
 
-@pytest.mark.parametrize(
-    "method_params",
-    [
-        [CoreEcho(data=echo_test_data), CoreEcho(data=echo_test_data)],
-        [
-            ("0", CoreEcho(data=echo_test_data)),
-            ("1", CoreEcho(data=echo_test_data)),
-        ],
-    ],
-    ids=["methods_only", "custom_ids"],
-)
-def test_method_calls(
-    client: Client,
-    http_responses: responses.RequestsMock,
-    method_params: MethodList,
+@pytest.mark.parametrize("raise_errors", [True, False])
+def test_client_request_single(
+    client: Client, http_responses: responses.RequestsMock, raise_errors: bool
 ) -> None:
+    method_params = CoreEcho(data=echo_test_data)
     expected_request = {
         "methodCalls": [
             [
                 "Core/echo",
                 echo_test_data,
-                "0",
-            ],
-            [
-                "Core/echo",
-                echo_test_data,
-                "1",
+                "single.Core/echo",
             ],
         ],
         "using": ["urn:ietf:params:jmap:core"],
@@ -125,21 +173,100 @@ def test_method_calls(
             [
                 "Core/echo",
                 echo_test_data,
-                "0",
-            ],
-            [
-                "Core/echo",
-                echo_test_data,
-                "1",
+                "single.Core/echo",
             ],
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
     expected_response = CoreEchoResponse(data=echo_test_data)
-    assert client.method_calls(method_params) == [
-        ("0", expected_response),
-        ("1", expected_response),
+    if raise_errors:
+        assert (
+            client.request(method_params, raise_errors=True)
+            == expected_response
+        )
+    else:
+        assert (
+            client.request(method_params, raise_errors=False)
+            == expected_response
+        )
+
+
+def test_client_request_single_with_multiple_responses(
+    client: Client,
+    http_responses: responses.RequestsMock,
+) -> None:
+    method_params = CoreEcho(data=echo_test_data)
+    expected_request = {
+        "methodCalls": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+        ],
+        "using": ["urn:ietf:params:jmap:core"],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+        ],
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(method_params) == [
+        CoreEchoResponse(data=echo_test_data),
+        CoreEchoResponse(data=echo_test_data),
     ]
+
+
+def test_client_request_single_with_multiple_responses_error(
+    client: Client,
+    http_responses: responses.RequestsMock,
+) -> None:
+    method_params = CoreEcho(data=echo_test_data)
+    expected_request = {
+        "methodCalls": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+        ],
+        "using": ["urn:ietf:params:jmap:core"],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+        ],
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    with pytest.raises(RuntimeError):
+        client.request(method_params, single_response=True)
+
+
+def test_client_invalid_single_response_argument(client: Client) -> None:
+    with pytest.raises(ValueError):
+        client.request(
+            [CoreEcho(data=echo_test_data), MailboxGet(ids=[])],
+            single_response=True,
+        )  # type: ignore
 
 
 def test_error_unauthorized(
@@ -151,5 +278,5 @@ def test_error_unauthorized(
         status=401,
     )
     with pytest.raises(requests.exceptions.HTTPError) as e:
-        client.method_call(CoreEcho(data=echo_test_data))
+        client.request(CoreEcho(data=echo_test_data))
     assert e.value.response.status_code == 401
