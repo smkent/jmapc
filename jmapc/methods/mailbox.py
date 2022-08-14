@@ -22,7 +22,7 @@ from .base import (
 
 
 class MailboxBase:
-    model: Optional[str] = "Mailbox"
+    method_namespace: Optional[str] = "Mailbox"
     using = set([constants.JMAP_URN_MAIL])
 
 

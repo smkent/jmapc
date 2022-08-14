@@ -8,7 +8,7 @@ from .base import Method, Response
 
 
 class CoreBase:
-    model: Optional[str] = "Core"
+    method_namespace: Optional[str] = "Core"
     using = set([constants.JMAP_URN_CORE])
 
 

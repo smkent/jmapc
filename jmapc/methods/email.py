@@ -24,7 +24,7 @@ from .base import (
 
 
 class EmailBase:
-    model: Optional[str] = "Email"
+    method_namespace: Optional[str] = "Email"
     using = set([constants.JMAP_URN_MAIL])
 
 

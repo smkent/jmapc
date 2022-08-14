@@ -11,7 +11,7 @@ from .base import Changes, ChangesResponse, Get, GetResponse
 
 
 class ThreadBase:
-    model: Optional[str] = "Thread"
+    method_namespace: Optional[str] = "Thread"
     using = set([constants.JMAP_URN_MAIL])
 
 

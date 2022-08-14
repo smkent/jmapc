@@ -13,7 +13,7 @@ from ..serializer import Model
 
 class MethodBase(Model):
     using: SetType[str] = set()
-    model: Optional[str] = None
+    method_namespace: Optional[str] = None
 
     @property
     def jmap_method_name(self) -> str:
@@ -21,12 +21,12 @@ class MethodBase(Model):
 
     @classmethod
     def get_method_name(cls) -> str:
-        if not cls.model:
-            raise ValueError(f"Method {cls.__class__} has no model type")
+        if not cls.method_namespace:
+            raise ValueError(f"Method {cls.__class__} has no method namespace")
         method_type = getattr(cls, "method_type", None)
         if not method_type:
             raise ValueError(f"Method {cls.__class__} has no method type")
-        return f"{cls.model}/{method_type}"
+        return f"{cls.method_namespace}/{method_type}"
 
 
 class Method(MethodBase):

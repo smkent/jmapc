@@ -11,7 +11,7 @@ from .base import Changes, ChangesResponse, Get, GetResponse, Set, SetResponse
 
 
 class IdentityBase:
-    model: Optional[str] = "Identity"
+    method_namespace: Optional[str] = "Identity"
     using = set([constants.JMAP_URN_SUBMISSION])
 
 
