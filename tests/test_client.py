@@ -6,13 +6,14 @@ import responses
 
 from jmapc import Client
 from jmapc.auth import BearerAuth
-from jmapc.client import Invocation, InvocationOrMethod
 from jmapc.methods import (
     CoreEcho,
     CoreEchoResponse,
+    Invocation,
     InvocationResponseOrError,
     MailboxGet,
     MailboxGetResponse,
+    Request,
 )
 from jmapc.ref import Ref, ResultReference
 from jmapc.session import Session, SessionPrimaryAccount
@@ -93,7 +94,7 @@ def test_jmap_session(
 def test_client_request(
     client: Client,
     http_responses: responses.RequestsMock,
-    method_params: List[InvocationOrMethod],
+    method_params: List[Request],
 ) -> None:
     expected_request = {
         "methodCalls": [
