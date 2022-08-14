@@ -30,7 +30,9 @@ class MethodBase(Model):
 
 
 class Method(MethodBase):
-    pass
+    """
+    Base JMAP method class
+    """
 
 
 @dataclass
@@ -52,7 +54,9 @@ class ResponseCollector(MethodBase):
 
 @dataclass
 class Response(ResponseCollector):
-    pass
+    """
+    Base JMAP method response class
+    """
 
 
 @dataclass
@@ -67,16 +71,42 @@ class InvocationBase:
 
 @dataclass
 class Invocation(InvocationBase):
+    """
+    JMAP request method with client-supplied method ID
+
+    Parameters:
+        id (str): Client-supplied method ID
+        method: JMAP request method
+    """
+
     method: Method
 
 
 @dataclass
 class InvocationResponseOrError(InvocationBase):
+    """
+    JMAP response content or error type with client-supplied method ID from the
+        original request
+
+    Parameters:
+        id (str): Client-supplied method ID from original request
+        response: JMAP method response or error
+    """
+
     response: Union[Error, Response]
 
 
 @dataclass
 class InvocationResponse(InvocationResponseOrError):
+    """
+    JMAP response content with client-supplied method ID from the original
+        request
+
+    Parameters:
+        id (str): Client-supplied method ID from original request
+        response: JMAP method response
+    """
+
     response: Response
 
 

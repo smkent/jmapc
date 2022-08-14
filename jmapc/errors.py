@@ -21,6 +21,13 @@ class ErrorCollector(Model):
 
 @dataclass
 class Error(ErrorCollector):
+    """
+    Base JMAP error response type
+
+    Attributes:
+        type: JMAP error type
+    """
+
     type: str = ""
 
     def __post_init__(self) -> None:

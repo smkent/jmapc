@@ -43,6 +43,17 @@ ClientType = TypeVar("ClientType", bound="Client")
 
 @dataclass
 class EventSourceConfig:
+    """
+    Parameters for EventSource URL
+
+    Parameters:
+        types: `*` for all types, or specific event types such as `Email` or
+            `Email,CalendarEvent`
+        closeafter: If `state`, close connection after receiving an event
+        ping: EventSource ping interval (between `30` and `300`, or `0` to
+            disable)
+    """
+
     types: str = "*"
     closeafter: Literal["state", "no"] = "no"
     ping: int = 0
@@ -57,6 +68,21 @@ class Client:
         *args: Any,
         **kwargs: Any,
     ) -> ClientType:
+        """
+        Create a `Client` with API token authentication
+
+        Parameters:
+            host: Server hostname
+            api_token: API token
+
+        Other parameters:
+            last_event_id (str): Last event ID to provide to EventSource
+                endpoint
+            event_source_config (EventSourceConfig): EventSource configuration
+
+        Returns:
+            (Client):
+        """
         kwargs["auth"] = BearerAuth(api_token)
         return cls(host, *args, **kwargs)
 
@@ -69,6 +95,17 @@ class Client:
         *args: Any,
         **kwargs: Any,
     ) -> ClientType:
+        """
+        Create a `Client` with HTTP Basic authentication
+
+        Parameters:
+            host: Server hostname
+            user: Account user name
+            password: Account password
+
+        Returns:
+            (Client):
+        """
         kwargs["auth"] = requests.auth.HTTPBasicAuth(
             username=user, password=password
         )
@@ -190,6 +227,19 @@ class Client:
         Union[Sequence[ResponseOrError], ResponseOrError],
         Union[Sequence[Response], Response],
     ]:
+        """
+        Submit an API request
+
+        Parameters:
+            calls: JMAP method call or iterable of method calls
+            raise_errors: If `True`, raise JMAP error responses as exceptions.
+                Otherwise, include them in the return value.
+            single_response: When calling a single JMAP method, raise an
+                exception if the server returns multiple responses
+
+        Returns:
+            Response
+        """
         if isinstance(calls, list):
             if single_response:
                 raise ValueError(
