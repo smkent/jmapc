@@ -48,7 +48,7 @@ def test_custom_method(
     assert resp == CustomResponse(account_id="u1138", data=test_data)
 
 
-def test_result_reference_custom_method_target(
+def test_custom_method_as_result_reference_target(
     client: Client, http_responses: responses.RequestsMock
 ) -> None:
     test_data = dict(
