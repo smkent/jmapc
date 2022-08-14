@@ -23,37 +23,33 @@ from .base import (
 )
 
 
-@dataclass
-class EmailChanges(Changes):
-    name = "Email/changes"
+class EmailBase:
+    method_namespace: Optional[str] = "Email"
     using = set([constants.JMAP_URN_MAIL])
 
 
 @dataclass
-class EmailChangesResponse(ChangesResponse):
-    name = "Email/changes"
+class EmailChanges(EmailBase, Changes):
+    pass
 
 
 @dataclass
-class EmailCopy(Copy):
-    name = "Email/copy"
-    using = set([constants.JMAP_URN_MAIL])
+class EmailChangesResponse(EmailBase, ChangesResponse):
+    pass
 
+
+@dataclass
+class EmailCopy(EmailBase, Copy):
     create: Optional[Dict[str, Email]] = None
 
 
 @dataclass
-class EmailCopyResponse(CopyResponse):
-    name = "Email/copy"
-
+class EmailCopyResponse(EmailBase, CopyResponse):
     created: Optional[Dict[str, Email]] = None
 
 
 @dataclass
-class EmailGet(Get):
-    name = "Email/get"
-    using = set([constants.JMAP_URN_MAIL])
-
+class EmailGet(EmailBase, Get):
     body_properties: Optional[List[str]] = None
     fetch_text_body_values: Optional[bool] = None
     fetch_html_body_values: Optional[bool] = field(
@@ -64,51 +60,38 @@ class EmailGet(Get):
 
 
 @dataclass
-class EmailGetResponse(GetResponse):
-    name = "Email/get"
-
+class EmailGetResponse(EmailBase, GetResponse):
     data: List[Email] = field(metadata=config(field_name="list"))
 
 
 @dataclass
-class EmailQuery(Query):
-    name = "Email/query"
-    using = set([constants.JMAP_URN_MAIL])
-
+class EmailQuery(EmailBase, Query):
     filter: Optional[EmailQueryFilter] = None
     collapse_threads: Optional[bool] = None
 
 
 @dataclass
-class EmailQueryResponse(QueryResponse):
-    name = "Email/query"
+class EmailQueryResponse(EmailBase, QueryResponse):
+    pass
 
 
 @dataclass
-class EmailQueryChanges(QueryChanges):
-    name = "Email/queryChanges"
-    using = set([constants.JMAP_URN_MAIL])
-
+class EmailQueryChanges(EmailBase, QueryChanges):
     filter: Optional[EmailQueryFilter] = None
     collapse_threads: Optional[bool] = None
 
 
 @dataclass
-class EmailQueryChangesResponse(QueryChangesResponse):
-    name = "Email/queryChanges"
+class EmailQueryChangesResponse(EmailBase, QueryChangesResponse):
+    pass
 
 
 @dataclass
-class EmailSet(Set):
-    name = "Email/set"
-    using = set([constants.JMAP_URN_MAIL])
-
+class EmailSet(EmailBase, Set):
     create: Optional[Dict[str, Email]] = None
 
 
 @dataclass
-class EmailSetResponse(SetResponse):
-    name = "Email/set"
-
+class EmailSetResponse(EmailBase, SetResponse):
     created: Optional[Dict[str, Optional[Email]]]
     updated: Optional[Dict[str, Optional[Email]]]

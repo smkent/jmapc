@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 from dataclasses_json import config
 
@@ -10,25 +10,26 @@ from ..models import Thread
 from .base import Changes, ChangesResponse, Get, GetResponse
 
 
-@dataclass
-class ThreadChanges(Changes):
-    name = "Thread/changes"
+class ThreadBase:
+    method_namespace: Optional[str] = "Thread"
     using = set([constants.JMAP_URN_MAIL])
 
 
 @dataclass
-class ThreadChangesResponse(ChangesResponse):
-    name = "Thread/changes"
+class ThreadChanges(ThreadBase, Changes):
+    pass
 
 
 @dataclass
-class ThreadGet(Get):
-    name = "Thread/get"
-    using = set([constants.JMAP_URN_MAIL])
+class ThreadChangesResponse(ThreadBase, ChangesResponse):
+    pass
 
 
 @dataclass
-class ThreadGetResponse(GetResponse):
-    name = "Thread/get"
+class ThreadGet(ThreadBase, Get):
+    pass
 
+
+@dataclass
+class ThreadGetResponse(ThreadBase, GetResponse):
     data: List[Thread] = field(metadata=config(field_name="list"))

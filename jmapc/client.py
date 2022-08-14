@@ -200,7 +200,9 @@ class Client:
                 method_calls.append(c)
                 continue
             method_call_id = (
-                f"{i}.{c.name}" if len(calls_list) > 1 else f"single.{c.name}"
+                f"{i}.{c.jmap_method_name}"
+                if len(calls_list) > 1
+                else f"single.{c.jmap_method_name}"
             )
             method_calls.append(Invocation(id=method_call_id, method=c))
         # Collect set of JMAP URNs used by all methods in this request
@@ -217,7 +219,7 @@ class Client:
                 "using": sorted(using),
                 "methodCalls": [
                     [
-                        c.method.name,
+                        c.method.jmap_method_name,
                         c.method.to_dict(
                             account_id=self.account_id,
                             method_calls_slice=method_calls[:i],
@@ -243,7 +245,7 @@ class Client:
                 if single_response:
                     raise RuntimeError(
                         f"{len(result)} results received for single method "
-                        f"call {method_calls[0].method.name}"
+                        f"call {method_calls[0].method.jmap_method_name}"
                     )
                 return [r.response for r in result]
             return result[0].response
@@ -269,6 +271,7 @@ class Client:
             List[Tuple[str, Dict[str, Any], str]],
             data.get("methodResponses", []),
         )
+
         return [
             InvocationResponseOrError(
                 id=method_id,

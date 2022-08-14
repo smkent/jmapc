@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Type, Union, cast
+from typing import Any, Dict, List, Optional
+from typing import Set as SetType
+from typing import Type, Union, cast
 
 from ..errors import Error
 from ..models import AddedItem, Comparator, ListOrRef, SetError, StrOrRef
@@ -9,11 +12,25 @@ from ..serializer import Model
 
 
 class MethodBase(Model):
-    name = ""
+    using: SetType[str] = set()
+    method_namespace: Optional[str] = None
+
+    @property
+    def jmap_method_name(self) -> str:
+        return getattr(self, "jmap_method", None) or self.get_method_name()
+
+    @classmethod
+    def get_method_name(cls) -> str:
+        if not cls.method_namespace:
+            raise ValueError(f"Method {cls.__class__} has no method namespace")
+        method_type = getattr(cls, "method_type", None)
+        if not method_type:
+            raise ValueError(f"Method {cls.__class__} has no method type")
+        return f"{cls.method_namespace}/{method_type}"
 
 
 class Method(MethodBase):
-    using: set[str] = set()
+    pass
 
 
 @dataclass
@@ -26,8 +43,9 @@ class ResponseCollector(MethodBase):
 
     @classmethod
     def __init_subclass__(cls) -> None:
-        if cls.name:
-            ResponseCollector.response_types[cls.name] = cast(
+        with contextlib.suppress(ValueError):
+            method_name = cls.get_method_name()
+            ResponseCollector.response_types[method_name] = cast(
                 Type[Response], cls
             )
 
@@ -62,14 +80,18 @@ class InvocationResponse(InvocationResponseOrError):
     response: Response
 
 
+class ChangesMethod:
+    method_type: Optional[str] = "changes"
+
+
 @dataclass
-class Changes(MethodWithAccount):
+class Changes(MethodWithAccount, ChangesMethod):
     since_state: str
     max_changes: Optional[int] = None
 
 
 @dataclass
-class ChangesResponse(ResponseWithAccount):
+class ChangesResponse(ResponseWithAccount, ChangesMethod):
     old_state: str
     new_state: str
     has_more_changes: bool
@@ -78,8 +100,12 @@ class ChangesResponse(ResponseWithAccount):
     destroyed: List[str]
 
 
+class CopyMethod:
+    method_type: Optional[str] = "copy"
+
+
 @dataclass
-class Copy(MethodWithAccount):
+class Copy(MethodWithAccount, CopyMethod):
     from_account_id: str
     if_from_in_state: Optional[str] = None
     if_in_state: Optional[str] = None
@@ -88,27 +114,35 @@ class Copy(MethodWithAccount):
 
 
 @dataclass
-class CopyResponse(ResponseWithAccount):
+class CopyResponse(ResponseWithAccount, CopyMethod):
     from_account_id: str
     old_state: str
     new_state: str
     not_created: Optional[Dict[str, SetError]]
 
 
+class GetMethod:
+    method_type: Optional[str] = "get"
+
+
 @dataclass
-class Get(MethodWithAccount):
+class Get(MethodWithAccount, GetMethod):
     ids: Optional[ListOrRef[str]]
     properties: Optional[List[str]] = None
 
 
 @dataclass
-class GetResponse(ResponseWithAccount):
+class GetResponse(ResponseWithAccount, GetMethod):
     state: Optional[str]
     not_found: Optional[List[str]]
 
 
+class SetMethod:
+    method_type: Optional[str] = "set"
+
+
 @dataclass
-class Set(MethodWithAccount):
+class Set(MethodWithAccount, SetMethod):
     if_in_state: Optional[StrOrRef] = None
     create: Optional[Dict[str, Any]] = None
     update: Optional[Dict[str, Dict[str, Any]]] = None
@@ -116,7 +150,7 @@ class Set(MethodWithAccount):
 
 
 @dataclass
-class SetResponse(ResponseWithAccount):
+class SetResponse(ResponseWithAccount, SetMethod):
     old_state: Optional[str]
     new_state: Optional[str]
     created: Optional[Dict[str, Any]]
@@ -127,8 +161,12 @@ class SetResponse(ResponseWithAccount):
     not_destroyed: Optional[Dict[str, SetError]]
 
 
+class QueryMethod:
+    method_type: Optional[str] = "query"
+
+
 @dataclass
-class Query(MethodWithAccount):
+class Query(MethodWithAccount, QueryMethod):
     sort: Optional[List[Comparator]] = None
     position: Optional[int] = None
     anchor: Optional[str] = None
@@ -138,7 +176,7 @@ class Query(MethodWithAccount):
 
 
 @dataclass
-class QueryResponse(ResponseWithAccount):
+class QueryResponse(ResponseWithAccount, QueryMethod):
     query_state: str
     can_calculate_changes: bool
     position: int
@@ -147,8 +185,12 @@ class QueryResponse(ResponseWithAccount):
     limit: Optional[int] = None
 
 
+class QueryChangesMethod:
+    method_type: Optional[str] = "queryChanges"
+
+
 @dataclass
-class QueryChanges(MethodWithAccount):
+class QueryChanges(MethodWithAccount, QueryChangesMethod):
     sort: Optional[List[Comparator]] = None
     since_query_state: Optional[str] = None
     max_changes: Optional[int] = None
@@ -157,7 +199,7 @@ class QueryChanges(MethodWithAccount):
 
 
 @dataclass
-class QueryChangesResponse(ResponseWithAccount):
+class QueryChangesResponse(ResponseWithAccount, QueryChangesMethod):
     old_query_state: str
     new_query_state: str
     removed: List[str]

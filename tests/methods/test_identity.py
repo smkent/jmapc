@@ -97,7 +97,7 @@ def test_identity_get(
                     "not_found": [],
                     "state": "2187",
                 },
-                "single.Identity/",
+                "single.Identity/get",
             ]
         ]
     }
