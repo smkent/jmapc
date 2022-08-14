@@ -327,6 +327,28 @@ Markdown = ">=3.3"
 mkdocs = ">=1.1"
 
 [[package]]
+name = "mkdocs-gen-files"
+version = "0.3.5"
+description = "MkDocs plugin to programmatically generate documentation pages during the build"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+mkdocs = ">=1.0.3,<2.0.0"
+
+[[package]]
+name = "mkdocs-literate-nav"
+version = "0.4.1"
+description = "MkDocs plugin to specify the navigation in Markdown instead of YAML"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+mkdocs = ">=1.0.3,<2.0.0"
+
+[[package]]
 name = "mkdocs-material"
 version = "8.4.0"
 description = "Documentation that simply works"
@@ -349,6 +371,17 @@ description = "Extension pack for Python Markdown."
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "mkdocs-section-index"
+version = "0.3.4"
+description = "MkDocs plugin to allow clickable sections that lead to an index page"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+mkdocs = ">=1.1,<2.0"
 
 [[package]]
 name = "mkdocstrings"
@@ -811,7 +844,7 @@ docs = ["jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "jaraco.packaging (>=9)
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "abca9b4ed593e309a8f25d3026516864f17bcc75889affe6c1956e9557599963"
+content-hash = "08da8f052f3870b32349ee5fc95405e8547137fc01496ffd5e365b5633617c39"
 
 [metadata.files]
 atomicwrites = [
@@ -957,11 +990,23 @@ mccabe = [
 mergedeep = []
 mkdocs = []
 mkdocs-autorefs = []
+mkdocs-gen-files = [
+    {file = "mkdocs-gen-files-0.3.5.tar.gz", hash = "sha256:d90d9e1676531a0bb96b1287dc28aa41162986de4dc3c00400214724761ff6ef"},
+    {file = "mkdocs_gen_files-0.3.5-py3-none-any.whl", hash = "sha256:69562fddc662482e8f54a00a8b4ede5166ad5384ae4dbb0469f1f338ef3285ca"},
+]
+mkdocs-literate-nav = [
+    {file = "mkdocs-literate-nav-0.4.1.tar.gz", hash = "sha256:9efe26b662f2f901cae5807bfd51446d30ea7e033c2bc43a15d6282c7dfac1ab"},
+    {file = "mkdocs_literate_nav-0.4.1-py3-none-any.whl", hash = "sha256:a4b761792ba21defbe2dfd5e0de6ba451639e1ca0f0661c37eda83cc6261e4f9"},
+]
 mkdocs-material = [
     {file = "mkdocs-material-8.4.0.tar.gz", hash = "sha256:6c0a6e6cda8b43956e0c562374588160af8110584a1444f422b1cfd91930f9c7"},
     {file = "mkdocs_material-8.4.0-py2.py3-none-any.whl", hash = "sha256:ef6641e1910d4f217873ac376b4594f3157dca3949901b88b4991ba8e5477577"},
 ]
 mkdocs-material-extensions = []
+mkdocs-section-index = [
+    {file = "mkdocs-section-index-0.3.4.tar.gz", hash = "sha256:050151bfe7c0e374f197335e0ecb19c45b53dbafc0f817aa203f0cc24bcf7d10"},
+    {file = "mkdocs_section_index-0.3.4-py3-none-any.whl", hash = "sha256:214f7a6df9d35a5772e9577f3899ff3edd90044064589e6dd4d84615b72a8024"},
+]
 mkdocstrings = []
 mkdocstrings-python = [
     {file = "mkdocstrings-python-0.7.1.tar.gz", hash = "sha256:c334b382dca202dfa37071c182418a6df5818356a95d54362a2b24822ca3af71"},
