@@ -66,7 +66,12 @@ class ModelToDictPostprocessor:
             raise ValueError("No previous calls for reference")
         ref_target = self.resolve_ref_target(ref)
         return ResultReference(
-            name=self.method_calls_slice[ref_target].method.name,
+            name=(
+                getattr(
+                    self.method_calls_slice[ref_target].method, "name", None
+                )
+                or self.method_calls_slice[ref_target].method.method_name()
+            ),
             path=ref.path,
             result_of=self.method_calls_slice[ref_target].id,
         )

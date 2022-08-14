@@ -21,70 +21,60 @@ from .base import (
 )
 
 
-@dataclass
-class MailboxChanges(Changes):
-    name = "Mailbox/changes"
+class MailboxBase:
+    model: Optional[str] = "Mailbox"
     using = set([constants.JMAP_URN_MAIL])
 
 
 @dataclass
-class MailboxChangesResponse(ChangesResponse):
-    name = "Mailbox/changes"
+class MailboxChanges(MailboxBase, Changes):
+    pass
 
 
 @dataclass
-class MailboxGet(Get):
-    name = "Mailbox/get"
-    using = set([constants.JMAP_URN_MAIL])
+class MailboxChangesResponse(MailboxBase, ChangesResponse):
+    pass
 
 
 @dataclass
-class MailboxGetResponse(GetResponse):
-    name = "Mailbox/get"
+class MailboxGet(MailboxBase, Get):
+    pass
 
+
+@dataclass
+class MailboxGetResponse(MailboxBase, GetResponse):
     data: List[Mailbox] = field(metadata=config(field_name="list"))
 
 
 @dataclass
-class MailboxQuery(Query):
-    name = "Mailbox/query"
-    using = set([constants.JMAP_URN_MAIL])
-
+class MailboxQuery(MailboxBase, Query):
     filter: Optional[MailboxQueryFilter] = None
     sort_as_tree: bool = False
     filter_as_tree: bool = False
 
 
 @dataclass
-class MailboxQueryResponse(QueryResponse):
-    name = "Mailbox/query"
+class MailboxQueryResponse(MailboxBase, QueryResponse):
+    pass
 
 
 @dataclass
-class MailboxQueryChanges(QueryChanges):
-    name = "Mailbox/queryChanges"
-    using = set([constants.JMAP_URN_MAIL])
-
+class MailboxQueryChanges(MailboxBase, QueryChanges):
     filter: Optional[MailboxQueryFilter] = None
 
 
 @dataclass
-class MailboxQueryChangesResponse(QueryChangesResponse):
-    name = "Mailbox/queryChanges"
+class MailboxQueryChangesResponse(MailboxBase, QueryChangesResponse):
+    pass
 
 
 @dataclass
-class MailboxSet(Set):
-    name = "Mailbox/set"
-    using = set([constants.JMAP_URN_MAIL])
-
+class MailboxSet(MailboxBase, Set):
     create: Optional[Dict[str, Mailbox]] = None
     on_destroy_remove_emails: bool = False
 
 
 @dataclass
-class MailboxSetResponse(SetResponse):
-    name = "Mailbox/set"
-
+class MailboxSetResponse(MailboxBase, SetResponse):
     created: Optional[Dict[str, Optional[Mailbox]]]
     updated: Optional[Dict[str, Optional[Mailbox]]]

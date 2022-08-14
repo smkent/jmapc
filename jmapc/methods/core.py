@@ -7,11 +7,17 @@ from .. import constants
 from .base import Method, Response
 
 
-@dataclass
-class CoreEcho(Method):
-    name = "Core/echo"
+class CoreBase:
+    model: Optional[str] = "Core"
     using = set([constants.JMAP_URN_CORE])
 
+
+class EchoMethod:
+    method_type: Optional[str] = "echo"
+
+
+@dataclass
+class CoreEcho(CoreBase, EchoMethod, Method):
     def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         return self.data or dict()
 
@@ -19,8 +25,7 @@ class CoreEcho(Method):
 
 
 @dataclass
-class CoreEchoResponse(Response):
-    name = "Core/echo"
+class CoreEchoResponse(CoreBase, EchoMethod, Response):
     data: Optional[Dict[str, Any]] = None
 
     @classmethod

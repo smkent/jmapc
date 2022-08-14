@@ -21,69 +21,61 @@ from .base import (
 )
 
 
-@dataclass
-class EmailSubmissionChanges(Changes):
-    name = "EmailSubmission/changes"
+class EmailSubmissionBase:
+    model: Optional[str] = "EmailSubmission"
     using = set([constants.JMAP_URN_SUBMISSION])
 
 
 @dataclass
-class EmailSubmissionChangesResponse(ChangesResponse):
-    name = "EmailSubmission/changes"
+class EmailSubmissionChanges(EmailSubmissionBase, Changes):
+    pass
 
 
 @dataclass
-class EmailSubmissionGet(Get):
-    name = "EmailSubmission/get"
-    using = set([constants.JMAP_URN_SUBMISSION])
+class EmailSubmissionChangesResponse(EmailSubmissionBase, ChangesResponse):
+    pass
 
 
 @dataclass
-class EmailSubmissionGetResponse(GetResponse):
-    name = "EmailSubmission/get"
+class EmailSubmissionGet(EmailSubmissionBase, Get):
+    pass
 
+
+@dataclass
+class EmailSubmissionGetResponse(EmailSubmissionBase, GetResponse):
     data: List[EmailSubmission] = field(metadata=config(field_name="list"))
 
 
 @dataclass
-class EmailSubmissionQuery(Query):
-    name = "EmailSubmission/query"
-    using = set([constants.JMAP_URN_SUBMISSION])
-
+class EmailSubmissionQuery(EmailSubmissionBase, Query):
     filter: Optional[EmailSubmissionQueryFilter] = None
 
 
 @dataclass
-class EmailSubmissionQueryResponse(QueryResponse):
-    name = "EmailSubmission/query"
+class EmailSubmissionQueryResponse(EmailSubmissionBase, QueryResponse):
+    pass
 
 
 @dataclass
-class EmailSubmissionQueryChanges(QueryChanges):
-    name = "EmailSubmission/queryChanges"
-    using = set([constants.JMAP_URN_SUBMISSION])
-
+class EmailSubmissionQueryChanges(EmailSubmissionBase, QueryChanges):
     filter: Optional[EmailSubmissionQueryFilter] = None
 
 
 @dataclass
-class EmailSubmissionQueryChangesResponse(QueryChangesResponse):
-    name = "EmailSubmission/queryChanges"
+class EmailSubmissionQueryChangesResponse(
+    EmailSubmissionBase, QueryChangesResponse
+):
+    pass
 
 
 @dataclass
-class EmailSubmissionSet(Set):
-    name = "EmailSubmission/set"
-    using = set([constants.JMAP_URN_SUBMISSION])
-
+class EmailSubmissionSet(EmailSubmissionBase, Set):
     create: Optional[Dict[str, EmailSubmission]] = None
     on_success_update_email: Optional[Dict[str, Any]] = None
     on_success_destroy_email: Optional[List[str]] = None
 
 
 @dataclass
-class EmailSubmissionSetResponse(SetResponse):
-    name = "EmailSubmission/set"
-
+class EmailSubmissionSetResponse(EmailSubmissionBase, SetResponse):
     created: Optional[Dict[str, Optional[EmailSubmission]]]
     updated: Optional[Dict[str, Optional[EmailSubmission]]]

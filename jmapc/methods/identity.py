@@ -10,43 +10,37 @@ from ..models import Identity, ListOrRef
 from .base import Changes, ChangesResponse, Get, GetResponse, Set, SetResponse
 
 
-@dataclass
-class IdentityChanges(Changes):
-    name = "Identity/changes"
+class IdentityBase:
+    model: Optional[str] = "Identity"
     using = set([constants.JMAP_URN_SUBMISSION])
 
 
 @dataclass
-class IdentityChangesResponse(ChangesResponse):
-    name = "Identity/changes"
+class IdentityChanges(IdentityBase, Changes):
+    pass
 
 
 @dataclass
-class IdentityGet(Get):
-    name = "Identity/get"
-    using = set([constants.JMAP_URN_SUBMISSION])
+class IdentityChangesResponse(IdentityBase, ChangesResponse):
+    pass
 
+
+@dataclass
+class IdentityGet(IdentityBase, Get):
     ids: Optional[ListOrRef[str]] = None
 
 
 @dataclass
-class IdentityGetResponse(GetResponse):
-    name = "Identity/get"
-
+class IdentityGetResponse(IdentityBase, GetResponse):
     data: List[Identity] = field(metadata=config(field_name="list"))
 
 
 @dataclass
-class IdentitySet(Set):
-    name = "Identity/set"
-    using = set([constants.JMAP_URN_SUBMISSION])
-
+class IdentitySet(IdentityBase, Set):
     create: Optional[Dict[str, Identity]] = None
 
 
 @dataclass
-class IdentitySetResponse(SetResponse):
-    name = "Identity/set"
-
+class IdentitySetResponse(IdentityBase, SetResponse):
     created: Optional[Dict[str, Optional[Identity]]]
     updated: Optional[Dict[str, Optional[Identity]]]
