@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import responses
 
 from jmapc import (
+    AddedItem,
     Address,
     Client,
     EmailSubmission,
@@ -18,6 +19,8 @@ from jmapc.methods import (
     EmailSubmissionGet,
     EmailSubmissionGetResponse,
     EmailSubmissionQuery,
+    EmailSubmissionQueryChanges,
+    EmailSubmissionQueryChangesResponse,
     EmailSubmissionQueryResponse,
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
@@ -222,6 +225,75 @@ def test_email_submission_query(
         position=42,
         total=9001,
         limit=256,
+    )
+
+
+def test_email_submission_query_changes(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "undoStatus": "final",
+                    },
+                    "sinceQueryState": "1000",
+                    "calculateTotal": False,
+                },
+                "single.EmailSubmission/queryChanges",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/queryChanges",
+                {
+                    "accountId": "u1138",
+                    "oldQueryState": "1000",
+                    "newQueryState": "1003",
+                    "added": [
+                        {
+                            "id": "S2000",
+                            "index": 3,
+                        },
+                        {
+                            "id": "S2001",
+                            "index": 8,
+                        },
+                    ],
+                    "removed": ["S2008"],
+                    "total": 42,
+                },
+                "single.EmailSubmission/queryChanges",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailSubmissionQueryChanges(
+            filter=EmailSubmissionQueryFilterCondition(
+                undo_status=UndoStatus.FINAL
+            ),
+            since_query_state="1000",
+        )
+    ) == EmailSubmissionQueryChangesResponse(
+        account_id="u1138",
+        old_query_state="1000",
+        new_query_state="1003",
+        removed=["S2008"],
+        added=[
+            AddedItem(id="S2000", index=3),
+            AddedItem(id="S2001", index=8),
+        ],
+        total=42,
     )
 
 

@@ -13,6 +13,8 @@ from .base import (
     Get,
     GetResponse,
     Query,
+    QueryChanges,
+    QueryChangesResponse,
     QueryResponse,
     Set,
     SetResponse,
@@ -54,6 +56,19 @@ class EmailSubmissionQuery(Query):
 @dataclass
 class EmailSubmissionQueryResponse(QueryResponse):
     name = "EmailSubmission/query"
+
+
+@dataclass
+class EmailSubmissionQueryChanges(QueryChanges):
+    name = "EmailSubmission/queryChanges"
+    using = set([constants.JMAP_URN_SUBMISSION])
+
+    filter: Optional[EmailSubmissionQueryFilter] = None
+
+
+@dataclass
+class EmailSubmissionQueryChangesResponse(QueryChangesResponse):
+    name = "EmailSubmission/queryChanges"
 
 
 @dataclass
