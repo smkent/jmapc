@@ -6,6 +6,7 @@ from jmapc import (
     Address,
     Client,
     EmailSubmission,
+    EmailSubmissionQueryFilterCondition,
     Envelope,
     SetError,
     UndoStatus,
@@ -16,6 +17,8 @@ from jmapc.methods import (
     EmailSubmissionChangesResponse,
     EmailSubmissionGet,
     EmailSubmissionGetResponse,
+    EmailSubmissionQuery,
+    EmailSubmissionQueryResponse,
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
 )
@@ -163,6 +166,62 @@ def test_email_submission_get(
                 send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
             ),
         ],
+    )
+
+
+def test_email_submission_query(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "EmailSubmission/query",
+                {
+                    "accountId": "u1138",
+                    "filter": {
+                        "undoStatus": "final",
+                    },
+                },
+                "single.EmailSubmission/query",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:submission",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "EmailSubmission/query",
+                {
+                    "accountId": "u1138",
+                    "ids": ["S2000", "S2001"],
+                    "queryState": "4000",
+                    "canCalculateChanges": True,
+                    "position": 42,
+                    "total": 9001,
+                    "limit": 256,
+                },
+                "single.EmailSubmission/query",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    assert client.request(
+        EmailSubmissionQuery(
+            filter=EmailSubmissionQueryFilterCondition(
+                undo_status=UndoStatus.FINAL,
+            )
+        )
+    ) == EmailSubmissionQueryResponse(
+        account_id="u1138",
+        ids=["S2000", "S2001"],
+        query_state="4000",
+        can_calculate_changes=True,
+        position=42,
+        total=9001,
+        limit=256,
     )
 
 

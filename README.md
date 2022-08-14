@@ -22,6 +22,7 @@ Currently implemented:
   * `Email/set`
   * `EmailSubmission/changes`
   * `EmailSubmission/get`
+  * `EmailSubmission/query`
   * `EmailSubmission/set`
   * `Identity/*` (`get`, `changes`, `set`)
   * `Mailbox/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
