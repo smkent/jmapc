@@ -35,7 +35,7 @@ class StateChange(Model):
 
 @dataclass
 class Event(Model):
-    id: str
+    id: Optional[str]
     data: StateChange
 
     @classmethod
