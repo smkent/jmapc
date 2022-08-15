@@ -102,7 +102,7 @@ class Client:
                 last_id=self._last_event_id,
             )
         for event in self._events:
-            if not event.id or event.event != "state":
+            if event.event != "state":
                 continue
             yield Event.load_from_sseclient_event(event)
 

@@ -137,7 +137,6 @@ def test_event_source(
             data="also-ignore-me",
         ),
         sseclient.Event(
-            id="8003",
             event="state",
             data=json.dumps(
                 {"changed": {"u1138": {"Email": "2000", "Mailbox": "2222"}}}
@@ -164,7 +163,7 @@ def test_event_source(
             ),
         ),
         Event(
-            id="8003",
+            id=None,
             data=StateChange(
                 changed={
                     "u1138": TypeState(
