@@ -4,6 +4,10 @@ name: CI
 on:
   pull_request:
   push:
+    branches:
+      - main
+    tags:
+      - '*'
   workflow_dispatch:
 
 jobs:
@@ -20,48 +24,45 @@ jobs:
         python-version:
           - "3.10"
         poetry-version:
-          - "1.1.11"
+          - "1.1.14"
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: 💾 Check out repository
+        uses: actions/checkout@v3
 
       - name: ✨ Install Poetry
-        uses: abatilo/actions-poetry@v2.0.0
-        with:
-          poetry-version: ${{ matrix.poetry-version }}
+        run: pip install poetry==${{ matrix.poetry-version }}
 
-      - name: 🐍 Install dependencies
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+
+      - name: 🛠️ Install dependencies
         run: |
           pip install poetry-dynamic-versioning
           poetry install
 
       - name: 🔥 Test
-        run: poetry run tox
+        run: poetry run poe test
 
       - name: 📊 Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-        if: |
-          !github.event.repository.fork
-          && env.ENABLE_COVERAGE
+        if: env.ENABLE_COVERAGE
         with:
           fail_ci_if_error: true
 
       - name: 📦 Build package
-        if: |
-          !github.event.repository.fork
-          && env.ENABLE_PYPI_PUBLISH
+        if: env.ENABLE_PYPI_PUBLISH
         run: poetry build
 
       - name: 🔼 Publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         if: |
-          !github.event.repository.fork
-          && env.ENABLE_TEST_PYPI_PUBLISH
-          && github.event_name == 'push'
-          && startsWith(github.ref, 'refs/tags')
+          env.ENABLE_TEST_PYPI_PUBLISH &&
+          github.event_name == 'push' &&
+          startsWith(github.ref, 'refs/tags')
         with:
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
@@ -69,11 +70,10 @@ jobs:
 
       - name: ☢️ Publish to PyPI
         if: |
-          !github.event.repository.fork
-          && env.ENABLE_PYPI_PUBLISH
-          && github.event_name == 'push'
-          && startsWith(github.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@master
+          env.ENABLE_PYPI_PUBLISH &&
+          github.event_name == 'push' &&
+          startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
