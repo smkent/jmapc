@@ -2,8 +2,8 @@
 
 [![PyPI](https://img.shields.io/pypi/v/jmapc)][pypi]
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)][pypi]
-[![Build](https://img.shields.io/github/checks-status/smkent/jmapc/master?label=build)][gh-actions]
-[![codecov](https://codecov.io/gh/smkent/jmapc/branch/master/graph/badge.svg)][codecov]
+[![Build](https://img.shields.io/github/checks-status/smkent/jmapc/main?label=build)][gh-actions]
+[![codecov](https://codecov.io/gh/smkent/jmapc/branch/main/graph/badge.svg)][codecov]
 [![GitHub stars](https://img.shields.io/github/stars/smkent/jmapc?style=social)][repo]
 
 [![jmapc][logo]](#)
@@ -72,8 +72,8 @@ Created from [smkent/cookie-python][cookie-python] using
 [codecov]: https://codecov.io/gh/smkent/jmapc
 [cookie-python]: https://github.com/smkent/cookie-python
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
-[gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amaster
-[logo]: https://raw.github.com/smkent/jmapc/master/img/jmapc.png
+[gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amain
+[logo]: https://raw.github.com/smkent/jmapc/main/img/jmapc.png
 [jmapc-pypi]: https://pypi.org/project/jmapc/
 [jmapio]: https://jmap.io
 [poetry]: https://python-poetry.org/docs/#installation
