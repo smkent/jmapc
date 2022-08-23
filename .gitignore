@@ -6,4 +6,5 @@
 .venv/
 bin/
 dist/
+tests/pytest.xml
 coverage.xml

@@ -31,12 +31,14 @@ sseclient = "^0.0.27"
 
 [tool.poetry.dev-dependencies]
 black = "*"
+cruft = "*"
 flake8 = "*"
 isort = "*"
 mypy = "*"
-poethepoet = "^0.12.3"
+poethepoet = "*"
 pytest = "*"
 pytest-cov = "*"
+pytest-github-actions-annotate-failures = "*"
 pytest-sugar = "*"
 tox = "*"
 types-python-dateutil = "^2.8.9"
@@ -69,6 +71,9 @@ source = ["jmapc"]
 fail_under = 95
 show_missing = true
 
+[tool.cruft]
+skip = [".git"]
+
 [tool.isort]
 atomic = true
 profile = "black"
@@ -84,7 +89,13 @@ show_error_codes = true
 warn_unused_ignores = true
 
 [tool.pytest.ini_options]
-addopts = "--cov --cov-append --cov-report term --cov-report xml:coverage.xml"
+addopts = """\
+    --cov \
+    --cov-append \
+    --cov-report term \
+    --cov-report xml:coverage.xml \
+    --junitxml=tests/pytest.xml \
+"""
 
 [tool.tox]
 legacy_tox_ini = """

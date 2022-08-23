@@ -1,0 +1,20 @@
+{
+  "template": "https://github.com/smkent/cookie-python",
+  "commit": "5af527a8d40e490c75bffdd4ed9e13e229a18378",
+  "context": {
+    "cookiecutter": {
+      "project_name": "jmapc",
+      "project_slug": "jmapc",
+      "project_description": "JMAP client library for Python",
+      "project_license": "GPL-3.0-or-later",
+      "enable_coverage": "yes",
+      "enable_pypi_publish": "yes",
+      "author_name": "Stephen Kent",
+      "author_email": "smkent@smkent.net",
+      "github_user": "smkent",
+      "_template": "https://github.com/smkent/cookie-python"
+    }
+  },
+  "directory": null,
+  "checkout": null
+}
