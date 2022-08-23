@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from dataclasses_json import config
 
@@ -21,7 +22,9 @@ class Session(Model):
 @dataclass
 class SessionPrimaryAccount(Model):
     core: str = field(metadata=config(field_name=constants.JMAP_URN_CORE))
-    mail: str = field(metadata=config(field_name=constants.JMAP_URN_MAIL))
-    submission: str = field(
-        metadata=config(field_name=constants.JMAP_URN_SUBMISSION)
+    mail: Optional[str] = field(
+        metadata=config(field_name=constants.JMAP_URN_MAIL), default=None
+    )
+    submission: Optional[str] = field(
+        metadata=config(field_name=constants.JMAP_URN_SUBMISSION), default=None
     )
