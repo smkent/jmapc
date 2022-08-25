@@ -21,7 +21,9 @@ class Session(Model):
 
 @dataclass
 class SessionPrimaryAccount(Model):
-    core: str = field(metadata=config(field_name=constants.JMAP_URN_CORE))
+    core: Optional[str] = field(
+        metadata=config(field_name=constants.JMAP_URN_CORE), default=None
+    )
     mail: Optional[str] = field(
         metadata=config(field_name=constants.JMAP_URN_MAIL), default=None
     )

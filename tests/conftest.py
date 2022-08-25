@@ -35,25 +35,32 @@ def client() -> Iterable[Client]:
 
 
 @pytest.fixture
-def http_responses() -> Iterable[responses.RequestsMock]:
+def http_responses_base() -> Iterable[responses.RequestsMock]:
     with responses.RequestsMock() as resp_mock:
-        resp_mock.add(
-            method=responses.GET,
-            url="https://jmap-example.localhost/.well-known/jmap",
-            body=json.dumps(
-                {
-                    "apiUrl": "https://jmap-api.localhost/api",
-                    "eventSourceUrl": (
-                        "https://jmap-api.localhost/events/"
-                        "{types}/{closeafter}/{ping}"
-                    ),
-                    "username": "ness@onett.example.net",
-                    "primary_accounts": {
-                        "urn:ietf:params:jmap:core": "u1138",
-                        "urn:ietf:params:jmap:mail": "u1138",
-                        "urn:ietf:params:jmap:submission": "u1138",
-                    },
-                },
-            ),
-        )
         yield resp_mock
+
+
+@pytest.fixture
+def http_responses(
+    http_responses_base: responses.RequestsMock,
+) -> Iterable[responses.RequestsMock]:
+    http_responses_base.add(
+        method=responses.GET,
+        url="https://jmap-example.localhost/.well-known/jmap",
+        body=json.dumps(
+            {
+                "apiUrl": "https://jmap-api.localhost/api",
+                "eventSourceUrl": (
+                    "https://jmap-api.localhost/events/"
+                    "{types}/{closeafter}/{ping}"
+                ),
+                "username": "ness@onett.example.net",
+                "primary_accounts": {
+                    "urn:ietf:params:jmap:core": "u1138",
+                    "urn:ietf:params:jmap:mail": "u1138",
+                    "urn:ietf:params:jmap:submission": "u1138",
+                },
+            },
+        ),
+    )
+    yield http_responses_base

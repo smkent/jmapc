@@ -125,7 +125,14 @@ class Client:
 
     @property
     def account_id(self) -> str:
-        return self.jmap_session.primary_accounts.mail
+        primary_account_id = (
+            self.jmap_session.primary_accounts.core
+            or self.jmap_session.primary_accounts.mail
+            or self.jmap_session.primary_accounts.submission
+        )
+        if not primary_account_id:
+            raise Exception("No primary account ID found")
+        return primary_account_id
 
     @overload
     def request(

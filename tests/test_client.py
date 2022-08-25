@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 import pytest
@@ -59,6 +60,32 @@ def test_jmap_session(
             submission="u1138",
         ),
     )
+
+
+def test_jmap_session_no_account(
+    http_responses_base: responses.RequestsMock,
+) -> None:
+    http_responses_base.add(
+        method=responses.GET,
+        url="https://jmap-example.localhost/.well-known/jmap",
+        body=json.dumps(
+            {
+                "apiUrl": "https://jmap-api.localhost/api",
+                "eventSourceUrl": (
+                    "https://jmap-api.localhost/events/"
+                    "{types}/{closeafter}/{ping}"
+                ),
+                "username": "ness@onett.example.net",
+                "primary_accounts": {},
+            },
+        ),
+    )
+    client = Client.create_with_api_token(
+        "jmap-example.localhost", api_token="ness__pk_fire"
+    )
+    with pytest.raises(Exception) as e:
+        client.account_id
+    assert str(e.value) == "No primary account ID found"
 
 
 @pytest.mark.parametrize(
