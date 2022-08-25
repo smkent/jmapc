@@ -14,9 +14,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  Test:
-    uses: ./.github/workflows/ci.yml
-
   Publish:
     name: Publish package for ${{ github.ref_name }}
 
@@ -33,8 +30,19 @@ jobs:
           python_version: ${{ env.RELEASE_PYTHON_VERSION }}
           poetry_version: ${{ env.RELEASE_POETRY_VERSION }}
 
+      - name: 🔥 Test
+        run: poetry run poe test
+
+      - name: 🚒 Create test summary
+        uses: test-summary/action@v1
+        if: success() || failure()
+        with:
+          paths: tests/pytest.xml
+
       - name: 📦 Build package
-        if: ${{ env.ENABLE_PYPI_PUBLISH == 'true' }}
+        if: |
+          env.ENABLE_PYPI_PUBLISH == 'true'
+          || env.ENABLE_TEST_PYPI_PUBLISH == 'true'
         run: poetry build
 
       - name: 🔼 Publish to Test PyPI
