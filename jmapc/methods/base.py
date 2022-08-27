@@ -170,9 +170,9 @@ class Query(MethodWithAccount, QueryMethod):
     sort: Optional[List[Comparator]] = None
     position: Optional[int] = None
     anchor: Optional[str] = None
-    anchorOffset: Optional[int] = None
+    anchor_offset: Optional[int] = None
     limit: Optional[int] = None
-    calculateTotal: Optional[bool] = None
+    calculate_total: Optional[bool] = None
 
 
 @dataclass

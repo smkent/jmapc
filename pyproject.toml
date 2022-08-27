@@ -30,12 +30,15 @@ requests = "^2.27.1"
 sseclient = "^0.0.27"
 
 [tool.poetry.dev-dependencies]
+bandit = "*"
 black = "*"
 cruft = "*"
 flake8 = "*"
+flake8-bugbear = "*"
 flake8-pyproject = "*"
 isort = "*"
 mypy = "*"
+pep8-naming = "*"
 poethepoet = "*"
 pytest = "*"
 pytest-cov = "*"
@@ -79,6 +82,10 @@ shell = """
 """
 help = "Apply upstream project template updates"
 
+[tool.poe.tasks.bandit]
+cmd = "bandit -c pyproject.toml -q -r jmapc/ examples/"
+help = "Perform security analysis with bandit"
+
 [tool.poe.tasks.black]
 cmd = "black -l 79 --check --diff --color -- ${PROJECT_CODE_DIRS}"
 help = "Check code formatting with black"
@@ -104,8 +111,11 @@ sequence = ["isort_lint", "black_lint"]
 help = "Run linters"
 
 [tool.poe.tasks.test]
-sequence = ["flake8", "isort", "black", "mypy", "pytest"]
+sequence = ["flake8", "isort", "black", "mypy", "bandit", "pytest"]
 help = "Run all tests"
+
+[tool.bandit]
+skips = ["B101"]  # assert_used
 
 [tool.coverage.run]
 source = ["jmapc"]
