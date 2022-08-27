@@ -13,11 +13,3 @@ class Thread(Model):
 
     id: str
     email_ids: List[str]
-
-
-@dataclass
-class ThreadEmail(Model):
-    id: str
-    mailbox_ids: List[str]
-    is_unread: bool
-    is_flagged: bool

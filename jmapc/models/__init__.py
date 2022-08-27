@@ -36,7 +36,7 @@ from .models import (
     SetError,
     StrOrRef,
 )
-from .thread import Thread, ThreadEmail
+from .thread import Thread
 
 __all__ = [
     "AddedItem",
@@ -70,7 +70,6 @@ __all__ = [
     "StateChange",
     "StrOrRef",
     "Thread",
-    "ThreadEmail",
     "TypeState",
     "UndoStatus",
 ]

@@ -35,7 +35,6 @@ from .models import (
     StateChange,
     StrOrRef,
     Thread,
-    ThreadEmail,
     TypeState,
     UndoStatus,
 )
@@ -80,7 +79,6 @@ __all__ = [
     "StateChange",
     "StrOrRef",
     "Thread",
-    "ThreadEmail",
     "TypeState",
     "UndoStatus",
     "auth",
