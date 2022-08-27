@@ -197,12 +197,11 @@ class Client:
         Union[Sequence[ResponseOrError], ResponseOrError],
         Union[Sequence[Response], Response],
     ]:
-        if isinstance(calls, list):
-            if single_response:
-                raise ValueError(
-                    "single_response cannot be used with "
-                    "multiple JMAP request methods"
-                )
+        if isinstance(calls, list) and single_response:
+            raise ValueError(
+                "single_response cannot be used with "
+                "multiple JMAP request methods"
+            )
 
         calls_list = calls if isinstance(calls, list) else [calls]
         method_calls: List[Invocation] = []

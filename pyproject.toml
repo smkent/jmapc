@@ -36,6 +36,7 @@ cruft = "*"
 flake8 = "*"
 flake8-bugbear = "*"
 flake8-pyproject = "*"
+flake8-simplify = "*"
 isort = "*"
 mypy = "*"
 pep8-naming = "*"
@@ -67,9 +68,9 @@ shell = """
     set -e
     git checkout -b update-cookie
     git reset --hard origin/main
-    before_ref=$(jq -r .commit .cruft.json)
+    before_ref=$(python -c 'import json; print(json.load(open(".cruft.json"))["commit"])')
     cruft update -y
-    after_ref=$(jq -r .commit .cruft.json)
+    after_ref=$(python -c 'import json; print(json.load(open(".cruft.json"))["commit"])')
     poetry lock --no-update
     git add .cruft.json poetry.lock
     (
@@ -83,7 +84,7 @@ shell = """
 help = "Apply upstream project template updates"
 
 [tool.poe.tasks.bandit]
-cmd = "bandit -c pyproject.toml -q -r jmapc/ examples/"
+cmd = "bandit -c pyproject.toml -q -r $(echo \"${PROJECT_CODE_DIRS}\" | sed 's:tests/::')"
 help = "Perform security analysis with bandit"
 
 [tool.poe.tasks.black]
@@ -150,8 +151,8 @@ addopts = """\
     --cov \
     --cov-append \
     --cov-report term \
-    --cov-report xml:.coverage.xml \
-    --junitxml=tests/pytest.xml \
+    --cov-report xml:.pytest_coverage.xml \
+    --junitxml=.pytest_results.xml \
 """
 
 [tool.tox]
