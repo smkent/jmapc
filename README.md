@@ -8,8 +8,6 @@
 
 [![jmapc][logo]](#)
 
-jmapc is in initial development.
-
 Currently implemented:
 
 * Basic models
