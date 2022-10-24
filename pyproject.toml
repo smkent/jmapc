@@ -30,7 +30,7 @@ requests = "^2.27.1"
 sseclient = "^0.0.27"
 
 [tool.poetry.dev-dependencies]
-bandit = "*"
+bandit = {extras = ["toml"], version = "*"}
 black = "*"
 cruft = "*"
 flake8 = "*"
