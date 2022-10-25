@@ -17,7 +17,12 @@ from jmapc.methods import (
     Request,
 )
 from jmapc.ref import Ref, ResultReference
-from jmapc.session import Session, SessionPrimaryAccount
+from jmapc.session import (
+    Session,
+    SessionCapabilities,
+    SessionCapabilitiesCore,
+    SessionPrimaryAccount,
+)
 
 from .utils import expect_jmap_call
 
@@ -54,6 +59,22 @@ def test_jmap_session(
         event_source_url=(
             "https://jmap-api.localhost/events/{types}/{closeafter}/{ping}"
         ),
+        capabilities=SessionCapabilities(
+            core=SessionCapabilitiesCore(
+                max_size_upload=50_000_000,
+                max_concurrent_upload=4,
+                max_size_request=10_000_000,
+                max_concurrent_requests=4,
+                max_calls_in_request=16,
+                max_objects_in_get=500,
+                max_objects_in_set=500,
+                collation_algorithms={
+                    "i;ascii-numeric",
+                    "i;ascii-casemap",
+                    "i;octet",
+                },
+            )
+        ),
         primary_accounts=SessionPrimaryAccount(
             core="u1138",
             mail="u1138",
@@ -76,6 +97,22 @@ def test_jmap_session_no_account(
                     "{types}/{closeafter}/{ping}"
                 ),
                 "username": "ness@onett.example.net",
+                "capabilities": {
+                    "urn:ietf:params:jmap:core": {
+                        "maxSizeUpload": 50_000_000,
+                        "maxConcurrentUpload": 4,
+                        "maxSizeRequest": 10_000_000,
+                        "maxConcurrentRequests": 4,
+                        "maxCallsInRequest": 16,
+                        "maxObjectsInGet": 500,
+                        "maxObjectsInSet": 500,
+                        "collationAlgorithms": [
+                            "i;ascii-numeric",
+                            "i;ascii-casemap",
+                            "i;octet",
+                        ],
+                    },
+                },
                 "primary_accounts": {},
             },
         ),
