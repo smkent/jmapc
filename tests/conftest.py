@@ -9,7 +9,9 @@ import responses
 from jmapc import Client
 from jmapc.logging import log
 
-pytest.register_assert_rewrite("tests.utils")
+from .data import make_session_response
+
+pytest.register_assert_rewrite("tests.data", "tests.utils")
 
 
 @pytest.fixture(autouse=True)
@@ -47,20 +49,6 @@ def http_responses(
     http_responses_base.add(
         method=responses.GET,
         url="https://jmap-example.localhost/.well-known/jmap",
-        body=json.dumps(
-            {
-                "apiUrl": "https://jmap-api.localhost/api",
-                "eventSourceUrl": (
-                    "https://jmap-api.localhost/events/"
-                    "{types}/{closeafter}/{ping}"
-                ),
-                "username": "ness@onett.example.net",
-                "primary_accounts": {
-                    "urn:ietf:params:jmap:core": "u1138",
-                    "urn:ietf:params:jmap:mail": "u1138",
-                    "urn:ietf:params:jmap:submission": "u1138",
-                },
-            },
-        ),
+        body=json.dumps(make_session_response()),
     )
     yield http_responses_base

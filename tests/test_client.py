@@ -1,11 +1,11 @@
 import json
-from typing import List
+from typing import List, Set
 
 import pytest
 import requests
 import responses
 
-from jmapc import Client
+from jmapc import Client, constants
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -17,8 +17,14 @@ from jmapc.methods import (
     Request,
 )
 from jmapc.ref import Ref, ResultReference
-from jmapc.session import Session, SessionPrimaryAccount
+from jmapc.session import (
+    Session,
+    SessionCapabilities,
+    SessionCapabilitiesCore,
+    SessionPrimaryAccount,
+)
 
+from .data import make_session_response
 from .utils import expect_jmap_call
 
 echo_test_data = dict(
@@ -54,6 +60,22 @@ def test_jmap_session(
         event_source_url=(
             "https://jmap-api.localhost/events/{types}/{closeafter}/{ping}"
         ),
+        capabilities=SessionCapabilities(
+            core=SessionCapabilitiesCore(
+                max_size_upload=50_000_000,
+                max_concurrent_upload=4,
+                max_size_request=10_000_000,
+                max_concurrent_requests=4,
+                max_calls_in_request=16,
+                max_objects_in_get=500,
+                max_objects_in_set=500,
+                collation_algorithms={
+                    "i;ascii-numeric",
+                    "i;ascii-casemap",
+                    "i;octet",
+                },
+            )
+        ),
         primary_accounts=SessionPrimaryAccount(
             core="u1138",
             mail="u1138",
@@ -65,20 +87,12 @@ def test_jmap_session(
 def test_jmap_session_no_account(
     http_responses_base: responses.RequestsMock,
 ) -> None:
+    session_response = make_session_response()
+    session_response["primaryAccounts"] = {}
     http_responses_base.add(
         method=responses.GET,
         url="https://jmap-example.localhost/.well-known/jmap",
-        body=json.dumps(
-            {
-                "apiUrl": "https://jmap-api.localhost/api",
-                "eventSourceUrl": (
-                    "https://jmap-api.localhost/events/"
-                    "{types}/{closeafter}/{ping}"
-                ),
-                "username": "ness@onett.example.net",
-                "primary_accounts": {},
-            },
-        ),
+        body=json.dumps(session_response),
     )
     client = Client.create_with_api_token(
         "jmap-example.localhost", api_token="ness__pk_fire"
@@ -86,6 +100,38 @@ def test_jmap_session_no_account(
     with pytest.raises(Exception) as e:
         client.account_id
     assert str(e.value) == "No primary account ID found"
+
+
+@pytest.mark.parametrize(
+    "urns",
+    [
+        {constants.JMAP_URN_MAIL},
+        {constants.JMAP_URN_MAIL, constants.JMAP_URN_SUBMISSION},
+        {
+            constants.JMAP_URN_MAIL,
+            constants.JMAP_URN_SUBMISSION,
+            "https://jmap.example.com/extra/capability",
+        },
+        {
+            "https://jmap.example.com/other/extra/capability",
+        },
+    ],
+)
+def test_jmap_session_capabilities_urns(
+    client: Client,
+    http_responses_base: responses.RequestsMock,
+    urns: Set[str],
+) -> None:
+    session_response = make_session_response()
+    session_response["capabilities"].update({u: {} for u in urns})
+    http_responses_base.add(
+        method=responses.GET,
+        url="https://jmap-example.localhost/.well-known/jmap",
+        body=json.dumps(session_response),
+    )
+    assert client.jmap_session.capabilities.urns == (
+        {"urn:ietf:params:jmap:core"} | urns
+    )
 
 
 @pytest.mark.parametrize(

@@ -8,6 +8,8 @@ import sseclient
 
 from jmapc import Client, Event, EventSourceConfig, StateChange, TypeState
 
+from .data import make_session_response
+
 
 @pytest.fixture
 def mock_sseclient() -> Iterable[mock.MagicMock]:
@@ -73,21 +75,12 @@ def test_event_source_url(
         event_source_config=event_source_config,
     )
     with responses.RequestsMock() as resp_mock:
+        session_response = make_session_response()
+        session_response["eventSourceUrl"] = event_source_url
         resp_mock.add(
             method=responses.GET,
             url="https://jmap-example.localhost/.well-known/jmap",
-            body=json.dumps(
-                {
-                    "apiUrl": "https://jmap-api.localhost/api",
-                    "eventSourceUrl": event_source_url,
-                    "username": "ness@onett.example.net",
-                    "primary_accounts": {
-                        "urn:ietf:params:jmap:core": "u1138",
-                        "urn:ietf:params:jmap:mail": "u1138",
-                        "urn:ietf:params:jmap:submission": "u1138",
-                    },
-                },
-            ),
+            body=json.dumps(session_response),
         )
         with pytest.raises(StopIteration):
             next(client.events)
