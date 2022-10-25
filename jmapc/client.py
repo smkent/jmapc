@@ -88,8 +88,6 @@ class Client:
         self._event_source_config: EventSourceConfig = (
             event_source_config or EventSourceConfig()
         )
-        self._jmap_session: Optional[Session] = None
-        self._requests_session: Optional[requests.Session] = None
         self._events: Optional[sseclient.SSEClient] = None
 
     @property
