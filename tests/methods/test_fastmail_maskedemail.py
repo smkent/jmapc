@@ -3,13 +3,13 @@ from datetime import datetime, timezone
 import responses
 
 from jmapc import Client
-from jmapc.methods.fastmail_maskedemail import (
+from jmapc.fastmail import (
+    MaskedEmail,
     MaskedEmailGet,
     MaskedEmailGetResponse,
     MaskedEmailSet,
     MaskedEmailSetResponse,
 )
-from jmapc.models.fastmail_maskedemail import MaskedEmail
 
 from ..utils import expect_jmap_call
 

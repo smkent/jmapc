@@ -1,4 +1,4 @@
-from . import auth, errors, methods, models
+from . import auth, errors, fastmail, methods, models
 from .__version__ import __version__ as version
 from .client import Client, EventSourceConfig
 from .errors import Error
@@ -82,6 +82,7 @@ __all__ = [
     "TypeState",
     "UndoStatus",
     "auth",
+    "fastmail",
     "errors",
     "log",
     "methods",
