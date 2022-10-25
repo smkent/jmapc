@@ -5,8 +5,8 @@ from typing import Dict, List, Optional
 
 from dataclasses_json import config
 
-from ..models.fastmail_maskedemail import MaskedEmail
-from .base import Get, GetResponse, Set, SetResponse
+from ..methods.base import Get, GetResponse, Set, SetResponse
+from .maskedemail_models import MaskedEmail
 
 URN = "https://www.fastmail.com/dev/maskedemail"
 

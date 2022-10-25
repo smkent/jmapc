@@ -1,10 +1,10 @@
-from ..methods.fastmail_maskedemail import (
+from .maskedemail_methods import (
     MaskedEmailGet,
     MaskedEmailGetResponse,
     MaskedEmailSet,
     MaskedEmailSetResponse,
 )
-from ..models.fastmail_maskedemail import MaskedEmail
+from .maskedemail_models import MaskedEmail
 
 __all__ = [
     "MaskedEmail",
