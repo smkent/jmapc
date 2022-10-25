@@ -1,9 +1,8 @@
-from __future__ import annotations
-
+import functools
 from dataclasses import dataclass, field
 from typing import Optional, Set
 
-from dataclasses_json import config
+from dataclasses_json import CatchAll, Undefined, config, dataclass_json
 
 from . import constants
 from .serializer import Model
@@ -14,15 +13,23 @@ class Session(Model):
     username: str
     api_url: str
     event_source_url: str
-    primary_accounts: SessionPrimaryAccount
-    capabilities: SessionCapabilities
+    primary_accounts: "SessionPrimaryAccount"
+    capabilities: "SessionCapabilities"
 
 
+@dataclass_json(undefined=Undefined.INCLUDE)
 @dataclass
 class SessionCapabilities(Model):
-    core: SessionCapabilitiesCore = field(
+    # dataclasses_json.CatchAll Currently does not work with
+    # from __future__ import annotations
+    core: "SessionCapabilitiesCore" = field(
         metadata=config(field_name=constants.JMAP_URN_CORE)
     )
+    extensions: CatchAll = field(default_factory=dict)
+
+    @functools.cached_property
+    def urns(self) -> Set[str]:
+        return set(self.to_dict().keys())
 
 
 @dataclass

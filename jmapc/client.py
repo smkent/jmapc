@@ -213,17 +213,22 @@ class Client:
             )
             method_calls.append(Invocation(id=method_call_id, method=c))
         # Collect set of JMAP URNs used by all methods in this request
-        using = list(
-            set([constants.JMAP_URN_CORE]).union(
-                *[c.method.using for c in method_calls]
-            )
+        using = set([constants.JMAP_URN_CORE]).union(
+            *[c.method.using for c in method_calls]
         )
+        # Validate all requested JMAP URNs are supported by the server
+        unsupported_urns = using - self.jmap_session.capabilities.urns
+        if unsupported_urns:
+            log.warning(
+                "URNs in request are not in server capabilities: "
+                f"{', '.join(sorted(unsupported_urns))}"
+            )
         # Execute request
         result: Union[
             Sequence[InvocationResponseOrError], Sequence[InvocationResponse]
         ] = self._api_request(
             {
-                "using": sorted(using),
+                "using": sorted(list(using)),
                 "methodCalls": [
                     [
                         c.method.jmap_method_name,

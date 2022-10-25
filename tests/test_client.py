@@ -1,11 +1,11 @@
 import json
-from typing import List
+from typing import List, Set
 
 import pytest
 import requests
 import responses
 
-from jmapc import Client
+from jmapc import Client, constants
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -100,6 +100,38 @@ def test_jmap_session_no_account(
     with pytest.raises(Exception) as e:
         client.account_id
     assert str(e.value) == "No primary account ID found"
+
+
+@pytest.mark.parametrize(
+    "urns",
+    [
+        {constants.JMAP_URN_MAIL},
+        {constants.JMAP_URN_MAIL, constants.JMAP_URN_SUBMISSION},
+        {
+            constants.JMAP_URN_MAIL,
+            constants.JMAP_URN_SUBMISSION,
+            "https://jmap.example.com/extra/capability",
+        },
+        {
+            "https://jmap.example.com/other/extra/capability",
+        },
+    ],
+)
+def test_jmap_session_capabilities_urns(
+    client: Client,
+    http_responses_base: responses.RequestsMock,
+    urns: Set[str],
+) -> None:
+    session_response = make_session_response()
+    session_response["capabilities"].update({u: {} for u in urns})
+    http_responses_base.add(
+        method=responses.GET,
+        url="https://jmap-example.localhost/.well-known/jmap",
+        body=json.dumps(session_response),
+    )
+    assert client.jmap_session.capabilities.urns == (
+        {"urn:ietf:params:jmap:core"} | urns
+    )
 
 
 @pytest.mark.parametrize(
