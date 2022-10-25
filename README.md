@@ -24,6 +24,8 @@ Currently implemented:
   * `Mailbox/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
   * `Thread/*` (`get`, `changes`)
   * Arbitrary methods via the `CustomMethod` class
+* Fastmail-specific methods:
+  * [`MaskedEmail/*` (`get`, `set`)][fastmail-maskedemail]
 * Combined requests with support for result references
 * Basic JMAP method response error handling
 * EventSource event handling
@@ -70,6 +72,7 @@ Created from [smkent/cookie-python][cookie-python] using
 [codecov]: https://codecov.io/gh/smkent/jmapc
 [cookie-python]: https://github.com/smkent/cookie-python
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
+[fastmail-maskedemail]: https://www.fastmail.com/developer/maskedemail/
 [gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amain
 [logo]: https://raw.github.com/smkent/jmapc/main/img/jmapc.png
 [jmapc-pypi]: https://pypi.org/project/jmapc/
