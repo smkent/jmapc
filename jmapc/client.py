@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import json
 from dataclasses import asdict, dataclass
 from typing import (
@@ -106,22 +107,17 @@ class Client:
                 continue
             yield Event.load_from_sseclient_event(event)
 
-    @property
+    @functools.cached_property
     def requests_session(self) -> requests.Session:
-        if not self._requests_session:
-            self._requests_session = requests.Session()
-            self._requests_session.auth = self._auth
-        return self._requests_session
+        requests_session = requests.Session()
+        requests_session.auth = self._auth
+        return requests_session
 
-    @property
+    @functools.cached_property
     def jmap_session(self) -> Session:
-        if not self._jmap_session:
-            r = self.requests_session.get(
-                f"https://{self._host}/.well-known/jmap"
-            )
-            r.raise_for_status()
-            self._jmap_session = Session.from_dict(r.json())
-        return self._jmap_session
+        r = self.requests_session.get(f"https://{self._host}/.well-known/jmap")
+        r.raise_for_status()
+        return Session.from_dict(r.json())
 
     @property
     def account_id(self) -> str:
