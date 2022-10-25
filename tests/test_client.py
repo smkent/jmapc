@@ -24,6 +24,7 @@ from jmapc.session import (
     SessionPrimaryAccount,
 )
 
+from .data import make_session_response
 from .utils import expect_jmap_call
 
 echo_test_data = dict(
@@ -86,36 +87,12 @@ def test_jmap_session(
 def test_jmap_session_no_account(
     http_responses_base: responses.RequestsMock,
 ) -> None:
+    session_response = make_session_response()
+    session_response["primaryAccounts"] = {}
     http_responses_base.add(
         method=responses.GET,
         url="https://jmap-example.localhost/.well-known/jmap",
-        body=json.dumps(
-            {
-                "apiUrl": "https://jmap-api.localhost/api",
-                "eventSourceUrl": (
-                    "https://jmap-api.localhost/events/"
-                    "{types}/{closeafter}/{ping}"
-                ),
-                "username": "ness@onett.example.net",
-                "capabilities": {
-                    "urn:ietf:params:jmap:core": {
-                        "maxSizeUpload": 50_000_000,
-                        "maxConcurrentUpload": 4,
-                        "maxSizeRequest": 10_000_000,
-                        "maxConcurrentRequests": 4,
-                        "maxCallsInRequest": 16,
-                        "maxObjectsInGet": 500,
-                        "maxObjectsInSet": 500,
-                        "collationAlgorithms": [
-                            "i;ascii-numeric",
-                            "i;ascii-casemap",
-                            "i;octet",
-                        ],
-                    },
-                },
-                "primary_accounts": {},
-            },
-        ),
+        body=json.dumps(session_response),
     )
     client = Client.create_with_api_token(
         "jmap-example.localhost", api_token="ness__pk_fire"
