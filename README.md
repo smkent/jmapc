@@ -35,7 +35,7 @@ Currently implemented:
 
 [jmapc is available on PyPI][pypi]:
 
-```
+```console
 pip install jmapc
 ```
 
@@ -43,7 +43,7 @@ pip install jmapc
 
 Any of the included examples can be invoked with `poetry run`:
 
-```sh
+```console
 JMAP_HOST=jmap.example.com \
 JMAP_API_TOKEN=ness__pk_fire \
 poetry run examples/identity_get.py
