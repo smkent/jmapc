@@ -1,6 +1,5 @@
 from typing import Any, Optional
 
-
 class SSEClient:
     def __init__(
         self,
