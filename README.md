@@ -33,25 +33,17 @@ Currently implemented:
 
 ## Installation
 
-[jmapc is available on PyPI][jmapc-pypi]:
+[jmapc is available on PyPI][pypi]:
 
-```
+```console
 pip install jmapc
 ```
 
-## Development
-
-Prerequisites: [Poetry][poetry]
-
-* Repository setup: `poetry install`
-* Run all tests: `poetry run poe test`
-* Fix linting errors: `poetry run poe lint`
-
-### Examples
+## Examples
 
 Any of the included examples can be invoked with `poetry run`:
 
-```sh
+```console
 JMAP_HOST=jmap.example.com \
 JMAP_API_TOKEN=ness__pk_fire \
 poetry run examples/identity_get.py
@@ -64,6 +56,32 @@ Identity 12345 is for Ness at ness@onett.example.com
 Identity 67890 is for Ness at ness-alternate@onett.example.com
 ```
 
+## Development
+
+### [Poetry][poetry] installation
+
+Via [`pipx`][pipx]:
+
+```console
+pip install pipx
+pipx install poetry
+pipx inject poetry poetry-dynamic-versioning poetry-pre-commit-plugin
+```
+
+Via `pip`:
+
+```console
+pip install poetry
+poetry self add poetry-dynamic-versioning poetry-pre-commit-plugin
+```
+
+### Development tasks
+
+* Setup: `poetry install`
+* Run static checks: `poetry run poe lint` or
+  `poetry run pre-commit run --all-files`
+* Run static checks and tests: `poetry run poe test`
+
 ---
 
 Created from [smkent/cookie-python][cookie-python] using
@@ -75,8 +93,8 @@ Created from [smkent/cookie-python][cookie-python] using
 [fastmail-maskedemail]: https://www.fastmail.com/developer/maskedemail/
 [gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amain
 [logo]: https://raw.github.com/smkent/jmapc/main/img/jmapc.png
-[jmapc-pypi]: https://pypi.org/project/jmapc/
 [jmapio]: https://jmap.io
+[pipx]: https://pypa.github.io/pipx/
 [poetry]: https://python-poetry.org/docs/#installation
 [pypi]: https://pypi.org/project/jmapc/
 [repo]: https://github.com/smkent/jmapc

@@ -21,7 +21,9 @@ from jmapc.methods import (
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
     IdentityGet,
+    IdentityGetResponse,
     MailboxGet,
+    MailboxGetResponse,
     MailboxQuery,
 )
 
@@ -49,6 +51,9 @@ results = client.request(
 )
 
 # From results, second result, MailboxGet instance, retrieve Mailbox data
+assert isinstance(
+    results[1].response, MailboxGetResponse
+), "Error in Mailbox/get method"
 mailbox_data = results[1].response.data
 if not mailbox_data:
     raise Exception("Drafts not found on the server")
@@ -60,6 +65,9 @@ assert drafts_mailbox_id
 print(f"Drafts has Mailbox ID {drafts_mailbox_id}")
 
 # From results, third result, IdentityGet instance, retrieve Identity data
+assert isinstance(
+    results[2].response, IdentityGetResponse
+), "Error in Identity/get method"
 identity_data = results[2].response.data
 if not identity_data:
     raise Exception("No identities found on the server")
@@ -122,7 +130,9 @@ assert isinstance(
 ), f"Error sending test email: f{email_send_result}"
 
 # Retrieve sent email metadata from EmailSubmission/set method response
+assert email_send_result.created, "Error retrieving sent test email"
 sent_data = email_send_result.created["emailToSend"]
+assert sent_data, "Error retrieving sent test email data"
 
 # Print sent email timestamp
 print(f"Test email sent to {identity.email} at {sent_data.send_at}")
