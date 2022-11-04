@@ -3,7 +3,7 @@
 import os
 
 from jmapc import Client, MailboxQueryFilterCondition, Ref
-from jmapc.methods import MailboxGet, MailboxQuery
+from jmapc.methods import MailboxGet, MailboxGetResponse, MailboxQuery
 
 # Create and configure client
 client = Client.create_with_api_token(
@@ -30,6 +30,9 @@ method_2_result = results[1]
 method_2_result_data = method_2_result.response
 
 # Retrieve the Mailbox data from the result data model
+assert isinstance(
+    method_2_result_data, MailboxGetResponse
+), "Error in Mailbox/get method"
 mailboxes = method_2_result_data.data
 
 # Although multiple mailboxes may be present in the results, we only expect a
