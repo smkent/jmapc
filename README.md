@@ -78,8 +78,6 @@ poetry self add poetry-dynamic-versioning poetry-pre-commit-plugin
 ### Development tasks
 
 * Setup: `poetry install`
-* Run all tests: `poetry run poe test`
-* Fix linting errors: `poetry run poe lint`
 * Run static checks: `poetry run poe lint` or
   `poetry run pre-commit run --all-files`
 * Run static checks and tests: `poetry run poe test`
