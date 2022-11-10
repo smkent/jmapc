@@ -55,7 +55,7 @@ from .mailbox import (
     MailboxSet,
     MailboxSetResponse,
 )
-from .searchsnippet import SearchSnippetGet, SearchSnippetGetResponse
+from .search_snippet import SearchSnippetGet, SearchSnippetGetResponse
 from .thread import (
     ThreadChanges,
     ThreadChangesResponse,

@@ -37,7 +37,7 @@ from .models import (
     StrOrRef,
     TypeOrRef,
 )
-from .searchsnippet import SearchSnippet
+from .search_snippet import SearchSnippet
 from .thread import Thread
 
 __all__ = [
