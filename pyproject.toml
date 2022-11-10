@@ -25,7 +25,6 @@ include = [
 [tool.poetry.dependencies]
 python = "^3.8"
 dataclasses-json = "^0.5.6"
-pre-commit = "*"
 python-dateutil = "^2.8.2"
 requests = "^2.27.1"
 sseclient = "^0.0.27"
@@ -42,6 +41,7 @@ isort = "*"
 mypy = "*"
 pep8-naming = "*"
 poethepoet = "*"
+pre-commit = "*"
 py = "1.11.0"  # https://github.com/Teemu/pytest-sugar/issues/241
 pytest = "*"
 pytest-cov = "*"
