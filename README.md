@@ -22,6 +22,7 @@ Currently implemented:
   * `EmailSubmission/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
   * `Identity/*` (`get`, `changes`, `set`)
   * `Mailbox/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
+  * `SearchSnippet/*` (`get`)
   * `Thread/*` (`get`, `changes`)
   * Arbitrary methods via the `CustomMethod` class
 * Fastmail-specific methods:
