@@ -24,6 +24,7 @@ Currently implemented:
   * `Mailbox/*` (`get`, `changes`, `query`, `queryChanges`, `set`)
   * `SearchSnippet/*` (`get`)
   * `Thread/*` (`get`, `changes`)
+  * `VacationResponse/*` (`get`, `set`)
   * Arbitrary methods via the `CustomMethod` class
 * Fastmail-specific methods:
   * [`MaskedEmail/*` (`get`, `set`)][fastmail-maskedemail]

@@ -62,6 +62,12 @@ from .thread import (
     ThreadGet,
     ThreadGetResponse,
 )
+from .vacation_response import (
+    VacationResponseGet,
+    VacationResponseGetResponse,
+    VacationResponseSet,
+    VacationResponseSetResponse,
+)
 
 __all__ = [
     "CoreEcho",
@@ -119,4 +125,8 @@ __all__ = [
     "ThreadChangesResponse",
     "ThreadGet",
     "ThreadGetResponse",
+    "VacationResponseGet",
+    "VacationResponseGetResponse",
+    "VacationResponseSet",
+    "VacationResponseSetResponse",
 ]

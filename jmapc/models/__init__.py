@@ -39,6 +39,7 @@ from .models import (
 )
 from .search_snippet import SearchSnippet
 from .thread import Thread
+from .vacation_response import VacationResponse
 
 __all__ = [
     "AddedItem",
@@ -76,4 +77,5 @@ __all__ = [
     "TypeOrRef",
     "TypeState",
     "UndoStatus",
+    "VacationResponse",
 ]

@@ -38,6 +38,7 @@ from .models import (
     Thread,
     TypeState,
     UndoStatus,
+    VacationResponse,
 )
 from .ref import Ref, ResultReference
 
@@ -83,6 +84,7 @@ __all__ = [
     "Thread",
     "TypeState",
     "UndoStatus",
+    "VacationResponse",
     "auth",
     "fastmail",
     "errors",
