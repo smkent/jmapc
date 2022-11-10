@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "jmapc"
-version = "0.2.7"
+version = "0.0.0"
 description = "JMAP client library for Python"
 license = "GPL-3.0-or-later"
 authors = ["Stephen Kent <smkent@smkent.net>"]
@@ -52,7 +52,7 @@ types-requests = "^2.27.11"
 responses = "^0.18.0"
 
 [tool.poetry-dynamic-versioning]
-enable = false
+enable = true
 vcs = "git"
 style = "semver"
 
