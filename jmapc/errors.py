@@ -77,6 +77,11 @@ class Forbidden(Error):
 
 
 @dataclass
+class RequestTooLarge(Error):
+    _type = "requestTooLarge"
+
+
+@dataclass
 class ServerFail(Error):
     _type = "serverFail"
     description: Optional[str] = None
@@ -95,3 +100,8 @@ class ServerUnavailable(Error):
 @dataclass
 class UnknownMethod(Error):
     _type = "unknownMethod"
+
+
+@dataclass
+class UnsupportedFilter(Error):
+    _type = "UnsupportedFilter"

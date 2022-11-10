@@ -35,7 +35,9 @@ from .models import (
     Operator,
     SetError,
     StrOrRef,
+    TypeOrRef,
 )
+from .searchsnippet import SearchSnippet
 from .thread import Thread
 
 __all__ = [
@@ -66,10 +68,12 @@ __all__ = [
     "MailboxQueryFilterCondition",
     "MailboxQueryFilterOperator",
     "Operator",
+    "SearchSnippet",
     "SetError",
     "StateChange",
     "StrOrRef",
     "Thread",
+    "TypeOrRef",
     "TypeState",
     "UndoStatus",
 ]

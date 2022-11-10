@@ -132,9 +132,13 @@ class Get(MethodWithAccount, GetMethod):
 
 
 @dataclass
-class GetResponse(ResponseWithAccount, GetMethod):
-    state: Optional[str]
+class GetResponseWithoutState(ResponseWithAccount, GetMethod):
     not_found: Optional[List[str]]
+
+
+@dataclass
+class GetResponse(GetResponseWithoutState):
+    state: Optional[str]
 
 
 class SetMethod:

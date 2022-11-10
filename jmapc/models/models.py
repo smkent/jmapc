@@ -12,6 +12,7 @@ from ..serializer import Model
 T = TypeVar("T")
 StrOrRef = Union[str, ResultReference, Ref]
 ListOrRef = Union[List[T], ResultReference, Ref]
+TypeOrRef = Union[T, ResultReference, Ref]
 
 
 @dataclass

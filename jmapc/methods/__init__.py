@@ -55,6 +55,7 @@ from .mailbox import (
     MailboxSet,
     MailboxSetResponse,
 )
+from .searchsnippet import SearchSnippetGet, SearchSnippetGetResponse
 from .thread import (
     ThreadChanges,
     ThreadChangesResponse,
@@ -112,6 +113,8 @@ __all__ = [
     "Request",
     "Response",
     "ResponseOrError",
+    "SearchSnippetGet",
+    "SearchSnippetGetResponse",
     "ThreadChanges",
     "ThreadChangesResponse",
     "ThreadGet",
