@@ -150,7 +150,7 @@ class Set(MethodWithAccount, SetMethod):
     if_in_state: Optional[StrOrRef] = None
     create: Optional[Dict[str, Any]] = None
     update: Optional[Dict[str, Dict[str, Any]]] = None
-    destroy: Optional[ListOrRef] = None
+    destroy: Optional[ListOrRef[str]] = None
 
 
 @dataclass

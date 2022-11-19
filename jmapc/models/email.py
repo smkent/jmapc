@@ -79,7 +79,7 @@ class EmailBodyValue(Model):
 @dataclass
 class EmailQueryFilterCondition(Model):
     in_mailbox: Optional[StrOrRef] = None
-    in_mailbox_other_than: Optional[ListOrRef] = None
+    in_mailbox_other_than: Optional[ListOrRef[str]] = None
     before: Optional[datetime] = field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
@@ -104,7 +104,7 @@ class EmailQueryFilterCondition(Model):
     cc: Optional[StrOrRef] = None
     bcc: Optional[StrOrRef] = None
     body: Optional[StrOrRef] = None
-    header: Optional[ListOrRef] = None
+    header: Optional[ListOrRef[str]] = None
 
 
 @dataclass

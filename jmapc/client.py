@@ -197,7 +197,7 @@ class Client:
                 "multiple JMAP request methods"
             )
 
-        calls_list = calls if isinstance(calls, list) else [calls]
+        calls_list = calls if isinstance(calls, Sequence) else [calls]
         method_calls: List[Invocation] = []
         # Create Invocations for Methods
         for i, c in enumerate(calls_list):

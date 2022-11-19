@@ -25,7 +25,7 @@ def test_camel_case() -> None:
 def test_serialize_result_reference() -> None:
     @dataclass
     class TestModel(Model):
-        ids: ListOrRef
+        ids: ListOrRef[str]
 
     d = TestModel(
         ids=ResultReference(
