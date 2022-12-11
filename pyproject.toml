@@ -24,10 +24,10 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-dataclasses-json = "^0.5.6"
-python-dateutil = "^2.8.2"
-requests = "^2.27.1"
-sseclient = "^0.0.27"
+dataclasses-json = "*"
+python-dateutil = "*"
+requests = "*"
+sseclient = "*"
 
 [tool.poetry.dev-dependencies]
 bandit = {extras = ["toml"], version = "*"}
@@ -46,9 +46,9 @@ pytest = "*"
 pytest-cov = "*"
 pytest-github-actions-annotate-failures = "*"
 pytest-sugar = "*"
-types-python-dateutil = "^2.8.9"
-types-requests = "^2.27.11"
-responses = "^0.18.0"
+types-python-dateutil = "*"
+types-requests = "*"
+responses = "*"
 
 [tool.poetry-dynamic-versioning]
 enable = true
