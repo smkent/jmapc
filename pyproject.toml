@@ -24,6 +24,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+brotli = ">=1.0.9"
 dataclasses-json = "*"
 python-dateutil = "*"
 requests = "*"
