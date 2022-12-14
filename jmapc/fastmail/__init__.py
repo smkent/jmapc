@@ -4,7 +4,7 @@ from .maskedemail_methods import (
     MaskedEmailSet,
     MaskedEmailSetResponse,
 )
-from .maskedemail_models import MaskedEmail
+from .maskedemail_models import MaskedEmail, MaskedEmailState
 
 __all__ = [
     "MaskedEmail",
@@ -12,4 +12,5 @@ __all__ = [
     "MaskedEmailGetResponse",
     "MaskedEmailSet",
     "MaskedEmailSetResponse",
+    "MaskedEmailState",
 ]

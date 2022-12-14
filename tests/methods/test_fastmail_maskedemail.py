@@ -9,6 +9,7 @@ from jmapc.fastmail import (
     MaskedEmailGetResponse,
     MaskedEmailSet,
     MaskedEmailSetResponse,
+    MaskedEmailState,
 )
 
 from ..utils import expect_jmap_call
@@ -92,14 +93,14 @@ def test_maskedemail_set(
                     "accountId": "u1138",
                     "create": {
                         "create": {
-                            "email": "pk.fire@ness.example.com",
+                            "email": "pk.fire2187@ness.example.com",
                             "forDomain": "ness.example.com",
                             "description": (
-                                "Masked Email (pk.fire@ness.example.com)"
+                                "Masked Email (pk.fire2187@ness.example.com)"
                             ),
                             "lastMessageAt": "1994-08-24T12:01:02Z",
                             "createdAt": "1994-08-24T12:01:02Z",
-                            "createdBy": "ness",
+                            "createdBy": "API Token: onett-dev",
                         },
                     },
                 },
@@ -117,26 +118,25 @@ def test_maskedemail_set(
                 "MaskedEmail/set",
                 {
                     "accountId": "u1138",
+                    "oldState": None,
+                    "newState": None,
                     "created": {
                         "create": {
                             "id": "masked-42",
-                            "email": "pk.fire@ness.example.com",
+                            "url": None,
+                            "state": "pending",
                             "forDomain": "ness.example.com",
                             "description": (
-                                "Masked Email (pk.fire@ness.example.com)"
+                                "Masked Email (pk.fire2187@ness.example.com)"
                             ),
-                            "lastMessageAt": "1994-08-24T12:01:02Z",
                             "createdAt": "1994-08-24T12:01:02Z",
-                            "createdBy": "ness",
+                            "email": "pk.fire2187@ness.example.com",
+                            "createdBy": "API Token: onett-dev",
+                            "lastMessageAt": None,
                         }
                     },
-                    "destroyed": None,
-                    "newState": "2",
-                    "notCreated": None,
-                    "notDestroyed": None,
-                    "notUpdated": None,
-                    "oldState": "1",
-                    "updated": None,
+                    "updated": {},
+                    "destroyed": [],
                 },
                 "single.MaskedEmail/set",
             ]
@@ -149,40 +149,39 @@ def test_maskedemail_set(
             create=dict(
                 create=MaskedEmail(
                     id=None,
-                    email="pk.fire@ness.example.com",
+                    email="pk.fire2187@ness.example.com",
                     for_domain="ness.example.com",
-                    description="Masked Email (pk.fire@ness.example.com)",
+                    description="Masked Email (pk.fire2187@ness.example.com)",
                     last_message_at=datetime(
                         1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
                     ),
                     created_at=datetime(
                         1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
                     ),
-                    created_by="ness",
+                    created_by="API Token: onett-dev",
                 )
             )
         )
     ) == MaskedEmailSetResponse(
         account_id="u1138",
-        old_state="1",
-        new_state="2",
+        old_state=None,
+        new_state=None,
         created=dict(
             create=MaskedEmail(
                 id="masked-42",
-                email="pk.fire@ness.example.com",
+                email="pk.fire2187@ness.example.com",
+                state=MaskedEmailState.PENDING,
                 for_domain="ness.example.com",
-                description="Masked Email (pk.fire@ness.example.com)",
-                last_message_at=datetime(
-                    1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                ),
+                description="Masked Email (pk.fire2187@ness.example.com)",
+                last_message_at=None,
                 created_at=datetime(
                     1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
                 ),
-                created_by="ness",
+                created_by="API Token: onett-dev",
             ),
         ),
-        updated=None,
-        destroyed=None,
+        updated={},
+        destroyed=[],
         not_created=None,
         not_updated=None,
         not_destroyed=None,

@@ -21,6 +21,7 @@ class MaskedEmailState(Enum):
 class MaskedEmail(Model):
     id: Optional[str] = None
     email: Optional[str] = None
+    state: Optional[MaskedEmailState] = None
     for_domain: Optional[str] = None
     description: Optional[str] = None
     last_message_at: Optional[datetime] = field(
