@@ -160,9 +160,9 @@ class SetResponse(ResponseWithAccount, SetMethod):
     created: Optional[Dict[str, Any]]
     updated: Optional[Dict[str, Any]]
     destroyed: Optional[List[str]]
-    not_created: Optional[Dict[str, SetError]]
-    not_updated: Optional[Dict[str, SetError]]
-    not_destroyed: Optional[Dict[str, SetError]]
+    not_created: Optional[Dict[str, SetError]] = None
+    not_updated: Optional[Dict[str, SetError]] = None
+    not_destroyed: Optional[Dict[str, SetError]] = None
 
 
 class QueryMethod:
