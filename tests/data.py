@@ -4,8 +4,13 @@ from typing import Any, Dict
 def make_session_response() -> Dict[str, Any]:
     return {
         "apiUrl": "https://jmap-api.localhost/api",
+        "downloadUrl": (
+            "https://jmap-api.localhost/jmap/download"
+            "/{accountId}/{blobId}/{name}?type={type}"
+        ),
+        "uploadUrl": "https://jmap-api.localhost/jmap/upload/{accountId}/",
         "eventSourceUrl": (
-            "https://jmap-api.localhost/events/" "{types}/{closeafter}/{ping}"
+            "https://jmap-api.localhost/events/{types}/{closeafter}/{ping}"
         ),
         "username": "ness@onett.example.net",
         "capabilities": {

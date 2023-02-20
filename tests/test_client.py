@@ -57,6 +57,11 @@ def test_jmap_session(
     assert test_client.jmap_session == Session(
         username="ness@onett.example.net",
         api_url="https://jmap-api.localhost/api",
+        download_url=(
+            "https://jmap-api.localhost/jmap/download"
+            "/{accountId}/{blobId}/{name}?type={type}"
+        ),
+        upload_url="https://jmap-api.localhost/jmap/upload/{accountId}/",
         event_source_url=(
             "https://jmap-api.localhost/events/{types}/{closeafter}/{ping}"
         ),
