@@ -48,6 +48,7 @@ def decode_method_responses(
 
 @dataclass
 class APIResponse(Model):
+    session_state: str
     method_responses: List[InvocationResponseOrError] = field(
         metadata=config(
             encoder=lambda value: None,
