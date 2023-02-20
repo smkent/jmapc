@@ -1,6 +1,8 @@
 import json
 import logging
+import tempfile
 import time
+from pathlib import Path
 from typing import Iterable
 
 import pytest
@@ -52,3 +54,9 @@ def http_responses(
         body=json.dumps(make_session_response()),
     )
     yield http_responses_base
+
+
+@pytest.fixture
+def tempdir() -> Iterable[Path]:
+    with tempfile.TemporaryDirectory(suffix=".unit_test") as td:
+        yield Path(td)

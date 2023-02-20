@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import functools
 import json
+import mimetypes
 from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import (
     Any,
     Dict,
@@ -35,7 +37,7 @@ from .methods import (
     Response,
     ResponseOrError,
 )
-from .models import Event
+from .models import EmailBodyPart, Event
 from .session import Session
 
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
@@ -127,6 +129,42 @@ class Client:
         if not primary_account_id:
             raise Exception("No primary account ID found")
         return primary_account_id
+
+    def upload(self, file_name: Union[str, Path]) -> Dict[str, Any]:
+        mime_type, mime_encoding = mimetypes.guess_type(file_name)
+        upload_url = self.jmap_session.upload_url.format(
+            accountId=self.account_id
+        )
+        print(upload_url)
+        with open(file_name, "rb") as f:
+            response = self.requests_session.post(
+                upload_url,
+                stream=True,
+                data=f,
+                headers={"Content-Type": mime_type},
+            )
+        response.raise_for_status()
+        return cast(Dict[str, Any], response.json())
+
+    def download(
+        self,
+        attachment: EmailBodyPart,
+        file_name: Optional[Union[str, Path]] = None,
+    ) -> Path:
+        file_name = file_name or attachment.name
+        if not file_name:
+            raise Exception("Unable to determine destination file name")
+        blob_url = self.jmap_session.download_url.format(
+            accountId=self.account_id,
+            blobId=attachment.blob_id,
+            name=attachment.name,
+            type=attachment.type,
+        )
+        response = self.requests_session.get(blob_url, stream=True)
+        response.raise_for_status()
+        with open(file_name, "wb") as f:
+            f.write(response.raw.data)
+        return Path(file_name)
 
     @overload
     def request(

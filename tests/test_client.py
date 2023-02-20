@@ -1,11 +1,12 @@
 import json
+from pathlib import Path
 from typing import List, Set
 
 import pytest
 import requests
 import responses
 
-from jmapc import Client, constants
+from jmapc import Client, EmailBodyPart, constants
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -359,3 +360,44 @@ def test_error_unauthorized(
     with pytest.raises(requests.exceptions.HTTPError) as e:
         client.request(CoreEcho(data=echo_test_data))
     assert e.value.response.status_code == 401
+
+
+def test_download(
+    client: Client, http_responses: responses.RequestsMock, tempdir: Path
+) -> None:
+    blob_content = "test download blob content"
+    http_responses.add(
+        method=responses.GET,
+        url=(
+            "https://jmap-api.localhost/jmap/download"
+            "/u1138/C2187/upload.txt?type=text/plain"
+        ),
+        body=blob_content,
+    )
+    dest_file = tempdir / "upload.txt"
+    client.download(
+        EmailBodyPart(name="upload.txt", blob_id="C2187", type="text/plain"),
+        dest_file,
+    )
+    assert dest_file.read_text() == blob_content
+
+
+def test_upload(
+    client: Client, http_responses: responses.RequestsMock, tempdir: Path
+) -> None:
+    blob_content = "test upload blob content"
+    source_file = tempdir / "upload.txt"
+    source_file.write_text(blob_content)
+    upload_response = {
+        "accountId": "u1138",
+        "blobId": "C2187",
+        "type": "text/plain",
+        "size": len(blob_content),
+    }
+    http_responses.add(
+        method=responses.POST,
+        url="https://jmap-api.localhost/jmap/upload/u1138/",
+        body=json.dumps(upload_response),
+    )
+    response = client.upload(source_file)
+    assert response == upload_response
