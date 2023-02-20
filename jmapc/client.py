@@ -113,7 +113,9 @@ class Client:
     def jmap_session(self) -> Session:
         r = self.requests_session.get(f"https://{self._host}/.well-known/jmap")
         r.raise_for_status()
-        return Session.from_dict(r.json())
+        session = Session.from_dict(r.json())
+        log.debug(f"Retrieved JMAP session with state {session.state}")
+        return session
 
     @property
     def account_id(self) -> str:
@@ -275,4 +277,11 @@ class Client:
         r.raise_for_status()
         log.debug(f"Received JMAP response {r.text}")
         api_response = APIResponse.from_dict(r.json())
+        if api_response.session_state != self.jmap_session.state:
+            log.debug(
+                "JMAP response session state"
+                f' "{api_response.session_state}" differs from cached state'
+                f'"{self.jmap_session.state}", invalidating cached state'
+            )
+            del self.jmap_session
         return api_response.method_responses
