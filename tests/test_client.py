@@ -87,6 +87,7 @@ def test_jmap_session(
             mail="u1138",
             submission="u1138",
         ),
+        state="test;session;state",
     )
 
 

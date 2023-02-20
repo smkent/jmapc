@@ -34,4 +34,5 @@ def make_session_response() -> Dict[str, Any]:
             "urn:ietf:params:jmap:mail": "u1138",
             "urn:ietf:params:jmap:submission": "u1138",
         },
+        "state": "test;session;state",
     }
