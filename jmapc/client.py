@@ -157,7 +157,7 @@ class Client:
         blob_url = self.jmap_session.download_url.format(
             accountId=self.account_id,
             blobId=attachment.blob_id,
-            name=file_name.name,
+            name=attachment.name,
             type=attachment.type,
         )
         r = self.requests_session.get(blob_url, stream=True)
