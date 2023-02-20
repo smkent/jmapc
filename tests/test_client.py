@@ -362,26 +362,6 @@ def test_error_unauthorized(
     assert e.value.response.status_code == 401
 
 
-def test_download_attachment(
-    client: Client, http_responses: responses.RequestsMock, tempdir: Path
-) -> None:
-    blob_content = "test download blob content"
-    http_responses.add(
-        method=responses.GET,
-        url=(
-            "https://jmap-api.localhost/jmap/download"
-            "/u1138/C2187/upload.txt?type=text/plain"
-        ),
-        body=blob_content,
-    )
-    dest_file = tempdir / "upload.txt"
-    client.download_attachment(
-        EmailBodyPart(name="upload.txt", blob_id="C2187", type="text/plain"),
-        dest_file,
-    )
-    assert dest_file.read_text() == blob_content
-
-
 def test_upload_blob(
     client: Client, http_responses: responses.RequestsMock, tempdir: Path
 ) -> None:
@@ -403,3 +383,23 @@ def test_upload_blob(
     assert response == Blob(
         id="C2187", type="text/plain", size=len(blob_content)
     )
+
+
+def test_download_attachment(
+    client: Client, http_responses: responses.RequestsMock, tempdir: Path
+) -> None:
+    blob_content = "test download blob content"
+    http_responses.add(
+        method=responses.GET,
+        url=(
+            "https://jmap-api.localhost/jmap/download"
+            "/u1138/C2187/upload.txt?type=text/plain"
+        ),
+        body=blob_content,
+    )
+    dest_file = tempdir / "upload.txt"
+    client.download_attachment(
+        EmailBodyPart(name="upload.txt", blob_id="C2187", type="text/plain"),
+        dest_file,
+    )
+    assert dest_file.read_text() == blob_content
