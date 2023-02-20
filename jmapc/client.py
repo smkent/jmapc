@@ -25,10 +25,10 @@ import requests
 import sseclient
 
 from . import constants, errors
+from .api import APIResponse
 from .auth import BearerAuth
 from .logging import log
 from .methods import (
-    CustomResponse,
     Invocation,
     InvocationResponse,
     InvocationResponseOrError,
@@ -308,27 +308,5 @@ class Client:
         )
         r.raise_for_status()
         log.debug(f"Received JMAP response {r.text}")
-        return self._parse_method_responses(r.json())
-
-    def _parse_method_responses(
-        self, data: dict[str, Any]
-    ) -> Sequence[InvocationResponseOrError]:
-        method_responses = cast(
-            Sequence[Tuple[str, Dict[str, Any], str]],
-            data.get("methodResponses", []),
-        )
-
-        return [
-            InvocationResponseOrError(
-                id=method_id,
-                response=self._response_type(name).from_dict(response),
-            )
-            for name, response, method_id in method_responses
-        ]
-
-    def _response_type(self, method_name: str) -> Type[ResponseOrError]:
-        if method_name == "error":
-            return errors.Error
-        if method_name in Response.response_types:
-            return Response.response_types[method_name]
-        return CustomResponse
+        api_response = APIResponse.from_dict(r.json())
+        return api_response.method_responses
