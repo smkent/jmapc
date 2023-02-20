@@ -51,12 +51,10 @@ class ClientError(RuntimeError):
     def __init__(
         self,
         *args: Any,
-        http_response: Optional[requests.Response] = None,
-        result: Optional[Sequence[InvocationResponseOrError]] = None,
+        result: Sequence[InvocationResponseOrError],
         **kwargs: Any,
     ):
         super().__init__(*args, **kwargs)
-        self.http_response = http_response
         self.result = result
 
 
