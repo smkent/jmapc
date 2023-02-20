@@ -398,6 +398,15 @@ def test_download_attachment(
         body=blob_content,
     )
     dest_file = tempdir / "download.txt"
+    with pytest.raises(Exception) as e:
+        client.download_attachment(
+            EmailBodyPart(
+                name="download.txt", blob_id="C2187", type="text/plain"
+            ),
+            "",
+        )
+    assert str(e.value) == "Destination file name is required"
+    assert not dest_file.exists()
     client.download_attachment(
         EmailBodyPart(name="download.txt", blob_id="C2187", type="text/plain"),
         dest_file,
