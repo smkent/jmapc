@@ -10,7 +10,7 @@ import dateutil.parser
 from .ref import REF_SENTINEL_KEY, Ref, ResultReference
 
 if TYPE_CHECKING:
-    from .client import Invocation  # pragma: no cover
+    from .methods import Invocation  # pragma: no cover
 
 
 def datetime_encode(dt: datetime) -> str:

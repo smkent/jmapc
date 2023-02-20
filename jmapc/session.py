@@ -15,6 +15,7 @@ class Session(Model):
     download_url: str
     upload_url: str
     event_source_url: str
+    state: str
     primary_accounts: "SessionPrimaryAccount"
     capabilities: "SessionCapabilities"
 

@@ -27,6 +27,7 @@ def expect_jmap_call(
     expected_request: Dict[str, Any],
     response: Dict[str, Any],
 ) -> None:
+    response.setdefault("sessionState", "test;session;state")
     http_responses.add_callback(
         method=responses.POST,
         url="https://jmap-api.localhost/api",

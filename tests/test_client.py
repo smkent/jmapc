@@ -87,6 +87,7 @@ def test_jmap_session(
             mail="u1138",
             submission="u1138",
         ),
+        state="test;session;state",
     )
 
 
@@ -138,6 +139,49 @@ def test_jmap_session_capabilities_urns(
     assert client.jmap_session.capabilities.urns == (
         {"urn:ietf:params:jmap:core"} | urns
     )
+
+
+def test_client_request_updated_session(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    new_session_response = make_session_response()
+    new_session_response.update(
+        {
+            "state": "updated;state;value",
+            "username": "paula@twoson.example.net",
+        }
+    )
+    http_responses.add(
+        method=responses.GET,
+        url="https://jmap-example.localhost/.well-known/jmap",
+        body=json.dumps(new_session_response),
+    )
+    method_params = CoreEcho(data=echo_test_data)
+    expected_request = {
+        "methodCalls": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+        ],
+        "using": ["urn:ietf:params:jmap:core"],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Core/echo",
+                echo_test_data,
+                "single.Core/echo",
+            ],
+        ],
+        "sessionState": "updated;state;value",
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+    expected_response = CoreEchoResponse(data=echo_test_data)
+    assert client.jmap_session.username == "ness@onett.example.net"
+    assert client.request(method_params) == expected_response
+    assert client.jmap_session.username == "paula@twoson.example.net"
 
 
 @pytest.mark.parametrize(
