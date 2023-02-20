@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import functools
-import json
 import mimetypes
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import (
     Any,
-    Dict,
     Generator,
-    List,
     Literal,
     Optional,
     Sequence,
@@ -24,12 +21,11 @@ from typing import (
 import requests
 import sseclient
 
-from . import constants, errors
-from .api import APIResponse
+from . import errors
+from .api import APIRequest, APIResponse
 from .auth import BearerAuth
 from .logging import log
 from .methods import (
-    Invocation,
     InvocationResponse,
     InvocationResponseOrError,
     Method,
@@ -232,26 +228,11 @@ class Client:
                 "single_response cannot be used with "
                 "multiple JMAP request methods"
             )
-
-        calls_list = calls if isinstance(calls, Sequence) else [calls]
-        method_calls: List[Invocation] = []
-        # Create Invocations for Methods
-        for i, c in enumerate(calls_list):
-            if isinstance(c, Invocation):
-                method_calls.append(c)
-                continue
-            method_call_id = (
-                f"{i}.{c.jmap_method_name}"
-                if len(calls_list) > 1
-                else f"single.{c.jmap_method_name}"
-            )
-            method_calls.append(Invocation(id=method_call_id, method=c))
-        # Collect set of JMAP URNs used by all methods in this request
-        using = set([constants.JMAP_URN_CORE]).union(
-            *[c.method.using for c in method_calls]
-        )
+        api_request = APIRequest.from_calls(self.account_id, calls)
         # Validate all requested JMAP URNs are supported by the server
-        unsupported_urns = using - self.jmap_session.capabilities.urns
+        unsupported_urns = (
+            api_request.using - self.jmap_session.capabilities.urns
+        )
         if unsupported_urns:
             log.warning(
                 "URNs in request are not in server capabilities: "
@@ -260,23 +241,7 @@ class Client:
         # Execute request
         result: Union[
             Sequence[InvocationResponseOrError], Sequence[InvocationResponse]
-        ] = self._api_request(
-            {
-                "using": sorted(list(using)),
-                "methodCalls": [
-                    [
-                        c.method.jmap_method_name,
-                        c.method.to_dict(
-                            account_id=self.account_id,
-                            method_calls_slice=method_calls[:i],
-                            encode_json=True,
-                        ),
-                        c.id,
-                    ]
-                    for i, c in enumerate(method_calls)
-                ],
-            },
-        )
+        ] = self._api_request(api_request)
         if raise_errors:
             if any(isinstance(r.response, errors.Error) for r in result):
                 raise RuntimeError("Errors found")
@@ -291,20 +256,21 @@ class Client:
                 if single_response:
                     raise RuntimeError(
                         f"{len(result)} results received for single method "
-                        f"call {method_calls[0].method.jmap_method_name}"
+                        f"call {api_request.method_calls[0][0]}"
                     )
                 return [r.response for r in result]
             return result[0].response
         return result
 
     def _api_request(
-        self, request: Dict[str, Any]
+        self, request: APIRequest
     ) -> Sequence[InvocationResponseOrError]:
-        log.debug(f"Sending JMAP request {json.dumps(request)}")
+        raw_request = request.to_json()
+        log.debug(f"Sending JMAP request {raw_request}")
         r = self.requests_session.post(
             self.jmap_session.api_url,
             headers={"Content-Type": "application/json"},
-            data=json.dumps(request),
+            data=raw_request,
         )
         r.raise_for_status()
         log.debug(f"Received JMAP response {r.text}")
