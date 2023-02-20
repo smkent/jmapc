@@ -12,6 +12,8 @@ from .serializer import Model
 class Session(Model):
     username: str
     api_url: str
+    download_url: str
+    upload_url: str
     event_source_url: str
     primary_accounts: "SessionPrimaryAccount"
     capabilities: "SessionCapabilities"

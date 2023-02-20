@@ -6,6 +6,7 @@ from .methods import Request, ResponseOrError
 from .models import (
     AddedItem,
     Address,
+    Blob,
     Comparator,
     Delivered,
     DeliveryStatus,
@@ -44,6 +45,7 @@ from .ref import Ref, ResultReference
 __all__ = [
     "AddedItem",
     "Address",
+    "Blob",
     "Client",
     "Comparator",
     "Delivered",

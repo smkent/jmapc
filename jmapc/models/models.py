@@ -16,6 +16,13 @@ TypeOrRef = Union[T, ResultReference, Ref]
 
 
 @dataclass
+class Blob(Model):
+    id: str = field(metadata=config(field_name="blobId"))
+    type: str
+    size: int
+
+
+@dataclass
 class AddedItem(Model):
     id: str = field(metadata=config(field_name="id"))
     index: int
