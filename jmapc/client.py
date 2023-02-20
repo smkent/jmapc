@@ -37,7 +37,7 @@ from .methods import (
     Response,
     ResponseOrError,
 )
-from .models import EmailBodyPart, Event
+from .models import Blob, EmailBodyPart, Event
 from .session import Session
 
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
@@ -130,12 +130,11 @@ class Client:
             raise Exception("No primary account ID found")
         return primary_account_id
 
-    def upload(self, file_name: Union[str, Path]) -> Dict[str, Any]:
+    def upload_blob(self, file_name: Union[str, Path]) -> Blob:
         mime_type, mime_encoding = mimetypes.guess_type(file_name)
         upload_url = self.jmap_session.upload_url.format(
             accountId=self.account_id
         )
-        print(upload_url)
         with open(file_name, "rb") as f:
             response = self.requests_session.post(
                 upload_url,
@@ -144,9 +143,9 @@ class Client:
                 headers={"Content-Type": mime_type},
             )
         response.raise_for_status()
-        return cast(Dict[str, Any], response.json())
+        return Blob.from_dict(response.json())
 
-    def download(
+    def download_attachment(
         self,
         attachment: EmailBodyPart,
         file_name: Optional[Union[str, Path]] = None,
@@ -154,17 +153,18 @@ class Client:
         file_name = file_name or attachment.name
         if not file_name:
             raise Exception("Unable to determine destination file name")
+        file_name = Path(file_name)
         blob_url = self.jmap_session.download_url.format(
             accountId=self.account_id,
             blobId=attachment.blob_id,
-            name=attachment.name,
+            name=file_name.name,
             type=attachment.type,
         )
         response = self.requests_session.get(blob_url, stream=True)
         response.raise_for_status()
         with open(file_name, "wb") as f:
             f.write(response.raw.data)
-        return Path(file_name)
+        return file_name
 
     @overload
     def request(

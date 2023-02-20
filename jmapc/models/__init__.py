@@ -29,6 +29,7 @@ from .mailbox import (
 )
 from .models import (
     AddedItem,
+    Blob,
     Comparator,
     EmailAddress,
     ListOrRef,
@@ -43,6 +44,7 @@ from .thread import Thread
 __all__ = [
     "AddedItem",
     "Address",
+    "Blob",
     "Comparator",
     "Delivered",
     "DeliveryStatus",

@@ -6,7 +6,7 @@ import pytest
 import requests
 import responses
 
-from jmapc import Client, EmailBodyPart, constants
+from jmapc import Blob, Client, EmailBodyPart, constants
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -362,7 +362,7 @@ def test_error_unauthorized(
     assert e.value.response.status_code == 401
 
 
-def test_download(
+def test_download_attachment(
     client: Client, http_responses: responses.RequestsMock, tempdir: Path
 ) -> None:
     blob_content = "test download blob content"
@@ -375,14 +375,14 @@ def test_download(
         body=blob_content,
     )
     dest_file = tempdir / "upload.txt"
-    client.download(
+    client.download_attachment(
         EmailBodyPart(name="upload.txt", blob_id="C2187", type="text/plain"),
         dest_file,
     )
     assert dest_file.read_text() == blob_content
 
 
-def test_upload(
+def test_upload_blob(
     client: Client, http_responses: responses.RequestsMock, tempdir: Path
 ) -> None:
     blob_content = "test upload blob content"
@@ -399,5 +399,7 @@ def test_upload(
         url="https://jmap-api.localhost/jmap/upload/u1138/",
         body=json.dumps(upload_response),
     )
-    response = client.upload(source_file)
-    assert response == upload_response
+    response = client.upload_blob(source_file)
+    assert response == Blob(
+        id="C2187", type="text/plain", size=len(blob_content)
+    )
