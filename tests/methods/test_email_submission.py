@@ -650,7 +650,9 @@ def test_email_submission_set_update_email_error(
             not_created=None,
             not_updated={
                 "Mdeadbeefdeadbeefdeadbeef": SetError(
-                    type="invalidProperties", description=None
+                    type="invalidProperties",
+                    description=None,
+                    properties=["mailboxIds"],
                 )
             },
             not_destroyed=None,

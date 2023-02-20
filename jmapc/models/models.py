@@ -61,3 +61,6 @@ class Operator(Enum):
 class SetError(Model):
     type: str
     description: Optional[str] = None
+    already_exists: Optional[str] = None
+    not_found: Optional[List[str]] = None
+    properties: Optional[List[str]] = None
