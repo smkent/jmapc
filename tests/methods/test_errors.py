@@ -3,8 +3,8 @@ from typing import Any, Dict
 import pytest
 import responses
 
-from jmapc import Client, Error, errors
-from jmapc.methods import CoreEcho
+from jmapc import Client, ClientError, Error, errors
+from jmapc.methods import CoreEcho, InvocationResponseOrError
 
 from ..utils import expect_jmap_call
 
@@ -105,8 +105,14 @@ def test_method_error(
     }
     expect_jmap_call(http_responses, expected_request, response)
     if raise_errors:
-        with pytest.raises(RuntimeError):
+        with pytest.raises(ClientError) as e:
             client.request(CoreEcho(data=test_data), raise_errors=True)
+        assert str(e.value) == "Errors found in method responses"
+        assert e.value.result == [
+            InvocationResponseOrError(
+                id="single.Core/echo", response=expected_error
+            )
+        ]
     else:
         resp = client.request(CoreEcho(data=test_data), raise_errors=False)
         assert resp == expected_error

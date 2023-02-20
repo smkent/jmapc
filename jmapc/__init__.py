@@ -1,6 +1,6 @@
 from . import auth, errors, fastmail, methods, models
 from .__version__ import __version__ as version
-from .client import Client, EventSourceConfig
+from .client import Client, ClientError, EventSourceConfig
 from .errors import Error
 from .methods import Request, ResponseOrError
 from .models import (
@@ -47,6 +47,7 @@ __all__ = [
     "Address",
     "Blob",
     "Client",
+    "ClientError",
     "Comparator",
     "Delivered",
     "DeliveryStatus",

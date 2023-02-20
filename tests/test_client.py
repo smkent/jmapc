@@ -6,7 +6,7 @@ import pytest
 import requests
 import responses
 
-from jmapc import Blob, Client, EmailBodyPart, constants
+from jmapc import Blob, Client, ClientError, EmailBodyPart, constants
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -381,8 +381,18 @@ def test_client_request_single_with_multiple_responses_error(
         ],
     }
     expect_jmap_call(http_responses, expected_request, response)
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ClientError) as e:
         client.request(method_params, single_response=True)
+    assert (
+        str(e.value)
+        == "2 method responses received for single method call Core/echo"
+    )
+    assert e.value.result == 2 * [
+        InvocationResponseOrError(
+            id="single.Core/echo",
+            response=CoreEchoResponse(data=echo_test_data),
+        )
+    ]
 
 
 def test_client_invalid_single_response_argument(client: Client) -> None:
