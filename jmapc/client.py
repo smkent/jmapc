@@ -148,11 +148,10 @@ class Client:
     def download_attachment(
         self,
         attachment: EmailBodyPart,
-        file_name: Optional[Union[str, Path]] = None,
-    ) -> Path:
-        file_name = file_name or attachment.name
+        file_name: Union[str, Path],
+    ) -> None:
         if not file_name:
-            raise Exception("Unable to determine destination file name")
+            raise Exception("Destination file name is required")
         file_name = Path(file_name)
         blob_url = self.jmap_session.download_url.format(
             accountId=self.account_id,
@@ -164,7 +163,6 @@ class Client:
         r.raise_for_status()
         with open(file_name, "wb") as f:
             f.write(r.raw.data)
-        return file_name
 
     @overload
     def request(
