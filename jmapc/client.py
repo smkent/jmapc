@@ -47,6 +47,17 @@ class EventSourceConfig:
     ping: int = 0
 
 
+class ClientError(RuntimeError):
+    def __init__(
+        self,
+        *args: Any,
+        result: Sequence[InvocationResponseOrError],
+        **kwargs: Any,
+    ):
+        super().__init__(*args, **kwargs)
+        self.result = result
+
+
 class Client:
     @classmethod
     def create_with_api_token(
@@ -246,7 +257,9 @@ class Client:
         ] = self._api_request(api_request)
         if raise_errors:
             if any(isinstance(r.response, errors.Error) for r in result):
-                raise RuntimeError("Errors found")
+                raise ClientError(
+                    "Errors found in method responses", result=result
+                )
             result = [
                 InvocationResponse(
                     id=r.id, response=cast(Response, r.response)
@@ -256,9 +269,10 @@ class Client:
         if isinstance(calls, Method):
             if len(result) > 1:
                 if single_response:
-                    raise RuntimeError(
-                        f"{len(result)} results received for single method "
-                        f"call {api_request.method_calls[0][0]}"
+                    raise ClientError(
+                        f"{len(result)} method responses received for single"
+                        f" method call {api_request.method_calls[0][0]}",
+                        result=result,
                     )
                 return [r.response for r in result]
             return result[0].response
