@@ -136,14 +136,14 @@ class Client:
             accountId=self.account_id
         )
         with open(file_name, "rb") as f:
-            response = self.requests_session.post(
+            r = self.requests_session.post(
                 upload_url,
                 stream=True,
                 data=f,
                 headers={"Content-Type": mime_type},
             )
-        response.raise_for_status()
-        return Blob.from_dict(response.json())
+        r.raise_for_status()
+        return Blob.from_dict(r.json())
 
     def download_attachment(
         self,
@@ -160,10 +160,10 @@ class Client:
             name=file_name.name,
             type=attachment.type,
         )
-        response = self.requests_session.get(blob_url, stream=True)
-        response.raise_for_status()
+        r = self.requests_session.get(blob_url, stream=True)
+        r.raise_for_status()
         with open(file_name, "wb") as f:
-            f.write(response.raw.data)
+            f.write(r.raw.data)
         return file_name
 
     @overload
