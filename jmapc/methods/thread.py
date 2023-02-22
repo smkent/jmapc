@@ -12,7 +12,7 @@ from .base import Changes, ChangesResponse, Get, GetResponse
 
 class ThreadBase:
     method_namespace: Optional[str] = "Thread"
-    using = set([constants.JMAP_URN_MAIL])
+    using = {constants.JMAP_URN_MAIL}
 
 
 @dataclass
