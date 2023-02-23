@@ -9,7 +9,7 @@ from .base import Method, Response
 
 class CoreBase:
     method_namespace: Optional[str] = "Core"
-    using = set([constants.JMAP_URN_CORE])
+    using = {constants.JMAP_URN_CORE}
 
 
 class EchoMethod:

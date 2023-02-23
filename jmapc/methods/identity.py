@@ -12,7 +12,7 @@ from .base import Changes, ChangesResponse, Get, GetResponse, Set, SetResponse
 
 class IdentityBase:
     method_namespace: Optional[str] = "Identity"
-    using = set([constants.JMAP_URN_SUBMISSION])
+    using = {constants.JMAP_URN_SUBMISSION}
 
 
 @dataclass

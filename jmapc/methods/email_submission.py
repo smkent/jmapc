@@ -23,7 +23,7 @@ from .base import (
 
 class EmailSubmissionBase:
     method_namespace: Optional[str] = "EmailSubmission"
-    using = set([constants.JMAP_URN_SUBMISSION])
+    using = {constants.JMAP_URN_SUBMISSION}
 
 
 @dataclass
