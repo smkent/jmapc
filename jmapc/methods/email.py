@@ -25,7 +25,7 @@ from .base import (
 
 class EmailBase:
     method_namespace: Optional[str] = "Email"
-    using = set([constants.JMAP_URN_MAIL])
+    using = {constants.JMAP_URN_MAIL}
 
 
 @dataclass

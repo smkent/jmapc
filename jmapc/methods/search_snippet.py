@@ -12,7 +12,7 @@ from .base import Get, GetResponseWithoutState
 
 class SearchSnippetBase:
     method_namespace: Optional[str] = "SearchSnippet"
-    using = set([constants.JMAP_URN_MAIL])
+    using = {constants.JMAP_URN_MAIL}
 
 
 @dataclass

@@ -46,7 +46,7 @@ class ModelToDictPostprocessor:
                 and isinstance(value, list)
                 and len(value) > 0
                 and isinstance(value[0], dict)
-                and set(value[0].keys()) == set(["name", "value"])
+                and set(value[0].keys()) == {"name", "value"}
             ):
                 data = self.fix_email_headers(data, key, value)
         return data
