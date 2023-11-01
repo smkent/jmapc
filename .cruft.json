@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/smkent/cookie-python",
-  "commit": "ae5c42761c7903b4c6238c1c6e8f91121866db89",
+  "commit": "dfd8d8e7e3b932522bb719c5e76ee5072f39d8a3",
   "context": {
     "cookiecutter": {
       "project_name": "jmapc",
