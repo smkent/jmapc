@@ -39,6 +39,8 @@ from .session import Session
 RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
 ClientType = TypeVar("ClientType", bound="Client")
 
+REQUEST_TIMEOUT = 30
+
 
 @dataclass
 class EventSourceConfig:
@@ -122,7 +124,9 @@ class Client:
 
     @functools.cached_property
     def jmap_session(self) -> Session:
-        r = self.requests_session.get(f"https://{self._host}/.well-known/jmap")
+        r = self.requests_session.get(
+            f"https://{self._host}/.well-known/jmap", timeout=REQUEST_TIMEOUT
+        )
         r.raise_for_status()
         session = Session.from_dict(r.json())
         log.debug(f"Retrieved JMAP session with state {session.state}")
@@ -150,6 +154,7 @@ class Client:
                 stream=True,
                 data=f,
                 headers={"Content-Type": mime_type},
+                timeout=REQUEST_TIMEOUT,
             )
         r.raise_for_status()
         return Blob.from_dict(r.json())
@@ -168,7 +173,9 @@ class Client:
             name=attachment.name,
             type=attachment.type,
         )
-        r = self.requests_session.get(blob_url, stream=True)
+        r = self.requests_session.get(
+            blob_url, stream=True, timeout=REQUEST_TIMEOUT
+        )
         r.raise_for_status()
         with open(file_name, "wb") as f:
             f.write(r.raw.data)
@@ -287,6 +294,7 @@ class Client:
             self.jmap_session.api_url,
             headers={"Content-Type": "application/json"},
             data=raw_request,
+            timeout=REQUEST_TIMEOUT,
         )
         r.raise_for_status()
         log.debug(f"Received JMAP response {r.text}")
