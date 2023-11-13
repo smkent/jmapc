@@ -11,7 +11,7 @@ authors = ["Stephen Kent <smkent@smkent.net>"]
 readme = "README.md"
 repository = "https://github.com/smkent/jmapc"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Operating System :: OS Independent",
     "Topic :: Communications :: Email :: Post-Office",
     "Topic :: Office/Business :: Groupware",
