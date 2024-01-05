@@ -7,6 +7,7 @@ from dataclasses_json import config
 
 from .. import constants
 from ..models import Mailbox, MailboxQueryFilter
+from ..serializer import null_omitted_field
 from .base import (
     Changes,
     ChangesResponse,
@@ -48,7 +49,7 @@ class MailboxGetResponse(MailboxBase, GetResponse):
 
 @dataclass
 class MailboxQuery(MailboxBase, Query):
-    filter: Optional[MailboxQueryFilter] = None
+    filter: Optional[MailboxQueryFilter] = null_omitted_field()
     sort_as_tree: bool = False
     filter_as_tree: bool = False
 

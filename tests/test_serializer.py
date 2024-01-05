@@ -7,7 +7,12 @@ from dataclasses_json import config
 
 from jmapc import EmailHeader, ResultReference
 from jmapc.models import ListOrRef
-from jmapc.serializer import Model, datetime_decode, datetime_encode
+from jmapc.serializer import (
+    Model,
+    datetime_decode,
+    datetime_encode,
+    null_omitted_field,
+)
 
 
 def test_camel_case() -> None:
@@ -100,7 +105,7 @@ def test_serialize_datetime(
 ) -> None:
     @dataclass
     class TestModel(Model):
-        timestamp: Optional[datetime] = field(
+        timestamp: Optional[datetime] = null_omitted_field(
             default=None,
             metadata=config(encoder=datetime_encode, decoder=datetime_decode),
         )

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import contextlib
+from dataclasses import field
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Mapping, cast
 
 import dataclasses_json
 import dateutil.parser
@@ -114,7 +115,6 @@ class Model(dataclasses_json.DataClassJsonMixin):
     dataclass_json_config = dataclasses_json.config(
         letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
         undefined=dataclasses_json.Undefined.EXCLUDE,
-        exclude=lambda f: f is None,
     )["dataclasses_json"]
 
     def to_dict(
@@ -128,3 +128,20 @@ class Model(dataclasses_json.DataClassJsonMixin):
             self.account_id: Optional[str] = account_id
         todict = ModelToDictPostprocessor(method_calls_slice)
         return todict.postprocess(super().to_dict(*args, **kwargs))
+
+
+def exclude(v: Optional[Any]) -> bool:
+    return v is None
+
+
+def null_omitted_field(
+    *args: Any,
+    metadata: Optional[Mapping[str, Any]] = None,
+    default: Optional[Any] = None,
+    **kwargs: Any,
+) -> Optional[Any]:
+    if metadata is None:
+        metadata = dataclasses_json.config(exclude=exclude)
+    else:
+        metadata["dataclasses_json"]["exclude"] = exclude
+    return field(*args, metadata=metadata, default=default, **kwargs)
