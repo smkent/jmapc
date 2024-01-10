@@ -112,7 +112,7 @@ class ModelToDictPostprocessor:
 
 class Model(dataclasses_json.DataClassJsonMixin):
     dataclass_json_config = dataclasses_json.config(
-        letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
+        letter_case=dataclasses_json.LetterCase.CAMEL,
         undefined=dataclasses_json.Undefined.EXCLUDE,
         exclude=lambda f: f is None,
     )["dataclasses_json"]

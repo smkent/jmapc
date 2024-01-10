@@ -10,7 +10,7 @@ REF_SENTINEL_KEY = "__ref"
 @dataclass
 class ResultReference(dataclasses_json.DataClassJsonMixin):
     dataclass_json_config = dataclasses_json.config(
-        letter_case=dataclasses_json.LetterCase.CAMEL,  # type: ignore
+        letter_case=dataclasses_json.LetterCase.CAMEL,
     )["dataclasses_json"]
     name: str
     path: str

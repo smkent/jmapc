@@ -413,7 +413,7 @@ def test_error_unauthorized(
     )
     with pytest.raises(requests.exceptions.HTTPError) as e:
         client.request(CoreEcho(data=echo_test_data))
-    assert e.value.response.status_code == 401  # type: ignore
+    assert e.value.response.status_code == 401
 
 
 def test_upload_blob(
