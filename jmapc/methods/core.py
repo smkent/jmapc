@@ -5,6 +5,7 @@ from typing import Any, Dict, Optional
 
 from .. import constants
 from .base import Method, Response
+from ..serializer import null_omitted_field
 
 
 class CoreBase:
@@ -21,12 +22,12 @@ class CoreEcho(CoreBase, EchoMethod, Method):
     def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         return self.data or dict()
 
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[Dict[str, Any]] = null_omitted_field()
 
 
 @dataclass
 class CoreEchoResponse(CoreBase, EchoMethod, Response):
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[Dict[str, Any]] = null_omitted_field()
 
     @classmethod
     def from_dict(

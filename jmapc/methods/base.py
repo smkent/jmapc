@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import contextlib
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 from typing import Set as SetType
 from typing import Type, Union, cast
 
 from ..errors import Error
 from ..models import AddedItem, Comparator, ListOrRef, SetError, StrOrRef
-from ..serializer import Model
+from ..serializer import Model, null_omitted_field
 
 
 class MethodBase(Model):
@@ -35,7 +35,7 @@ class Method(MethodBase):
 
 @dataclass
 class MethodWithAccount(Method):
-    account_id: Optional[str] = field(init=False, default=None)
+    account_id: Optional[str] = null_omitted_field(init=False)
 
 
 class ResponseCollector(MethodBase):
@@ -87,7 +87,7 @@ class ChangesMethod:
 @dataclass
 class Changes(MethodWithAccount, ChangesMethod):
     since_state: str
-    max_changes: Optional[int] = None
+    max_changes: Optional[int] = null_omitted_field()
 
 
 @dataclass
@@ -107,10 +107,10 @@ class CopyMethod:
 @dataclass
 class Copy(MethodWithAccount, CopyMethod):
     from_account_id: str
-    if_from_in_state: Optional[str] = None
-    if_in_state: Optional[str] = None
+    if_from_in_state: Optional[str] = null_omitted_field()
+    if_in_state: Optional[str] = null_omitted_field()
     on_success_destroy_original: bool = False
-    destroy_from_if_in_state: Optional[str] = None
+    destroy_from_if_in_state: Optional[str] = null_omitted_field()
 
 
 @dataclass
@@ -127,8 +127,8 @@ class GetMethod:
 
 @dataclass
 class Get(MethodWithAccount, GetMethod):
-    ids: Optional[ListOrRef[str]]
-    properties: Optional[List[str]] = None
+    ids: Optional[ListOrRef[str]] = null_omitted_field()
+    properties: Optional[List[str]] = null_omitted_field()
 
 
 @dataclass
@@ -147,10 +147,10 @@ class SetMethod:
 
 @dataclass
 class Set(MethodWithAccount, SetMethod):
-    if_in_state: Optional[StrOrRef] = None
-    create: Optional[Dict[str, Any]] = None
-    update: Optional[Dict[str, Dict[str, Any]]] = None
-    destroy: Optional[ListOrRef[str]] = None
+    if_in_state: Optional[StrOrRef] = null_omitted_field()
+    create: Optional[Dict[str, Any]] = null_omitted_field()
+    update: Optional[Dict[str, Dict[str, Any]]] = null_omitted_field()
+    destroy: Optional[ListOrRef[str]] = null_omitted_field()
 
 
 @dataclass
@@ -160,9 +160,9 @@ class SetResponse(ResponseWithAccount, SetMethod):
     created: Optional[Dict[str, Any]]
     updated: Optional[Dict[str, Any]]
     destroyed: Optional[List[str]]
-    not_created: Optional[Dict[str, SetError]] = None
-    not_updated: Optional[Dict[str, SetError]] = None
-    not_destroyed: Optional[Dict[str, SetError]] = None
+    not_created: Optional[Dict[str, SetError]] = null_omitted_field()
+    not_updated: Optional[Dict[str, SetError]] = null_omitted_field()
+    not_destroyed: Optional[Dict[str, SetError]] = null_omitted_field()
 
 
 class QueryMethod:
@@ -171,12 +171,12 @@ class QueryMethod:
 
 @dataclass
 class Query(MethodWithAccount, QueryMethod):
-    sort: Optional[List[Comparator]] = None
-    position: Optional[int] = None
-    anchor: Optional[str] = None
-    anchor_offset: Optional[int] = None
-    limit: Optional[int] = None
-    calculate_total: Optional[bool] = None
+    sort: Optional[List[Comparator]] = null_omitted_field()
+    position: Optional[int] = null_omitted_field()
+    anchor: Optional[str] = null_omitted_field()
+    anchor_offset: Optional[int] = null_omitted_field()
+    limit: Optional[int] = null_omitted_field()
+    calculate_total: Optional[bool] = null_omitted_field()
 
 
 @dataclass
@@ -185,8 +185,8 @@ class QueryResponse(ResponseWithAccount, QueryMethod):
     can_calculate_changes: bool
     position: int
     ids: ListOrRef[str]
-    total: Optional[int] = None
-    limit: Optional[int] = None
+    total: Optional[int] = null_omitted_field()
+    limit: Optional[int] = null_omitted_field()
 
 
 class QueryChangesMethod:
@@ -195,10 +195,10 @@ class QueryChangesMethod:
 
 @dataclass
 class QueryChanges(MethodWithAccount, QueryChangesMethod):
-    sort: Optional[List[Comparator]] = None
-    since_query_state: Optional[str] = None
-    max_changes: Optional[int] = None
-    up_to_id: Optional[str] = None
+    sort: Optional[List[Comparator]] = null_omitted_field()
+    since_query_state: Optional[str] = null_omitted_field()
+    max_changes: Optional[int] = null_omitted_field()
+    up_to_id: Optional[str] = null_omitted_field()
     calculate_total: bool = False
 
 
@@ -208,7 +208,7 @@ class QueryChangesResponse(ResponseWithAccount, QueryChangesMethod):
     new_query_state: str
     removed: List[str]
     added: List[AddedItem]
-    total: Optional[int] = None
+    total: Optional[int] = null_omitted_field()
 
 
 ResponseOrError = Union[Error, Response]
