@@ -11,8 +11,10 @@ class SSEClient:
         **kwargs: Any
     ):
         pass
+
     def __iter__(self) -> SSEClient:
         pass
+
     def __next__(self) -> "Event":
         pass
 
