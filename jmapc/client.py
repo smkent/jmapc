@@ -186,8 +186,7 @@ class Client:
         calls: Method,
         raise_errors: Literal[False] = False,
         single_response: Literal[True] = True,
-    ) -> ResponseOrError:
-        ...  # pragma: no cover
+    ) -> ResponseOrError: ...  # pragma: no cover
 
     @overload
     def request(
@@ -195,8 +194,9 @@ class Client:
         calls: Method,
         raise_errors: Literal[False] = False,
         single_response: Literal[False] = False,
-    ) -> Union[Sequence[ResponseOrError], ResponseOrError]:
-        ...  # pragma: no cover
+    ) -> Union[
+        Sequence[ResponseOrError], ResponseOrError
+    ]: ...  # pragma: no cover
 
     @overload
     def request(
@@ -204,8 +204,7 @@ class Client:
         calls: Method,
         raise_errors: Literal[True],
         single_response: Literal[True],
-    ) -> Response:
-        ...  # pragma: no cover
+    ) -> Response: ...  # pragma: no cover
 
     @overload
     def request(
@@ -213,24 +212,21 @@ class Client:
         calls: Method,
         raise_errors: Literal[True],
         single_response: Literal[False] = False,
-    ) -> Union[Sequence[Response], Response]:
-        ...  # pragma: no cover
+    ) -> Union[Sequence[Response], Response]: ...  # pragma: no cover
 
     @overload
     def request(
         self,
         calls: Sequence[Request],
         raise_errors: Literal[False] = False,
-    ) -> Sequence[InvocationResponse]:
-        ...  # pragma: no cover
+    ) -> Sequence[InvocationResponse]: ...  # pragma: no cover
 
     @overload
     def request(
         self,
         calls: Sequence[Request],
         raise_errors: Literal[True],
-    ) -> Sequence[InvocationResponse]:
-        ...  # pragma: no cover
+    ) -> Sequence[InvocationResponse]: ...  # pragma: no cover
 
     def request(
         self,
