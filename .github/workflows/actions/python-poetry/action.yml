@@ -20,7 +20,7 @@ runs:
         python3 -m pip install --upgrade requests
 
     - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       id: setuppy
       with:
         python-version: ${{ inputs.python_version }}
@@ -41,7 +41,7 @@ runs:
         echo "PROJECT_VERSION=${PROJECT_VERSION}" >> $GITHUB_ENV
 
     - name: 🪝 Cache pre-commit hooks
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pre-commit
         key: "pre-commit-${{ runner.os }}-python\
