@@ -5,7 +5,7 @@ env:
   ENABLE_PYPI_PUBLISH: true
   ENABLE_TEST_PYPI_PUBLISH: true
   RELEASE_PYTHON_VERSION: "3.12"
-  RELEASE_POETRY_VERSION: "1.6"
+  RELEASE_POETRY_VERSION: "1.8"
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: 💾 Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🐍 Set up Python project with Poetry
         uses: ./.github/workflows/actions/python-poetry
