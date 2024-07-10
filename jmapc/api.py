@@ -103,7 +103,5 @@ class APIRequest(Model):
         api_request = APIRequest(
             account_id=account_id, method_calls=method_calls
         )
-        api_request.using |= set().union(
-            *[c.method.using for c in invocations]
-        )
+        api_request.using |= {c.method.using for c in invocations}
         return api_request
