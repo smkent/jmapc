@@ -6,45 +6,50 @@ from typing import Dict, List, Optional, Union
 
 from dataclasses_json import config
 
-from ..serializer import Model, datetime_decode, datetime_encode
+from ..serializer import (
+    Model,
+    datetime_decode,
+    datetime_encode,
+    null_omitted_field,
+)
 from .models import EmailAddress, ListOrRef, Operator, StrOrRef
 
 
 @dataclass
 class Email(Model):
     id: Optional[str] = field(metadata=config(field_name="id"), default=None)
-    blob_id: Optional[str] = None
-    thread_id: Optional[str] = None
-    mailbox_ids: Optional[Dict[str, bool]] = None
-    keywords: Optional[Dict[str, bool]] = None
-    size: Optional[int] = None
-    received_at: Optional[datetime] = field(
+    blob_id: Optional[str] = null_omitted_field()
+    thread_id: Optional[str] = null_omitted_field()
+    mailbox_ids: Optional[Dict[str, bool]] = null_omitted_field()
+    keywords: Optional[Dict[str, bool]] = null_omitted_field()
+    size: Optional[int] = null_omitted_field()
+    received_at: Optional[datetime] = null_omitted_field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
-    message_id: Optional[List[str]] = None
-    in_reply_to: Optional[List[str]] = None
-    references: Optional[List[str]] = None
-    headers: Optional[List[EmailHeader]] = None
-    mail_from: Optional[List[EmailAddress]] = field(
-        metadata=config(field_name="from"), default=None
+    message_id: Optional[List[str]] = null_omitted_field()
+    in_reply_to: Optional[List[str]] = null_omitted_field()
+    references: Optional[List[str]] = null_omitted_field()
+    headers: Optional[List[EmailHeader]] = null_omitted_field()
+    mail_from: Optional[List[EmailAddress]] = null_omitted_field(
+        default=None, metadata=config(field_name="from")
     )
-    to: Optional[List[EmailAddress]] = None
-    cc: Optional[List[EmailAddress]] = None
-    bcc: Optional[List[EmailAddress]] = None
-    reply_to: Optional[List[EmailAddress]] = None
-    subject: Optional[str] = None
-    sent_at: Optional[datetime] = field(
+    to: Optional[List[EmailAddress]] = null_omitted_field()
+    cc: Optional[List[EmailAddress]] = null_omitted_field()
+    bcc: Optional[List[EmailAddress]] = null_omitted_field()
+    reply_to: Optional[List[EmailAddress]] = null_omitted_field()
+    subject: Optional[str] = null_omitted_field()
+    sent_at: Optional[datetime] = null_omitted_field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
-    body_structure: Optional[EmailBodyPart] = None
-    body_values: Optional[Dict[str, EmailBodyValue]] = None
-    text_body: Optional[List[EmailBodyPart]] = None
-    html_body: Optional[List[EmailBodyPart]] = None
-    attachments: Optional[List[EmailBodyPart]] = None
-    has_attachment: Optional[bool] = None
-    preview: Optional[str] = None
+    body_structure: Optional[EmailBodyPart] = null_omitted_field()
+    body_values: Optional[Dict[str, EmailBodyValue]] = null_omitted_field()
+    text_body: Optional[List[EmailBodyPart]] = null_omitted_field()
+    html_body: Optional[List[EmailBodyPart]] = null_omitted_field()
+    attachments: Optional[List[EmailBodyPart]] = null_omitted_field()
+    has_attachment: Optional[bool] = null_omitted_field()
+    preview: Optional[str] = null_omitted_field()
 
 
 @dataclass
@@ -97,8 +102,9 @@ class EmailQueryFilterCondition(Model):
     not_keyword: Optional[StrOrRef] = None
     has_attachment: Optional[bool] = None
     text: Optional[StrOrRef] = None
-    mail_from: Optional[str] = field(
-        metadata=config(field_name="from"), default=None
+    mail_from: Optional[str] = null_omitted_field(
+        default=None,
+        metadata=config(field_name="from"),
     )
     to: Optional[StrOrRef] = None
     cc: Optional[StrOrRef] = None
