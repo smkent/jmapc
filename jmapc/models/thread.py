@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 from ..serializer import Model
 
@@ -12,4 +11,4 @@ class Thread(Model):
         return len(self.email_ids)
 
     id: str
-    email_ids: List[str]
+    email_ids: list[str]

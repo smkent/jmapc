@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 from dataclasses_json import config
 
@@ -15,34 +15,34 @@ class Email(Model):
     id: Optional[str] = field(metadata=config(field_name="id"), default=None)
     blob_id: Optional[str] = None
     thread_id: Optional[str] = None
-    mailbox_ids: Optional[Dict[str, bool]] = None
-    keywords: Optional[Dict[str, bool]] = None
+    mailbox_ids: Optional[dict[str, bool]] = None
+    keywords: Optional[dict[str, bool]] = None
     size: Optional[int] = None
     received_at: Optional[datetime] = field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
-    message_id: Optional[List[str]] = None
-    in_reply_to: Optional[List[str]] = None
-    references: Optional[List[str]] = None
-    headers: Optional[List[EmailHeader]] = None
-    mail_from: Optional[List[EmailAddress]] = field(
+    message_id: Optional[list[str]] = None
+    in_reply_to: Optional[list[str]] = None
+    references: Optional[list[str]] = None
+    headers: Optional[list[EmailHeader]] = None
+    mail_from: Optional[list[EmailAddress]] = field(
         metadata=config(field_name="from"), default=None
     )
-    to: Optional[List[EmailAddress]] = None
-    cc: Optional[List[EmailAddress]] = None
-    bcc: Optional[List[EmailAddress]] = None
-    reply_to: Optional[List[EmailAddress]] = None
+    to: Optional[list[EmailAddress]] = None
+    cc: Optional[list[EmailAddress]] = None
+    bcc: Optional[list[EmailAddress]] = None
+    reply_to: Optional[list[EmailAddress]] = None
     subject: Optional[str] = None
     sent_at: Optional[datetime] = field(
         default=None,
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
     body_structure: Optional[EmailBodyPart] = None
-    body_values: Optional[Dict[str, EmailBodyValue]] = None
-    text_body: Optional[List[EmailBodyPart]] = None
-    html_body: Optional[List[EmailBodyPart]] = None
-    attachments: Optional[List[EmailBodyPart]] = None
+    body_values: Optional[dict[str, EmailBodyValue]] = None
+    text_body: Optional[list[EmailBodyPart]] = None
+    html_body: Optional[list[EmailBodyPart]] = None
+    attachments: Optional[list[EmailBodyPart]] = None
     has_attachment: Optional[bool] = None
     preview: Optional[str] = None
 
@@ -58,15 +58,15 @@ class EmailBodyPart(Model):
     part_id: Optional[str] = None
     blob_id: Optional[str] = None
     size: Optional[int] = None
-    headers: Optional[List[EmailHeader]] = None
+    headers: Optional[list[EmailHeader]] = None
     name: Optional[str] = None
     type: Optional[str] = None
     charset: Optional[str] = None
     disposition: Optional[str] = None
     cid: Optional[str] = None
-    language: Optional[List[str]] = None
+    language: Optional[list[str]] = None
     location: Optional[str] = None
-    sub_parts: Optional[List[EmailBodyPart]] = None
+    sub_parts: Optional[list[EmailBodyPart]] = None
 
 
 @dataclass
@@ -110,7 +110,7 @@ class EmailQueryFilterCondition(Model):
 @dataclass
 class EmailQueryFilterOperator(Model):
     operator: Operator
-    conditions: List[EmailQueryFilter]
+    conditions: list[EmailQueryFilter]
 
 
 EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]

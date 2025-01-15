@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from .base import MethodWithAccount, ResponseWithAccount
 
@@ -12,15 +12,15 @@ class CustomMethod(MethodWithAccount):
         self.jmap_method = ""
         self.using = set()
 
-    def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def to_dict(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         return self.data or dict()
 
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[dict[str, Any]] = None
 
 
 @dataclass
 class CustomResponse(ResponseWithAccount):
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[dict[str, Any]] = None
 
     def __post_init__(self) -> None:
         if self.data and "accountId" in self.data:

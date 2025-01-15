@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from dataclasses_json import config
 
@@ -37,7 +37,7 @@ class MailboxQueryFilterCondition(Model):
 @dataclass
 class MailboxQueryFilterOperator(Model):
     operator: Operator
-    conditions: List[MailboxQueryFilter]
+    conditions: list[MailboxQueryFilter]
 
 
 MailboxQueryFilter = Union[

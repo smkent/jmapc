@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from dataclasses_json import config
 
@@ -43,7 +43,7 @@ class EmailSubmissionGet(EmailSubmissionBase, Get):
 
 @dataclass
 class EmailSubmissionGetResponse(EmailSubmissionBase, GetResponse):
-    data: List[EmailSubmission] = field(metadata=config(field_name="list"))
+    data: list[EmailSubmission] = field(metadata=config(field_name="list"))
 
 
 @dataclass
@@ -70,12 +70,12 @@ class EmailSubmissionQueryChangesResponse(
 
 @dataclass
 class EmailSubmissionSet(EmailSubmissionBase, Set):
-    create: Optional[Dict[str, EmailSubmission]] = None
-    on_success_update_email: Optional[Dict[str, Any]] = None
-    on_success_destroy_email: Optional[List[str]] = None
+    create: Optional[dict[str, EmailSubmission]] = None
+    on_success_update_email: Optional[dict[str, Any]] = None
+    on_success_destroy_email: Optional[list[str]] = None
 
 
 @dataclass
 class EmailSubmissionSetResponse(EmailSubmissionBase, SetResponse):
-    created: Optional[Dict[str, Optional[EmailSubmission]]]
-    updated: Optional[Dict[str, Optional[EmailSubmission]]]
+    created: Optional[dict[str, Optional[EmailSubmission]]]
+    updated: Optional[dict[str, Optional[EmailSubmission]]]

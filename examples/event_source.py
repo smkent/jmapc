@@ -2,7 +2,7 @@
 
 import collections
 import os
-from typing import Dict, Optional
+from typing import Optional
 
 from jmapc import Client, Ref, TypeState
 from jmapc.methods import EmailChanges, EmailGet, EmailGetResponse
@@ -32,7 +32,7 @@ def email_change_callback(
 
 
 # Listen for events from the EventSource endpoint
-all_prev_state: Dict[str, TypeState] = collections.defaultdict(TypeState)
+all_prev_state: dict[str, TypeState] = collections.defaultdict(TypeState)
 for i, event in enumerate(client.events):
     if i >= MAX_EVENTS:
         # Exit after receiving MAX_EVENTS events

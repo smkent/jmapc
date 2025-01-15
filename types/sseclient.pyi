@@ -8,7 +8,7 @@ class SSEClient:
         retry: int = 3000,
         session: Optional[Any] = None,
         chunk_size: int = 1024,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         pass
 

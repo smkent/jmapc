@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from typing import List, Set
 
 import pytest
 import requests
@@ -127,7 +126,7 @@ def test_jmap_session_no_account(
 def test_jmap_session_capabilities_urns(
     client: Client,
     http_responses_base: responses.RequestsMock,
-    urns: Set[str],
+    urns: set[str],
 ) -> None:
     session_response = make_session_response()
     session_response["capabilities"].update({u: {} for u in urns})
@@ -217,7 +216,7 @@ def test_client_request_updated_session(
 def test_client_request(
     client: Client,
     http_responses: responses.RequestsMock,
-    method_params: List[Request],
+    method_params: list[Request],
 ) -> None:
     expected_request = {
         "methodCalls": [

@@ -3,7 +3,7 @@ import logging
 import tempfile
 import time
 from pathlib import Path
-from typing import Iterable
+from collections.abc import Iterable
 
 import pytest
 import responses

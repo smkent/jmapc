@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from dataclasses_json import config
 
@@ -32,4 +32,4 @@ class ThreadGet(ThreadBase, Get):
 
 @dataclass
 class ThreadGetResponse(ThreadBase, GetResponse):
-    data: List[Thread] = field(metadata=config(field_name="list"))
+    data: list[Thread] = field(metadata=config(field_name="list"))

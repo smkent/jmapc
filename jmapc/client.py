@@ -2,21 +2,10 @@ from __future__ import annotations
 
 import functools
 import mimetypes
+from collections.abc import Generator, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import (
-    Any,
-    Generator,
-    Literal,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-    cast,
-    overload,
-)
+from typing import Any, Literal, Optional, TypeVar, Union, cast, overload
 
 import requests
 import sseclient
@@ -36,7 +25,7 @@ from .methods import (
 from .models import Blob, EmailBodyPart, Event
 from .session import Session
 
-RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
+RequestsAuth = Union[requests.auth.AuthBase, tuple[str, str]]
 ClientType = TypeVar("ClientType", bound="Client")
 
 REQUEST_TIMEOUT = 30
@@ -53,7 +42,7 @@ class ClientError(RuntimeError):
     def __init__(
         self,
         *args: Any,
-        result: Sequence[InvocationResponseOrError],
+        result: Sequence[Union[InvocationResponse, InvocationResponseOrError]],
         **kwargs: Any,
     ):
         super().__init__(*args, **kwargs)
@@ -63,7 +52,7 @@ class ClientError(RuntimeError):
 class Client:
     @classmethod
     def create_with_api_token(
-        cls: Type[ClientType],
+        cls: type[ClientType],
         host: str,
         api_token: str,
         *args: Any,
@@ -74,7 +63,7 @@ class Client:
 
     @classmethod
     def create_with_password(
-        cls: Type[ClientType],
+        cls: type[ClientType],
         host: str,
         user: str,
         password: str,

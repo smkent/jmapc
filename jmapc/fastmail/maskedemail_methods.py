@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Optional
 
 from dataclasses_json import config
 
@@ -23,7 +23,7 @@ class MaskedEmailGet(MaskedEmailBase, Get):
 
 @dataclass
 class MaskedEmailGetResponse(MaskedEmailBase, GetResponse):
-    data: List[MaskedEmail] = field(metadata=config(field_name="list"))
+    data: list[MaskedEmail] = field(metadata=config(field_name="list"))
 
 
 @dataclass
@@ -33,5 +33,5 @@ class MaskedEmailSet(MaskedEmailBase, Set):
 
 @dataclass
 class MaskedEmailSetResponse(MaskedEmailBase, SetResponse):
-    created: Optional[Dict[str, Optional[MaskedEmail]]]
-    updated: Optional[Dict[str, Optional[MaskedEmail]]]
+    created: Optional[dict[str, Optional[MaskedEmail]]]
+    updated: Optional[dict[str, Optional[MaskedEmail]]]

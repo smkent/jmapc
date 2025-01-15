@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass, field
-from typing import Dict, Optional
+from typing import Optional
 
 import sseclient
 from dataclasses_json import config
@@ -29,7 +29,7 @@ class TypeState(Model):
 
 @dataclass
 class StateChange(Model):
-    changed: Dict[str, TypeState]
+    changed: dict[str, TypeState]
     type: Optional[str] = None
 
 

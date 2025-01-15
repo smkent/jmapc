@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import contextlib
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, cast
+from typing import TYPE_CHECKING, Any, Optional, cast
 
 import dataclasses_json
 import dateutil.parser
@@ -25,14 +25,14 @@ def datetime_decode(value: Optional[str]) -> Optional[datetime]:
 
 class ModelToDictPostprocessor:
     def __init__(
-        self, method_calls_slice: Optional[List[Invocation]] = None
+        self, method_calls_slice: Optional[list[Invocation]] = None
     ) -> None:
         self.method_calls_slice = method_calls_slice
 
     def postprocess(
         self,
-        data: Dict[str, dataclasses_json.core.Json],
-    ) -> Dict[str, dataclasses_json.core.Json]:
+        data: dict[str, dataclasses_json.core.Json],
+    ) -> dict[str, dataclasses_json.core.Json]:
         for key in [key for key in data.keys() if not key.startswith("#")]:
             value = data[key]
             if isinstance(value, dict):
@@ -73,10 +73,10 @@ class ModelToDictPostprocessor:
 
     def fix_result_reference(
         self,
-        data: Dict[str, dataclasses_json.core.Json],
+        data: dict[str, dataclasses_json.core.Json],
         key: str,
-    ) -> Dict[str, dataclasses_json.core.Json]:
-        ref_type = cast(Dict[str, Any], data[key]).get(REF_SENTINEL_KEY)
+    ) -> dict[str, dataclasses_json.core.Json]:
+        ref_type = cast(dict[str, Any], data[key]).get(REF_SENTINEL_KEY)
         if ref_type == "ResultReference":
             rr = ResultReference.from_dict(data[key])
         elif ref_type == "Ref":
@@ -98,10 +98,10 @@ class ModelToDictPostprocessor:
 
     def fix_email_headers(
         self,
-        data: Dict[str, dataclasses_json.core.Json],
+        data: dict[str, dataclasses_json.core.Json],
         key: str,
-        value: List[Dict[str, str]],
-    ) -> Dict[str, dataclasses_json.core.Json]:
+        value: list[dict[str, str]],
+    ) -> dict[str, dataclasses_json.core.Json]:
         for header in value:
             header_key = header["name"]
             header_value = header["value"]
@@ -121,9 +121,9 @@ class Model(dataclasses_json.DataClassJsonMixin):
         self,
         *args: Any,
         account_id: Optional[str] = None,
-        method_calls_slice: Optional[List[Invocation]] = None,
+        method_calls_slice: Optional[list[Invocation]] = None,
         **kwargs: Any,
-    ) -> Dict[str, dataclasses_json.core.Json]:
+    ) -> dict[str, dataclasses_json.core.Json]:
         if account_id:
             self.account_id: Optional[str] = account_id
         todict = ModelToDictPostprocessor(method_calls_slice)
