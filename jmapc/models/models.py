@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Optional, TypeVar, Union
+from typing import Optional, TypeVar, Union
 
 from dataclasses_json import config
 
@@ -11,7 +11,7 @@ from ..serializer import Model
 
 T = TypeVar("T")
 StrOrRef = Union[str, ResultReference, Ref]
-ListOrRef = Union[List[T], ResultReference, Ref]
+ListOrRef = Union[list[T], ResultReference, Ref]
 TypeOrRef = Union[T, ResultReference, Ref]
 
 
@@ -62,5 +62,5 @@ class SetError(Model):
     type: str
     description: Optional[str] = None
     already_exists: Optional[str] = None
-    not_found: Optional[List[str]] = None
-    properties: Optional[List[str]] = None
+    not_found: Optional[list[str]] = None
+    properties: Optional[list[str]] = None

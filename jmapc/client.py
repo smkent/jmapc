@@ -6,17 +6,14 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import (
     Any,
-    Generator,
     Literal,
     Optional,
-    Sequence,
-    Tuple,
-    Type,
     TypeVar,
     Union,
     cast,
     overload,
 )
+from collections.abc import Generator, Sequence
 
 import requests
 import sseclient
@@ -36,7 +33,7 @@ from .methods import (
 from .models import Blob, EmailBodyPart, Event
 from .session import Session
 
-RequestsAuth = Union[requests.auth.AuthBase, Tuple[str, str]]
+RequestsAuth = Union[requests.auth.AuthBase, tuple[str, str]]
 ClientType = TypeVar("ClientType", bound="Client")
 
 REQUEST_TIMEOUT = 30
@@ -63,7 +60,7 @@ class ClientError(RuntimeError):
 class Client:
     @classmethod
     def create_with_api_token(
-        cls: Type[ClientType],
+        cls: type[ClientType],
         host: str,
         api_token: str,
         *args: Any,
@@ -74,7 +71,7 @@ class Client:
 
     @classmethod
     def create_with_password(
-        cls: Type[ClientType],
+        cls: type[ClientType],
         host: str,
         user: str,
         password: str,

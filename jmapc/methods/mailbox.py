@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Optional
 
 from dataclasses_json import config
 
@@ -43,7 +43,7 @@ class MailboxGet(MailboxBase, Get):
 
 @dataclass
 class MailboxGetResponse(MailboxBase, GetResponse):
-    data: List[Mailbox] = field(metadata=config(field_name="list"))
+    data: list[Mailbox] = field(metadata=config(field_name="list"))
 
 
 @dataclass
@@ -70,11 +70,11 @@ class MailboxQueryChangesResponse(MailboxBase, QueryChangesResponse):
 
 @dataclass
 class MailboxSet(MailboxBase, Set):
-    create: Optional[Dict[str, Mailbox]] = None
+    create: Optional[dict[str, Mailbox]] = None
     on_destroy_remove_emails: bool = False
 
 
 @dataclass
 class MailboxSetResponse(MailboxBase, SetResponse):
-    created: Optional[Dict[str, Optional[Mailbox]]]
-    updated: Optional[Dict[str, Optional[Mailbox]]]
+    created: Optional[dict[str, Optional[Mailbox]]]
+    updated: Optional[dict[str, Optional[Mailbox]]]

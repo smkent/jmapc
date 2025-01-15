@@ -4,15 +4,10 @@ from dataclasses import dataclass, field
 from typing import (
     Any,
     Callable,
-    Dict,
-    List,
-    Sequence,
-    Set,
-    Tuple,
-    Type,
     Union,
     cast,
 )
+from collections.abc import Sequence
 
 from dataclasses_json import config
 
@@ -30,9 +25,9 @@ from .serializer import Model
 
 
 def decode_method_responses(
-    value: Sequence[Tuple[str, Dict[str, Any], str]],
-) -> List[InvocationResponseOrError]:
-    def _response_type(method_name: str) -> Type[ResponseOrError]:
+    value: Sequence[tuple[str, dict[str, Any], str]],
+) -> list[InvocationResponseOrError]:
+    def _response_type(method_name: str) -> type[ResponseOrError]:
         if method_name == "error":
             return errors.Error
         return Response.response_types.get(method_name, CustomResponse)
@@ -49,13 +44,13 @@ def decode_method_responses(
 @dataclass
 class APIResponse(Model):
     session_state: str
-    method_responses: List[InvocationResponseOrError] = field(
+    method_responses: list[InvocationResponseOrError] = field(
         metadata=config(
             encoder=lambda value: None,
             decoder=decode_method_responses,
         ),
     )
-    created_ids: List[str] = field(default_factory=list)
+    created_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -64,8 +59,8 @@ class APIRequest(Model):
         repr=False,
         metadata=config(exclude=cast(Callable[..., bool], lambda *_: True)),
     )
-    method_calls: List[Tuple[str, Any, str]]
-    using: Set[str] = field(
+    method_calls: list[tuple[str, Any, str]]
+    using: set[str] = field(
         init=False,
         default_factory=lambda: {constants.JMAP_URN_CORE},
         metadata=config(encoder=lambda value: sorted(list(value))),
@@ -77,7 +72,7 @@ class APIRequest(Model):
         calls: Union[Sequence[Request], Sequence[Method], Method],
     ) -> APIRequest:
         calls_list = calls if isinstance(calls, Sequence) else [calls]
-        invocations: List[Invocation] = []
+        invocations: list[Invocation] = []
         # Create Invocations for Methods
         for i, c in enumerate(calls_list):
             if isinstance(c, Invocation):

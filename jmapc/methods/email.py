@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Optional
 
 from dataclasses_json import config
 
@@ -40,17 +40,17 @@ class EmailChangesResponse(EmailBase, ChangesResponse):
 
 @dataclass
 class EmailCopy(EmailBase, Copy):
-    create: Optional[Dict[str, Email]] = None
+    create: Optional[dict[str, Email]] = None
 
 
 @dataclass
 class EmailCopyResponse(EmailBase, CopyResponse):
-    created: Optional[Dict[str, Email]] = None
+    created: Optional[dict[str, Email]] = None
 
 
 @dataclass
 class EmailGet(EmailBase, Get):
-    body_properties: Optional[List[str]] = None
+    body_properties: Optional[list[str]] = None
     fetch_text_body_values: Optional[bool] = None
     fetch_html_body_values: Optional[bool] = field(
         metadata=config(field_name="fetchHTMLBodyValues"), default=None
@@ -61,7 +61,7 @@ class EmailGet(EmailBase, Get):
 
 @dataclass
 class EmailGetResponse(EmailBase, GetResponse):
-    data: List[Email] = field(metadata=config(field_name="list"))
+    data: list[Email] = field(metadata=config(field_name="list"))
 
 
 @dataclass
@@ -88,10 +88,10 @@ class EmailQueryChangesResponse(EmailBase, QueryChangesResponse):
 
 @dataclass
 class EmailSet(EmailBase, Set):
-    create: Optional[Dict[str, Email]] = None
+    create: Optional[dict[str, Email]] = None
 
 
 @dataclass
 class EmailSetResponse(EmailBase, SetResponse):
-    created: Optional[Dict[str, Optional[Email]]]
-    updated: Optional[Dict[str, Optional[Email]]]
+    created: Optional[dict[str, Optional[Email]]]
+    updated: Optional[dict[str, Optional[Email]]]

@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 import responses
@@ -87,7 +87,7 @@ from ..utils import expect_jmap_call
 def test_method_error(
     client: Client,
     http_responses: responses.RequestsMock,
-    method_response: Dict[str, Any],
+    method_response: dict[str, Any],
     expected_error: Error,
     raise_errors: bool,
 ) -> None:

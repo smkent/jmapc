@@ -1,5 +1,6 @@
 import json
-from typing import Iterable, Optional
+from typing import Optional
+from collections.abc import Iterable
 from unittest import mock
 
 import pytest
