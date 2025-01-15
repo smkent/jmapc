@@ -2,18 +2,10 @@ from __future__ import annotations
 
 import functools
 import mimetypes
+from collections.abc import Generator, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import (
-    Any,
-    Literal,
-    Optional,
-    TypeVar,
-    Union,
-    cast,
-    overload,
-)
-from collections.abc import Generator, Sequence
+from typing import Any, Literal, Optional, TypeVar, Union, cast, overload
 
 import requests
 import sseclient
@@ -50,7 +42,7 @@ class ClientError(RuntimeError):
     def __init__(
         self,
         *args: Any,
-        result: Sequence[InvocationResponseOrError],
+        result: Sequence[Union[InvocationResponse, InvocationResponseOrError]],
         **kwargs: Any,
     ):
         super().__init__(*args, **kwargs)

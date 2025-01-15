@@ -71,13 +71,13 @@ class Invocation(InvocationBase):
 
 
 @dataclass
-class InvocationResponseOrError(InvocationBase):
-    response: Union[Error, Response]
+class InvocationResponse(InvocationBase):
+    response: Response
 
 
 @dataclass
-class InvocationResponse(InvocationResponseOrError):
-    response: Response
+class InvocationResponseOrError(InvocationBase):
+    response: Union[Error, Response]
 
 
 class ChangesMethod:
