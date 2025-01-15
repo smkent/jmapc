@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import pytest
 from dataclasses_json import config
@@ -43,7 +43,7 @@ def test_serialize_result_reference() -> None:
 def test_serialize_header() -> None:
     @dataclass
     class TestModel(Model):
-        headers: List[EmailHeader]
+        headers: list[EmailHeader]
 
     d = TestModel(
         headers=[
@@ -59,7 +59,7 @@ def test_serialize_header() -> None:
 def test_serialize_header_2() -> None:
     @dataclass
     class TestModel(Model):
-        headers: List[EmailHeader]
+        headers: list[EmailHeader]
 
     d = TestModel(
         headers=[
@@ -96,7 +96,7 @@ def test_serialize_add_account_id() -> None:
     ],
 )
 def test_serialize_datetime(
-    dt: datetime, expected_dict: Dict[str, Any]
+    dt: datetime, expected_dict: dict[str, Any]
 ) -> None:
     @dataclass
     class TestModel(Model):

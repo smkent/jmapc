@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 from dataclasses_json import DataClassJsonMixin, config
 
@@ -23,21 +23,21 @@ class EmailSubmission(Model):
         metadata=config(encoder=datetime_encode, decoder=datetime_decode),
     )
     undo_status: Optional[UndoStatus] = None
-    delivery_status: Optional[Dict[str, DeliveryStatus]] = None
-    dsn_blob_ids: Optional[List[str]] = None
-    mdn_blob_ids: Optional[List[str]] = None
+    delivery_status: Optional[dict[str, DeliveryStatus]] = None
+    dsn_blob_ids: Optional[list[str]] = None
+    mdn_blob_ids: Optional[list[str]] = None
 
 
 @dataclass
 class Envelope(Model):
     mail_from: Optional[Address] = None
-    rcpt_to: Optional[List[Address]] = None
+    rcpt_to: Optional[list[Address]] = None
 
 
 @dataclass
 class Address(DataClassJsonMixin):
     email: Optional[str] = None
-    parameters: Optional[Dict[str, str]] = None
+    parameters: Optional[dict[str, str]] = None
 
 
 class UndoStatus(Enum):
@@ -67,9 +67,9 @@ class Displayed(Enum):
 
 @dataclass
 class EmailSubmissionQueryFilterCondition(Model):
-    identity_ids: Optional[List[str]] = None
-    email_ids: Optional[List[str]] = None
-    thread_ids: Optional[List[str]] = None
+    identity_ids: Optional[list[str]] = None
+    email_ids: Optional[list[str]] = None
+    thread_ids: Optional[list[str]] = None
     undo_status: Optional[UndoStatus] = None
     before: Optional[datetime] = field(
         default=None,
@@ -84,7 +84,7 @@ class EmailSubmissionQueryFilterCondition(Model):
 @dataclass
 class EmailSubmissionQueryFilterOperator(Model):
     operator: Operator
-    conditions: List[EmailSubmissionQueryFilter]
+    conditions: list[EmailSubmissionQueryFilter]
 
 
 EmailSubmissionQueryFilter = Union[

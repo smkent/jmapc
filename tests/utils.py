@@ -1,20 +1,20 @@
 import functools
 import json
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Callable
 
 import requests
 import responses
 
 
 def assert_request_return_response(
-    expected_request: Dict[str, Any],
-    response: Dict[str, Any],
-) -> Callable[[requests.PreparedRequest], Tuple[int, Dict[str, str], str]]:
+    expected_request: dict[str, Any],
+    response: dict[str, Any],
+) -> Callable[[requests.PreparedRequest], tuple[int, dict[str, str], str]]:
     def _response_callback(
-        expected_request: Dict[str, Any],
-        response: Dict[str, Any],
+        expected_request: dict[str, Any],
+        response: dict[str, Any],
         request: requests.PreparedRequest,
-    ) -> Tuple[int, Dict[str, str], str]:
+    ) -> tuple[int, dict[str, str], str]:
         assert request.headers["Content-Type"] == "application/json"
         assert json.loads(request.body or "{}") == expected_request
         return (200, dict(), json.dumps(response))
@@ -24,8 +24,8 @@ def assert_request_return_response(
 
 def expect_jmap_call(
     http_responses: responses.RequestsMock,
-    expected_request: Dict[str, Any],
-    response: Dict[str, Any],
+    expected_request: dict[str, Any],
+    response: dict[str, Any],
 ) -> None:
     response.setdefault("sessionState", "test;session;state")
     http_responses.add_callback(

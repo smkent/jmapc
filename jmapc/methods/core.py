@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from .. import constants
 from .base import Method, Response
@@ -18,15 +18,15 @@ class EchoMethod:
 
 @dataclass
 class CoreEcho(CoreBase, EchoMethod, Method):
-    def to_dict(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def to_dict(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         return self.data or dict()
 
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[dict[str, Any]] = None
 
 
 @dataclass
 class CoreEchoResponse(CoreBase, EchoMethod, Response):
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[dict[str, Any]] = None
 
     @classmethod
     def from_dict(

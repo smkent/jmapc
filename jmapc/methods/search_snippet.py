@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from dataclasses_json import config
 
@@ -25,4 +25,4 @@ class SearchSnippetGet(SearchSnippetBase, Get):
 
 @dataclass
 class SearchSnippetGetResponse(SearchSnippetBase, GetResponseWithoutState):
-    data: List[SearchSnippet] = field(metadata=config(field_name="list"))
+    data: list[SearchSnippet] = field(metadata=config(field_name="list"))

@@ -1,6 +1,6 @@
 import functools
 from dataclasses import dataclass, field
-from typing import Optional, Set
+from typing import Optional
 
 from dataclasses_json import CatchAll, Undefined, config, dataclass_json
 
@@ -31,7 +31,7 @@ class SessionCapabilities(Model):
     extensions: CatchAll = field(default_factory=dict)
 
     @functools.cached_property
-    def urns(self) -> Set[str]:
+    def urns(self) -> set[str]:
         return set(self.to_dict().keys())
 
 
@@ -44,7 +44,7 @@ class SessionCapabilitiesCore(Model):
     max_calls_in_request: int
     max_objects_in_get: int
     max_objects_in_set: int
-    collation_algorithms: Set[str]
+    collation_algorithms: set[str]
 
 
 @dataclass
