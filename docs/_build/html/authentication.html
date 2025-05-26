@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication &mdash; jmapc 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7026087e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            jmapc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api-token-authentication">API Token Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-authentication">Basic Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-authentication">Custom Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-api-tokens">Getting API Tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fastmail">Fastmail</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-providers">Other Providers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#session-management">Session Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/client.html">Client API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/methods.html">Methods API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">jmapc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Authentication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/authentication.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="authentication">
+<h1>Authentication<a class="headerlink" href="#authentication" title="Link to this heading"></a></h1>
+<p>jmapc supports multiple authentication methods for connecting to JMAP servers.
+The authentication method you use depends on your JMAP server configuration.</p>
+<section id="api-token-authentication">
+<h2>API Token Authentication<a class="headerlink" href="#api-token-authentication" title="Link to this heading"></a></h2>
+<p>The most common and recommended authentication method is using an API token.
+Many JMAP providers (like Fastmail) provide API tokens for programmatic access.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jmapc</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">jmapc</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;jmap.example.com&quot;</span><span class="p">,</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="s2">&quot;your_api_token_here&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>API tokens are preferred because they:</p>
+<ul class="simple">
+<li><p>Don’t require storing passwords in your code</p></li>
+<li><p>Can be easily revoked if compromised</p></li>
+<li><p>Often have specific scopes/permissions</p></li>
+<li><p>Are designed for programmatic access</p></li>
+</ul>
+</section>
+<section id="basic-authentication">
+<h2>Basic Authentication<a class="headerlink" href="#basic-authentication" title="Link to this heading"></a></h2>
+<p>You can also use username/password authentication:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jmapc</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">jmapc</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">create_with_password</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;jmap.example.com&quot;</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;your_username&quot;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;your_password&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using passwords directly in code is not recommended for production applications.
+Consider using environment variables or secure credential storage.</p>
+</div>
+</section>
+<section id="custom-authentication">
+<h2>Custom Authentication<a class="headerlink" href="#custom-authentication" title="Link to this heading"></a></h2>
+<p>For more advanced authentication schemes, you can provide a custom authentication object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jmapc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests.auth</span>
+
+<span class="c1"># Custom authentication</span>
+<span class="n">custom_auth</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">HTTPDigestAuth</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">jmapc</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;jmap.example.com&quot;</span><span class="p">,</span>
+    <span class="n">auth</span><span class="o">=</span><span class="n">custom_auth</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h2>
+<p>For security, it’s recommended to store credentials in environment variables:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jmapc</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">jmapc</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>You can set these environment variables in your shell:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export JMAP_HOST=&quot;jmap.example.com&quot;</span>
+<span class="go">export JMAP_API_TOKEN=&quot;your_api_token_here&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="getting-api-tokens">
+<h2>Getting API Tokens<a class="headerlink" href="#getting-api-tokens" title="Link to this heading"></a></h2>
+<p>The process for obtaining API tokens varies by provider:</p>
+<section id="fastmail">
+<h3>Fastmail<a class="headerlink" href="#fastmail" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Log in to your Fastmail account</p></li>
+<li><p>Go to Settings → Privacy &amp; Security → Manage API Tokens</p></li>
+<li><p>Create a new API token with the required permissions</p></li>
+<li><p>Use the generated token in your application</p></li>
+</ol>
+</section>
+</section>
+<section id="other-providers">
+<h2>Other Providers<a class="headerlink" href="#other-providers" title="Link to this heading"></a></h2>
+<p>Check your JMAP provider’s documentation for instructions on generating API tokens.
+Most providers will have them in their account security or developer settings.</p>
+</section>
+<section id="session-management">
+<h2>Session Management<a class="headerlink" href="#session-management" title="Link to this heading"></a></h2>
+<p>jmapc automatically handles JMAP session discovery and management. When you create
+a client, it will:</p>
+<ol class="arabic simple">
+<li><p>Discover the JMAP endpoints using the well-known URL</p></li>
+<li><p>Establish a session with the server</p></li>
+<li><p>Cache session information for efficiency</p></li>
+</ol>
+<p>The session includes important information like:</p>
+<ul class="simple">
+<li><p>Available capabilities</p></li>
+<li><p>Account IDs</p></li>
+<li><p>Upload/download URLs</p></li>
+<li><p>EventSource URLs</p></li>
+</ul>
+<p>You can access session information if needed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get session information</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">jmap_session</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Session state: </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Account ID: </span><span class="si">{</span><span class="n">client</span><span class="o">.</span><span class="n">account_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>Always handle authentication errors gracefully:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jmapc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">jmapc</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;jmap.example.com&quot;</span><span class="p">,</span>
+        <span class="n">api_token</span><span class="o">=</span><span class="s2">&quot;invalid_token&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># This will trigger the session request</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">jmap_session</span>
+<span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Authentication failed: Invalid credentials&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTP error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Learn about making requests in the <a class="reference internal" href="quickstart.html"><span class="doc">Quick Start</span></a> guide</p></li>
+<li><p>Explore practical usage in the <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> section</p></li>
+<li><p>Check the <a class="reference internal" href="api/client.html"><span class="doc">Client API</span></a> for complete API reference</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Stephen Kent.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -59,6 +59,9 @@ pytest-sugar = "*"
 types-python-dateutil = "*"
 types-requests = "*"
 responses = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+myst-parser = "*"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -72,6 +75,18 @@ help = "Check all files"
 [tool.poe.tasks.pytest]
 cmd = "pytest"
 help = "Run unit tests with pytest"
+
+[tool.poe.tasks.docs-build]
+cmd = "sphinx-build -b html docs docs/_build/html"
+help = "Build documentation with Sphinx"
+
+[tool.poe.tasks.docs-serve]
+cmd = "python -m http.server 8000 --directory docs/_build/html"
+help = "Serve documentation locally on http://localhost:8000"
+
+[tool.poe.tasks.docs-clean]
+cmd = "rm -rf docs/_build"
+help = "Clean documentation build directory"
 
 [tool.poe.tasks.test]
 sequence = ["lint", "pytest"]

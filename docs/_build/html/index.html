@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jmapc: A JMAP client library for Python &mdash; jmapc 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7026087e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            jmapc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/client.html">Client API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/methods.html">Methods API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">jmapc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">jmapc: A JMAP client library for Python</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="jmapc-a-jmap-client-library-for-python">
+<h1>jmapc: A JMAP client library for Python<a class="headerlink" href="#jmapc-a-jmap-client-library-for-python" title="Link to this heading"></a></h1>
+<a class="reference external image-reference" href="https://pypi.org/project/jmapc/"><img alt="PyPI" src="https://img.shields.io/pypi/v/jmapc" />
+</a>
+<a class="reference external image-reference" href="https://pypi.org/project/jmapc/"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/jmapc" />
+</a>
+<a class="reference external image-reference" href="https://github.com/smkent/jmapc/actions?query=branch%3Amain"><img alt="Build" src="https://img.shields.io/github/checks-status/smkent/jmapc/main?label=build" />
+</a>
+<a class="reference external image-reference" href="https://codecov.io/gh/smkent/jmapc"><img alt="codecov" src="https://codecov.io/gh/smkent/jmapc/branch/main/graph/badge.svg" />
+</a>
+<p><strong>jmapc</strong> is a Python client library for the <a class="reference external" href="https://jmap.io">JMAP protocol</a>.
+JMAP (JSON Meta Application Protocol) is a modern, efficient protocol for
+synchronizing email, calendars, and contacts.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<p>Currently implemented:</p>
+<ul class="simple">
+<li><p>Basic models for JMAP objects</p></li>
+<li><p>Request methods:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Core/echo</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Email/changes</span></code>, <code class="docutils literal notranslate"><span class="pre">Email/copy</span></code>, <code class="docutils literal notranslate"><span class="pre">Email/get</span></code>, <code class="docutils literal notranslate"><span class="pre">Email/query</span></code>, <code class="docutils literal notranslate"><span class="pre">Email/queryChanges</span></code>, <code class="docutils literal notranslate"><span class="pre">Email/set</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EmailSubmission/*</span></code> (<code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">changes</span></code>, <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">queryChanges</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Identity/*</span></code> (<code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">changes</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Mailbox/*</span></code> (<code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">changes</span></code>, <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">queryChanges</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SearchSnippet/*</span></code> (<code class="docutils literal notranslate"><span class="pre">get</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Thread/*</span></code> (<code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">changes</span></code>)</p></li>
+<li><p>Arbitrary methods via the <code class="docutils literal notranslate"><span class="pre">CustomMethod</span></code> class</p></li>
+</ul>
+</li>
+<li><p>Fastmail-specific methods:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">MaskedEmail/*</span></code> (<code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>)</p></li>
+</ul>
+</li>
+<li><p>Combined requests with support for result references</p></li>
+<li><p>Basic JMAP method response error handling</p></li>
+<li><p>EventSource event handling</p></li>
+<li><p>Unit tests for basic functionality and methods</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>jmapc is available on PyPI and can be installed with pip:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install jmapc</span>
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<p>Here’s a simple example to get you started:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jmapc</span>
+
+<span class="c1"># Create a client with your JMAP server details</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">jmapc</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;jmap.example.com&quot;</span><span class="p">,</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="s2">&quot;your_api_token_here&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Get identities</span>
+<span class="n">identities</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">jmapc</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">identity</span><span class="o">.</span><span class="n">IdentityGet</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">identity</span> <span class="ow">in</span> <span class="n">identities</span><span class="o">.</span><span class="n">list</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Identity </span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation-contents">
+<h1>Documentation Contents<a class="headerlink" href="#documentation-contents" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-from-pypi">Installing from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-from-source">Installing from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#development-installation">Development Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verification">Verification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#basic-usage">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#getting-identities">Getting Identities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#working-with-mailboxes">Working with Mailboxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#querying-emails">Querying Emails</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#combined-requests">Combined Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-result-references">Using Result References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#api-token-authentication">API Token Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#basic-authentication">Basic Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#custom-authentication">Custom Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#getting-api-tokens">Getting API Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#other-providers">Other Providers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#session-management">Session Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#basic-echo-test">Basic Echo Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#getting-identities">Getting Identities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#working-with-mailboxes">Working with Mailboxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#querying-and-retrieving-emails">Querying and Retrieving Emails</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#creating-and-sending-emails">Creating and Sending Emails</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#using-combined-requests">Using Combined Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#event-source-monitoring">Event Source Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#file-upload-and-download">File Upload and Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#running-the-examples">Running the Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/client.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/client.html#jmapc.client.EventSourceConfig"><code class="docutils literal notranslate"><span class="pre">EventSourceConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/client.html#jmapc.client.ClientError"><code class="docutils literal notranslate"><span class="pre">ClientError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/client.html#jmapc.client.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/methods.html">Methods API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.CoreEcho"><code class="docutils literal notranslate"><span class="pre">CoreEcho</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.CoreEchoResponse"><code class="docutils literal notranslate"><span class="pre">CoreEchoResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.CustomMethod"><code class="docutils literal notranslate"><span class="pre">CustomMethod</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.CustomResponse"><code class="docutils literal notranslate"><span class="pre">CustomResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailChanges"><code class="docutils literal notranslate"><span class="pre">EmailChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailChangesResponse"><code class="docutils literal notranslate"><span class="pre">EmailChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailCopy"><code class="docutils literal notranslate"><span class="pre">EmailCopy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailCopyResponse"><code class="docutils literal notranslate"><span class="pre">EmailCopyResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailGet"><code class="docutils literal notranslate"><span class="pre">EmailGet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailGetResponse"><code class="docutils literal notranslate"><span class="pre">EmailGetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailQuery"><code class="docutils literal notranslate"><span class="pre">EmailQuery</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailQueryChanges"><code class="docutils literal notranslate"><span class="pre">EmailQueryChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailQueryChangesResponse"><code class="docutils literal notranslate"><span class="pre">EmailQueryChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailQueryResponse"><code class="docutils literal notranslate"><span class="pre">EmailQueryResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSet"><code class="docutils literal notranslate"><span class="pre">EmailSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSetResponse"><code class="docutils literal notranslate"><span class="pre">EmailSetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionChanges"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionChangesResponse"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionGet"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionGet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionGetResponse"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionGetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionQuery"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionQuery</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionQueryChanges"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionQueryChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionQueryChangesResponse"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionQueryChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionQueryResponse"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionQueryResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionSet"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.EmailSubmissionSetResponse"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionSetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.IdentityChanges"><code class="docutils literal notranslate"><span class="pre">IdentityChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.IdentityChangesResponse"><code class="docutils literal notranslate"><span class="pre">IdentityChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.IdentityGet"><code class="docutils literal notranslate"><span class="pre">IdentityGet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.IdentityGetResponse"><code class="docutils literal notranslate"><span class="pre">IdentityGetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.IdentitySet"><code class="docutils literal notranslate"><span class="pre">IdentitySet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.IdentitySetResponse"><code class="docutils literal notranslate"><span class="pre">IdentitySetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.Invocation"><code class="docutils literal notranslate"><span class="pre">Invocation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.InvocationResponse"><code class="docutils literal notranslate"><span class="pre">InvocationResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.InvocationResponseOrError"><code class="docutils literal notranslate"><span class="pre">InvocationResponseOrError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxChanges"><code class="docutils literal notranslate"><span class="pre">MailboxChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxChangesResponse"><code class="docutils literal notranslate"><span class="pre">MailboxChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxGet"><code class="docutils literal notranslate"><span class="pre">MailboxGet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxGetResponse"><code class="docutils literal notranslate"><span class="pre">MailboxGetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxQuery"><code class="docutils literal notranslate"><span class="pre">MailboxQuery</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxQueryChanges"><code class="docutils literal notranslate"><span class="pre">MailboxQueryChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxQueryChangesResponse"><code class="docutils literal notranslate"><span class="pre">MailboxQueryChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxQueryResponse"><code class="docutils literal notranslate"><span class="pre">MailboxQueryResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxSet"><code class="docutils literal notranslate"><span class="pre">MailboxSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.MailboxSetResponse"><code class="docutils literal notranslate"><span class="pre">MailboxSetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.Method"><code class="docutils literal notranslate"><span class="pre">Method</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.Response"><code class="docutils literal notranslate"><span class="pre">Response</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.SearchSnippetGet"><code class="docutils literal notranslate"><span class="pre">SearchSnippetGet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.SearchSnippetGetResponse"><code class="docutils literal notranslate"><span class="pre">SearchSnippetGetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.ThreadChanges"><code class="docutils literal notranslate"><span class="pre">ThreadChanges</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.ThreadChangesResponse"><code class="docutils literal notranslate"><span class="pre">ThreadChangesResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.ThreadGet"><code class="docutils literal notranslate"><span class="pre">ThreadGet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#jmapc.methods.ThreadGetResponse"><code class="docutils literal notranslate"><span class="pre">ThreadGetResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.core">Core Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.email">Email Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.email_submission">Email Submission Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.identity">Identity Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.mailbox">Mailbox Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.search_snippet">Search Snippet Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.thread">Thread Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#module-jmapc.methods.custom">Custom Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/methods.html#request-and-response-classes">Request and Response Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.AddedItem"><code class="docutils literal notranslate"><span class="pre">AddedItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Address"><code class="docutils literal notranslate"><span class="pre">Address</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Blob"><code class="docutils literal notranslate"><span class="pre">Blob</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Comparator"><code class="docutils literal notranslate"><span class="pre">Comparator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Delivered"><code class="docutils literal notranslate"><span class="pre">Delivered</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.DeliveryStatus"><code class="docutils literal notranslate"><span class="pre">DeliveryStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Displayed"><code class="docutils literal notranslate"><span class="pre">Displayed</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Email"><code class="docutils literal notranslate"><span class="pre">Email</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailAddress"><code class="docutils literal notranslate"><span class="pre">EmailAddress</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailBodyPart"><code class="docutils literal notranslate"><span class="pre">EmailBodyPart</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailBodyValue"><code class="docutils literal notranslate"><span class="pre">EmailBodyValue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailHeader"><code class="docutils literal notranslate"><span class="pre">EmailHeader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailQueryFilterCondition"><code class="docutils literal notranslate"><span class="pre">EmailQueryFilterCondition</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailQueryFilterOperator"><code class="docutils literal notranslate"><span class="pre">EmailQueryFilterOperator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailSubmission"><code class="docutils literal notranslate"><span class="pre">EmailSubmission</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailSubmissionQueryFilterCondition"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionQueryFilterCondition</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.EmailSubmissionQueryFilterOperator"><code class="docutils literal notranslate"><span class="pre">EmailSubmissionQueryFilterOperator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Envelope"><code class="docutils literal notranslate"><span class="pre">Envelope</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Identity"><code class="docutils literal notranslate"><span class="pre">Identity</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Mailbox"><code class="docutils literal notranslate"><span class="pre">Mailbox</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.MailboxQueryFilterCondition"><code class="docutils literal notranslate"><span class="pre">MailboxQueryFilterCondition</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.MailboxQueryFilterOperator"><code class="docutils literal notranslate"><span class="pre">MailboxQueryFilterOperator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Operator"><code class="docutils literal notranslate"><span class="pre">Operator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.SearchSnippet"><code class="docutils literal notranslate"><span class="pre">SearchSnippet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.SetError"><code class="docutils literal notranslate"><span class="pre">SetError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.StateChange"><code class="docutils literal notranslate"><span class="pre">StateChange</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.Thread"><code class="docutils literal notranslate"><span class="pre">Thread</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.TypeState"><code class="docutils literal notranslate"><span class="pre">TypeState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#jmapc.models.UndoStatus"><code class="docutils literal notranslate"><span class="pre">UndoStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.email">Email Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.email_submission">Email Submission Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.identity">Identity Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.mailbox">Mailbox Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.search_snippet">Search Snippet Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.thread">Thread Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.event">Event Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#module-jmapc.models.models">Base Models</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Stephen Kent.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

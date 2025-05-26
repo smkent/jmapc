@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; jmapc 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7026087e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Client API" href="api/client.html" />
+    <link rel="prev" title="Authentication" href="authentication.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            jmapc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-echo-test">Basic Echo Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-identities">Getting Identities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-mailboxes">Working with Mailboxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-and-retrieving-emails">Querying and Retrieving Emails</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-and-sending-emails">Creating and Sending Emails</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-combined-requests">Using Combined Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#event-source-monitoring">Event Source Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-upload-and-download">File Upload and Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-examples">Running the Examples</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/client.html">Client API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/methods.html">Methods API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">jmapc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<p>This page contains practical examples of using jmapc for common JMAP operations.
+All examples assume you have set the <code class="docutils literal notranslate"><span class="pre">JMAP_HOST</span></code> and <code class="docutils literal notranslate"><span class="pre">JMAP_API_TOKEN</span></code> environment variables.</p>
+<section id="basic-echo-test">
+<h2>Basic Echo Test<a class="headerlink" href="#basic-echo-test" title="Link to this heading"></a></h2>
+<p>The simplest way to test your connection is using the Core/echo method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoreEcho</span>
+
+<span class="c1"># Create and configure client</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Prepare a request for the JMAP Core/echo method with some sample data</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">CoreEcho</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">hello</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">))</span>
+
+<span class="c1"># Call JMAP API with the prepared request</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+
+<span class="c1"># Print result</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="c1"># Output: CoreEchoResponse(data={&#39;hello&#39;: &#39;world&#39;})</span>
+</pre></div>
+</div>
+</section>
+<section id="getting-identities">
+<h2>Getting Identities<a class="headerlink" href="#getting-identities" title="Link to this heading"></a></h2>
+<p>Retrieve all email identities associated with your account:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">IdentityGet</span><span class="p">,</span> <span class="n">IdentityGetResponse</span>
+
+<span class="c1"># Create and configure client</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Prepare Identity/get request</span>
+<span class="c1"># To retrieve all of the user&#39;s identities, no arguments are required.</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">IdentityGet</span><span class="p">()</span>
+
+<span class="c1"># Call JMAP API with the prepared request</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+
+<span class="c1"># Print some information about each retrieved identity</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">IdentityGetResponse</span><span class="p">),</span> <span class="s2">&quot;Error in Identity/get method&quot;</span>
+<span class="k">for</span> <span class="n">identity</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Identity </span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> is for </span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-mailboxes">
+<h2>Working with Mailboxes<a class="headerlink" href="#working-with-mailboxes" title="Link to this heading"></a></h2>
+<p>Get all mailboxes and their properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">MailboxGet</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Get all mailboxes</span>
+<span class="n">mailboxes_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">MailboxGet</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">mailbox</span> <span class="ow">in</span> <span class="n">mailboxes_result</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mailbox: </span><span class="si">{</span><span class="n">mailbox</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Role: </span><span class="si">{</span><span class="n">mailbox</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Total emails: </span><span class="si">{</span><span class="n">mailbox</span><span class="o">.</span><span class="n">total_emails</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Unread emails: </span><span class="si">{</span><span class="n">mailbox</span><span class="o">.</span><span class="n">unread_emails</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Parent: </span><span class="si">{</span><span class="n">mailbox</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="querying-and-retrieving-emails">
+<h2>Querying and Retrieving Emails<a class="headerlink" href="#querying-and-retrieving-emails" title="Link to this heading"></a></h2>
+<p>Search for emails and retrieve their details:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailQuery</span><span class="p">,</span> <span class="n">EmailGet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.models.email</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailFilterCondition</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># First, find the inbox mailbox ID</span>
+<span class="n">mailboxes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">MailboxGet</span><span class="p">())</span>
+<span class="n">inbox_id</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">mailbox</span> <span class="ow">in</span> <span class="n">mailboxes</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mailbox</span><span class="o">.</span><span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;inbox&quot;</span><span class="p">:</span>
+        <span class="n">inbox_id</span> <span class="o">=</span> <span class="n">mailbox</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">break</span>
+
+<span class="k">if</span> <span class="n">inbox_id</span><span class="p">:</span>
+    <span class="c1"># Query for recent emails in inbox</span>
+    <span class="n">email_query</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">EmailQuery</span><span class="p">(</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="n">EmailFilterCondition</span><span class="p">(</span><span class="n">in_mailbox</span><span class="o">=</span><span class="n">inbox_id</span><span class="p">),</span>
+        <span class="n">sort</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;receivedAt&quot;</span><span class="p">,</span> <span class="s2">&quot;isAscending&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span>
+        <span class="n">limit</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">email_query</span><span class="o">.</span><span class="n">ids</span><span class="p">:</span>
+        <span class="c1"># Get the email details</span>
+        <span class="n">emails</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">EmailGet</span><span class="p">(</span>
+            <span class="n">ids</span><span class="o">=</span><span class="n">email_query</span><span class="o">.</span><span class="n">ids</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span><span class="p">,</span> <span class="s2">&quot;receivedAt&quot;</span><span class="p">,</span> <span class="s2">&quot;hasAttachment&quot;</span><span class="p">]</span>
+        <span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">email</span> <span class="ow">in</span> <span class="n">emails</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">from_address</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">from_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">email</span> <span class="k">if</span> <span class="n">email</span><span class="o">.</span><span class="n">from_</span> <span class="k">else</span> <span class="s2">&quot;Unknown&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Subject: </span><span class="si">{</span><span class="n">email</span><span class="o">.</span><span class="n">subject</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="n">from_address</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received: </span><span class="si">{</span><span class="n">email</span><span class="o">.</span><span class="n">received_at</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Has attachment: </span><span class="si">{</span><span class="n">email</span><span class="o">.</span><span class="n">has_attachment</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-and-sending-emails">
+<h2>Creating and Sending Emails<a class="headerlink" href="#creating-and-sending-emails" title="Link to this heading"></a></h2>
+<p>Create a new email and send it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailSet</span><span class="p">,</span> <span class="n">EmailSubmissionSet</span><span class="p">,</span> <span class="n">IdentityGet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.models.email</span><span class="w"> </span><span class="kn">import</span> <span class="n">Email</span><span class="p">,</span> <span class="n">EmailAddress</span><span class="p">,</span> <span class="n">EmailBodyPart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.models.emailsubmission</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailSubmission</span><span class="p">,</span> <span class="n">Envelope</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Get the first identity to use as sender</span>
+<span class="n">identities</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">IdentityGet</span><span class="p">())</span>
+<span class="n">sender_identity</span> <span class="o">=</span> <span class="n">identities</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Create email object</span>
+<span class="n">email</span> <span class="o">=</span> <span class="n">Email</span><span class="p">(</span>
+    <span class="n">from_</span><span class="o">=</span><span class="p">[</span><span class="n">EmailAddress</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sender_identity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">sender_identity</span><span class="o">.</span><span class="n">email</span><span class="p">)],</span>
+    <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="n">EmailAddress</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s2">&quot;recipient@example.com&quot;</span><span class="p">)],</span>
+    <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Test email from jmapc&quot;</span><span class="p">,</span>
+    <span class="n">body_values</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">EmailBodyPart</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Hello from jmapc!</span><span class="se">\n\n</span><span class="s2">This is a test email.&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/plain&quot;</span>
+        <span class="p">)</span>
+    <span class="p">},</span>
+    <span class="n">text_body</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;partId&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">}],</span>
+    <span class="n">sent_at</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="c1"># Create the email</span>
+<span class="n">email_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">EmailSet</span><span class="p">(</span>
+    <span class="n">account_id</span><span class="o">=</span><span class="n">client</span><span class="o">.</span><span class="n">account_id</span><span class="p">,</span>
+    <span class="n">create</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;draft&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">}</span>
+<span class="p">))</span>
+
+<span class="k">if</span> <span class="n">email_result</span><span class="o">.</span><span class="n">created</span><span class="p">:</span>
+    <span class="n">email_id</span> <span class="o">=</span> <span class="n">email_result</span><span class="o">.</span><span class="n">created</span><span class="p">[</span><span class="s2">&quot;draft&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="c1"># Submit the email for sending</span>
+    <span class="n">submission</span> <span class="o">=</span> <span class="n">EmailSubmission</span><span class="p">(</span>
+        <span class="n">identity_id</span><span class="o">=</span><span class="n">sender_identity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">email_id</span><span class="o">=</span><span class="n">email_id</span><span class="p">,</span>
+        <span class="n">envelope</span><span class="o">=</span><span class="n">Envelope</span><span class="p">(</span>
+            <span class="n">mail_from</span><span class="o">=</span><span class="n">EmailAddress</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">sender_identity</span><span class="o">.</span><span class="n">email</span><span class="p">),</span>
+            <span class="n">rcpt_to</span><span class="o">=</span><span class="p">[</span><span class="n">EmailAddress</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s2">&quot;recipient@example.com&quot;</span><span class="p">)]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">submission_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">EmailSubmissionSet</span><span class="p">(</span>
+        <span class="n">account_id</span><span class="o">=</span><span class="n">client</span><span class="o">.</span><span class="n">account_id</span><span class="p">,</span>
+        <span class="n">create</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;send&quot;</span><span class="p">:</span> <span class="n">submission</span><span class="p">}</span>
+    <span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">submission_result</span><span class="o">.</span><span class="n">created</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Email sent successfully!&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to send email:&quot;</span><span class="p">,</span> <span class="n">submission_result</span><span class="o">.</span><span class="n">not_created</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to create email:&quot;</span><span class="p">,</span> <span class="n">email_result</span><span class="o">.</span><span class="n">not_created</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-combined-requests">
+<h2>Using Combined Requests<a class="headerlink" href="#using-combined-requests" title="Link to this heading"></a></h2>
+<p>Combine multiple operations in a single request for efficiency:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">ResultReference</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">MailboxGet</span><span class="p">,</span> <span class="n">EmailQuery</span><span class="p">,</span> <span class="n">EmailGet</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a combined request</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">()</span>
+
+<span class="c1"># Add multiple method calls</span>
+<span class="n">request</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">MailboxGet</span><span class="p">(),</span> <span class="s2">&quot;mailboxes&quot;</span><span class="p">)</span>
+<span class="n">request</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">EmailQuery</span><span class="p">(</span>
+    <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inMailbox&quot;</span><span class="p">:</span> <span class="s2">&quot;#mailboxes/list/0/id&quot;</span><span class="p">},</span>  <span class="c1"># Reference first mailbox</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">),</span> <span class="s2">&quot;emailQuery&quot;</span><span class="p">)</span>
+<span class="n">request</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">EmailGet</span><span class="p">(</span>
+    <span class="n">ids</span><span class="o">=</span><span class="n">ResultReference</span><span class="p">(</span><span class="s2">&quot;emailQuery&quot;</span><span class="p">,</span> <span class="s2">&quot;ids&quot;</span><span class="p">),</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span><span class="p">]</span>
+<span class="p">),</span> <span class="s2">&quot;emails&quot;</span><span class="p">)</span>
+
+<span class="c1"># Execute the combined request</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+<span class="c1"># Access results by call ID</span>
+<span class="n">mailboxes</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;mailboxes&quot;</span><span class="p">]</span>
+<span class="n">emails</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;emails&quot;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">emails</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> emails in </span><span class="si">{</span><span class="n">mailboxes</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="event-source-monitoring">
+<h2>Event Source Monitoring<a class="headerlink" href="#event-source-monitoring" title="Link to this heading"></a></h2>
+<p>Monitor real-time changes using EventSource:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Monitoring for changes... (Press Ctrl+C to stop)&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;State change: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">changed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># You can then query for specific changes based on the event</span>
+<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Monitoring stopped.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="file-upload-and-download">
+<h2>File Upload and Download<a class="headerlink" href="#file-upload-and-download" title="Link to this heading"></a></h2>
+<p>Upload a file and download email attachments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmapc.methods</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailGet</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">create_with_api_token</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_HOST&quot;</span><span class="p">],</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;JMAP_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Upload a file</span>
+<span class="n">blob</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">upload_blob</span><span class="p">(</span><span class="s2">&quot;document.pdf&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uploaded file: </span><span class="si">{</span><span class="n">blob</span><span class="o">.</span><span class="n">blob_id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">blob</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> bytes)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Download an attachment (assuming you have an email with attachments)</span>
+<span class="n">email_id</span> <span class="o">=</span> <span class="s2">&quot;your_email_id_here&quot;</span>
+<span class="n">email</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">EmailGet</span><span class="p">(</span>
+    <span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="n">email_id</span><span class="p">],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;attachments&quot;</span><span class="p">],</span>
+    <span class="n">body_properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blobId&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">]</span>
+<span class="p">))</span>
+
+<span class="k">if</span> <span class="n">email</span><span class="o">.</span><span class="n">data</span> <span class="ow">and</span> <span class="n">email</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attachments</span><span class="p">:</span>
+    <span class="n">attachment</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attachments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">download_attachment</span><span class="p">(</span><span class="n">attachment</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;downloaded_</span><span class="si">{</span><span class="n">attachment</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded attachment: </span><span class="si">{</span><span class="n">attachment</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-examples">
+<h2>Running the Examples<a class="headerlink" href="#running-the-examples" title="Link to this heading"></a></h2>
+<p>To run these examples:</p>
+<ol class="arabic">
+<li><p>Set your environment variables:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export JMAP_HOST=&quot;jmap.example.com&quot;</span>
+<span class="go">export JMAP_API_TOKEN=&quot;your_api_token_here&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Save any example to a Python file (e.g., <code class="docutils literal notranslate"><span class="pre">example.py</span></code>)</p></li>
+<li><p>Run it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python example.py</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The complete examples are also available in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory of the jmapc repository.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="authentication.html" class="btn btn-neutral float-left" title="Authentication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/client.html" class="btn btn-neutral float-right" title="Client API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Stephen Kent.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
