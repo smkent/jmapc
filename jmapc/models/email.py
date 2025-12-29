@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional, Union, Final
 
 from dataclasses_json import config
 
@@ -111,6 +111,61 @@ class EmailQueryFilterCondition(Model):
 class EmailQueryFilterOperator(Model):
     operator: Operator
     conditions: list[EmailQueryFilter]
+
+
+class EmailProperties:
+    """Property keys of an email object.
+
+    References:
+        https://jmap.io/spec-mail.html#properties-of-the-email-object
+    """
+
+    ID: Final[str] = "id"
+    BLOB_ID: Final[str] = "blobId"
+    THREAD_ID: Final[str] = "threadId"
+    MAILBOX_IDS: Final[str] = "mailboxIds"
+    KEYWORDS: Final[str] = "keywords"
+    SIZE: Final[str] = "size"
+    RECEIVED_AT: Final[str] = "receivedAt"
+    MESSAGE_ID: Final[str] = "messageId"
+    IN_REPLY_TO: Final[str] = "inReplyTo"
+    REFERENCES: Final[str] = "references"
+    SENDER: Final[str] = "sender"
+    FROM: Final[str] = "from"
+    TO: Final[str] = "to"
+    CC: Final[str] = "cc"
+    BCC: Final[str] = "bcc"
+    REPLY_TO: Final[str] = "replyTo"
+    SUBJECT: Final[str] = "subject"
+    SENT_AT: Final[str] = "sentAt"
+    BODY_STRUCTURE: Final[str] = "bodyStructure"
+    BODY_VALUES: Final[str] = "bodyValues"
+    TEXT_BODY: Final[str] = "textBody"
+    HTML_BODY: Final[str] = "htmlBody"
+    ATTACHMENTS: Final[str] = "attachments"
+    HAS_ATTACHMENT: Final[str] = "hasAttachment"
+    PREVIEW: Final[str] = "preview"
+
+
+class EmailBodyPartProperties:
+    """Property keys of an email bodypart object.
+
+    References:
+        https://jmap.io/spec-mail.html#properties-of-the-email-object
+    """
+
+    PART_ID: Final[str] = "partId"
+    BLOB_ID: Final[str] = "blobId"
+    SIZE: Final[str] = "size"
+    HEADERS: Final[str] = "headers"
+    NAME: Final[str] = "name"
+    TYPE: Final[str] = "type"
+    CHARSET: Final[str] = "charset"
+    DISPOSITION: Final[str] = "disposition"
+    CID: Final[str] = "cid"
+    LANGUAGE: Final[str] = "language"
+    LOCATION: Final[str] = "location"
+    SUB_PARTS: Final[str] = "subParts"
 
 
 EmailQueryFilter = Union[EmailQueryFilterCondition, EmailQueryFilterOperator]

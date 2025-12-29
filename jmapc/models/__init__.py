@@ -6,6 +6,8 @@ from .email import (
     EmailQueryFilter,
     EmailQueryFilterCondition,
     EmailQueryFilterOperator,
+    EmailProperties,
+    EmailBodyPartProperties,
 )
 from .email_submission import (
     Address,
@@ -54,6 +56,8 @@ __all__ = [
     "EmailBodyPart",
     "EmailBodyValue",
     "EmailHeader",
+    "EmailProperties",
+    "EmailBodyPartProperties",
     "EmailQueryFilter",
     "EmailQueryFilterCondition",
     "EmailQueryFilterOperator",
