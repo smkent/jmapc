@@ -6,6 +6,7 @@ import requests
 import responses
 
 from jmapc import Blob, Client, ClientError, EmailBodyPart, constants
+from jmapc.client import REQUEST_TIMEOUT
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -138,6 +139,40 @@ def test_jmap_session_capabilities_urns(
     assert client.jmap_session.capabilities.urns == (
         {"urn:ietf:params:jmap:core"} | urns
     )
+
+
+@pytest.mark.parametrize(
+    "test_client, expected_timeout",
+    (
+        (
+            Client.create_with_api_token(
+                host="jmapserver.it", api_token="myapikey", timeout=17
+            ),
+            17,
+        ),
+        (
+            Client.create_with_password(
+                host="myjmaphost.com", user="user", password="pwd"
+            ),
+            REQUEST_TIMEOUT,
+        ),
+        (Client(host="hostforjmap.de", auth=("user", "pwd"), timeout=3), 3),
+        (Client(host="hostforjmap.de", auth=("user", "pwd")), REQUEST_TIMEOUT),
+    ),
+)
+def test_client_timeout(test_client: Client, expected_timeout: int) -> None:
+    assert test_client.timeout == expected_timeout
+    assert test_client._timeout == expected_timeout
+
+
+def test_client_timeout_property(client: Client) -> None:
+    client.timeout = 78
+    assert client.timeout == 78
+    assert client._timeout == 78
+
+    client.timeout = 0
+    assert client.timeout == REQUEST_TIMEOUT
+    assert client._timeout == REQUEST_TIMEOUT
 
 
 def test_client_request_updated_session(
