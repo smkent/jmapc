@@ -148,14 +148,23 @@ class Client:
         r.raise_for_status()
         return Blob.from_dict(r.json())
 
+    @overload
+    def download_attachment(
+        self, attachment: EmailBodyPart, file_name: None
+    ) -> bytes: ...  # pragma: no cover
+
+    @overload
     def download_attachment(
         self,
         attachment: EmailBodyPart,
         file_name: Union[str, Path],
-    ) -> None:
-        if not file_name:
-            raise Exception("Destination file name is required")
-        file_name = Path(file_name)
+    ) -> None: ...  # pragma: no cover
+
+    def download_attachment(
+        self,
+        attachment: EmailBodyPart,
+        file_name: Union[str, Path, None],
+    ) -> Optional[bytes]:
         blob_url = self.jmap_session.download_url.format(
             accountId=self.account_id,
             blobId=attachment.blob_id,
@@ -166,8 +175,12 @@ class Client:
             blob_url, stream=True, timeout=REQUEST_TIMEOUT
         )
         r.raise_for_status()
-        with open(file_name, "wb") as f:
-            f.write(r.raw.data)
+        if file_name:
+            with open(file_name, "wb") as f:
+                f.write(r.raw.data)
+            return None
+        else:
+            return r.raw.data
 
     @overload
     def request(
