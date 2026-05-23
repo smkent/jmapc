@@ -11,9 +11,9 @@ import responses
 from jmapc import Client
 from jmapc.logging import log
 
-from .data import make_session_response
-
 pytest.register_assert_rewrite("tests.data", "tests.utils")
+
+from .data import make_session_response  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
