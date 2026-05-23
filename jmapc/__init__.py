@@ -1,5 +1,9 @@
+"""A JMAP client library for Python."""
+
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as import_version
+
 from . import auth, errors, fastmail, methods, models
-from .__version__ import __version__ as version
 from .client import Client, ClientError, EventSourceConfig
 from .errors import Error
 from .methods import Request, ResponseOrError
@@ -41,6 +45,11 @@ from .models import (
     UndoStatus,
 )
 from .ref import Ref, ResultReference
+
+try:
+    version = import_version(__name__)
+except PackageNotFoundError:  # pragma: no cover
+    version = "0.0.0"
 
 __all__ = [
     "AddedItem",
