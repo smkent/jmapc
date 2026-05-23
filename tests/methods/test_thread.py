@@ -7,8 +7,7 @@ from jmapc.methods import (
     ThreadGet,
     ThreadGetResponse,
 )
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 
 def test_thread_changes(

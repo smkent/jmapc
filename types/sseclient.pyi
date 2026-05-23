@@ -1,32 +1,23 @@
-from typing import Any, Optional
+from typing import Any
 
 class SSEClient:
     def __init__(
         self,
         url: str,
-        last_id: Optional[str] = None,
+        last_id: str | None = None,
         retry: int = 3000,
-        session: Optional[Any] = None,
+        session: Any | None = None,
         chunk_size: int = 1024,
         **kwargs: Any,
-    ):
-        pass
-
-    def __iter__(self) -> SSEClient:
-        pass
-
-    def __next__(self) -> "Event":
-        pass
+    ) -> None: ...
+    def __iter__(self) -> SSEClient: ...
+    def __next__(self) -> Event: ...
 
 class Event:
     def __init__(
         self,
         data: str = "",
         event: str = "message",
-        id: Optional[str] = None,
-        retry: Optional[str] = None,
-    ):
-        self.data: str
-        self.event: str
-        self.id: str
-        self.retry: str
+        id: str | None = None,  # noqa: A002
+        retry: str | None = None,
+    ) -> None: ...

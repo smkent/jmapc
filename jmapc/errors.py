@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Optional, cast
+from typing import Any, ClassVar, cast
 
 from .serializer import Model
 
@@ -9,11 +9,11 @@ __all__ = ["Error", "ServerFail"]
 
 
 class ErrorCollector(Model):
-    error_types: dict[str, type[Error]] = {}
+    error_types: ClassVar[dict[str, type[Error]]] = {}
 
     @classmethod
     def __init_subclass__(cls) -> None:
-        error_class = cast(type["Error"], cls)
+        error_class = cast("type[Error]", cls)
         type_attr = getattr(error_class, "_type", None)
         if type_attr:
             ErrorCollector.error_types[type_attr] = error_class
@@ -62,8 +62,8 @@ class CannotCalculateChanges(Error):
 @dataclass
 class InvalidArguments(Error):
     _type = "invalidArguments"
-    arguments: Optional[list[str]] = None
-    description: Optional[str] = None
+    arguments: list[str] | None = None
+    description: str | None = None
 
 
 @dataclass
@@ -84,7 +84,7 @@ class RequestTooLarge(Error):
 @dataclass
 class ServerFail(Error):
     _type = "serverFail"
-    description: Optional[str] = None
+    description: str | None = None
 
 
 @dataclass

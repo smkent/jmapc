@@ -5,13 +5,12 @@ import responses
 
 from jmapc import Client, ClientError, Error, errors
 from jmapc.methods import CoreEcho, InvocationResponseOrError
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 
 @pytest.mark.parametrize("raise_errors", [True, False])
 @pytest.mark.parametrize(
-    ["method_response", "expected_error"],
+    ("method_response", "expected_error"),
     [
         (
             {
@@ -89,9 +88,10 @@ def test_method_error(
     http_responses: responses.RequestsMock,
     method_response: dict[str, Any],
     expected_error: Error,
+    *,
     raise_errors: bool,
 ) -> None:
-    test_data = dict(param1="yes", another_param="ok")
+    test_data = {"param1": "yes", "another_param": "ok"}
     expected_request = {
         "methodCalls": [
             ["Core/echo", test_data, "single.Core/echo"],

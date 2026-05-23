@@ -33,9 +33,9 @@ results = client.request(
     ]
 )
 # From results, second result, MailboxGet instance, retrieve Mailbox data
-assert isinstance(
-    results[1].response, MailboxGetResponse
-), "Error in Mailbox/get method"
+assert isinstance(results[1].response, MailboxGetResponse), (
+    "Error in Mailbox/get method"
+)
 mailbox_data = results[1].response.data
 if not mailbox_data:
     raise Exception("Inbox not found on the server")
@@ -68,9 +68,9 @@ results = client.request(
 )
 
 # From results, third result, ThreadGet instance, retrieve Threads data
-assert isinstance(
-    results[2].response, ThreadGetResponse
-), "Error in Thread/get method"
+assert isinstance(results[2].response, ThreadGetResponse), (
+    "Error in Thread/get method"
+)
 for thread in results[2].response.data:
     print(f"Thread {thread.id} has {len(thread.email_ids)} emails")
 

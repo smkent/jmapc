@@ -1,28 +1,27 @@
 import json
 from dataclasses import dataclass, field
-from typing import Optional
 
 import sseclient
 from dataclasses_json import config
 
-from ..serializer import Model
+from jmapc.serializer import Model
 
 
 @dataclass
 class TypeState(Model):
-    calendar_event: Optional[str] = field(
+    calendar_event: str | None = field(
         metadata=config(field_name="CalendarEvent"), default=None
     )
-    mailbox: Optional[str] = field(
+    mailbox: str | None = field(
         metadata=config(field_name="Mailbox"), default=None
     )
-    email: Optional[str] = field(
+    email: str | None = field(
         metadata=config(field_name="Email"), default=None
     )
-    email_delivery: Optional[str] = field(
+    email_delivery: str | None = field(
         metadata=config(field_name="EmailDelivery"), default=None
     )
-    thread: Optional[str] = field(
+    thread: str | None = field(
         metadata=config(field_name="Thread"), default=None
     )
 
@@ -30,12 +29,12 @@ class TypeState(Model):
 @dataclass
 class StateChange(Model):
     changed: dict[str, TypeState]
-    type: Optional[str] = None
+    type: str | None = None
 
 
 @dataclass
 class Event(Model):
-    id: Optional[str]
+    id: str | None
     data: StateChange
 
     @classmethod

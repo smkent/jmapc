@@ -1,7 +1,8 @@
-def test_import() -> None:
-    import jmapc
+import jmapc
 
-    assert jmapc.Client  # type: ignore[truthy-function]
+
+def test_import() -> None:
+    assert jmapc.Client
     assert jmapc.methods
     assert jmapc.models
     assert jmapc.errors

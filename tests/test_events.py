@@ -1,5 +1,4 @@
 import json
-from typing import Optional
 from collections.abc import Iterable
 from unittest import mock
 
@@ -25,15 +24,15 @@ def mock_sseclient() -> Iterable[mock.MagicMock]:
         mock_client,
     ):
         assert isinstance(sseclient.SSEClient, mock.MagicMock)
-        sseclient.SSEClient.return_value.__iter__.side_effect = (
-            lambda: sseclient.SSEClient.return_value
+        sseclient.SSEClient.return_value.__iter__.side_effect = lambda: (
+            sseclient.SSEClient.return_value  # ty: ignore[unresolved-attribute]
         )
         sseclient.SSEClient.return_value.__next__.side_effect = []
         yield mock_client
 
 
 @pytest.mark.parametrize(
-    ["event_source_url", "expected_call_url", "event_source_config"],
+    ("event_source_url", "expected_call_url", "event_source_config"),
     [
         (
             "https://jmap-api.localhost/events/{types}/{closeafter}/{ping}",
@@ -68,7 +67,7 @@ def test_event_source_url(
     mock_sseclient: mock.MagicMock,
     event_source_url: str,
     expected_call_url: str,
-    event_source_config: Optional[EventSourceConfig],
+    event_source_config: EventSourceConfig | None,
 ) -> None:
     client = Client(
         host="jmap-example.localhost",

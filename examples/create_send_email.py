@@ -51,9 +51,9 @@ results = client.request(
 )
 
 # From results, second result, MailboxGet instance, retrieve Mailbox data
-assert isinstance(
-    results[1].response, MailboxGetResponse
-), "Error in Mailbox/get method"
+assert isinstance(results[1].response, MailboxGetResponse), (
+    "Error in Mailbox/get method"
+)
 mailbox_data = results[1].response.data
 if not mailbox_data:
     raise Exception("Drafts not found on the server")
@@ -65,9 +65,9 @@ assert drafts_mailbox_id
 print(f"Drafts has Mailbox ID {drafts_mailbox_id}")
 
 # From results, third result, IdentityGet instance, retrieve Identity data
-assert isinstance(
-    results[2].response, IdentityGetResponse
-), "Error in Identity/get method"
+assert isinstance(results[2].response, IdentityGetResponse), (
+    "Error in Identity/get method"
+)
 identity_data = results[2].response.data
 if not identity_data:
     raise Exception("No identities found on the server")
@@ -83,8 +83,8 @@ results = client.request(
     [
         # Create a draft email in the Drafts mailbox
         EmailSet(
-            create=dict(
-                draft=Email(
+            create={
+                "draft": Email(
                     mail_from=[
                         EmailAddress(name=identity.name, email=identity.email)
                     ],
@@ -94,9 +94,9 @@ results = client.request(
                     subject=f"Email created with jmapc's {__file__}",
                     keywords={"$draft": True},
                     mailbox_ids={drafts_mailbox_id: True},
-                    body_values=dict(
-                        body=EmailBodyValue(value=TEST_EMAIL_BODY)
-                    ),
+                    body_values={
+                        "body": EmailBodyValue(value=TEST_EMAIL_BODY)
+                    },
                     text_body=[
                         EmailBodyPart(part_id="body", type="text/plain")
                     ],
@@ -104,14 +104,14 @@ results = client.request(
                         EmailHeader(name="X-jmapc-example-header", value="yes")
                     ],
                 )
-            )
+            }
         ),
         # Send the created draft email, and delete from the Drafts mailbox on
         # success
         EmailSubmissionSet(
             on_success_destroy_email=["#emailToSend"],
-            create=dict(
-                emailToSend=EmailSubmission(
+            create={
+                "emailToSend": EmailSubmission(
                     email_id="#draft",
                     identity_id=identity.id,
                     envelope=Envelope(
@@ -119,15 +119,15 @@ results = client.request(
                         rcpt_to=[Address(email=identity.email)],
                     ),
                 )
-            ),
+            },
         ),
     ]
 )
 # Retrieve EmailSubmission/set method response from method responses
 email_send_result = results[1].response
-assert isinstance(
-    email_send_result, EmailSubmissionSetResponse
-), f"Error sending test email: f{email_send_result}"
+assert isinstance(email_send_result, EmailSubmissionSetResponse), (
+    f"Error sending test email: f{email_send_result}"
+)
 
 # Retrieve sent email metadata from EmailSubmission/set method response
 assert email_send_result.created, "Error retrieving sent test email"

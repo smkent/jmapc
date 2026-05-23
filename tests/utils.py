@@ -1,6 +1,7 @@
 import functools
 import json
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import requests
 import responses
@@ -16,8 +17,8 @@ def assert_request_return_response(
         request: requests.PreparedRequest,
     ) -> tuple[int, dict[str, str], str]:
         assert request.headers["Content-Type"] == "application/json"
-        assert json.loads(request.body or "{}") == expected_request
-        return (200, dict(), json.dumps(response))
+        assert json.loads(str(request.body) or "{}") == expected_request
+        return (200, {}, json.dumps(response))
 
     return functools.partial(_response_callback, expected_request, response)
 

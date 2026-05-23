@@ -20,7 +20,7 @@ client = Client.create_with_api_token(
 
 # Call JMAP API method
 # The request and response JSON content will be logged to the console
-client.request(CoreEcho(data=dict(hello="world")))
+client.request(CoreEcho(data={"hello": "world"}))
 
 # Example output:
 #

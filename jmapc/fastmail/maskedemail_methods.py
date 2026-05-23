@@ -1,19 +1,20 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import ClassVar
 
 from dataclasses_json import config
 
-from ..methods.base import Get, GetResponse, Set, SetResponse
+from jmapc.methods.base import Get, GetResponse, Set, SetResponse
+
 from .maskedemail_models import MaskedEmail
 
 URN = "https://www.fastmail.com/dev/maskedemail"
 
 
 class MaskedEmailBase:
-    method_namespace: Optional[str] = "MaskedEmail"
-    using = {URN}
+    method_namespace: ClassVar[str | None] = "MaskedEmail"
+    using: ClassVar[set[str]] = {URN}
 
 
 @dataclass
@@ -33,5 +34,5 @@ class MaskedEmailSet(MaskedEmailBase, Set):
 
 @dataclass
 class MaskedEmailSetResponse(MaskedEmailBase, SetResponse):
-    created: Optional[dict[str, Optional[MaskedEmail]]]
-    updated: Optional[dict[str, Optional[MaskedEmail]]]
+    created: dict[str, MaskedEmail | None] | None
+    updated: dict[str, MaskedEmail | None] | None

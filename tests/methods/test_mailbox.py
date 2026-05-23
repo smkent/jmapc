@@ -13,8 +13,7 @@ from jmapc.methods import (
     MailboxSet,
     MailboxSetResponse,
 )
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 
 def test_mailbox_changes(
@@ -343,21 +342,21 @@ def test_mailbox_set(
 
     assert client.request(
         MailboxSet(
-            create=dict(mailbox=Mailbox(name="Saturn Valley Newsletter"))
+            create={"mailbox": Mailbox(name="Saturn Valley Newsletter")}
         )
     ) == MailboxSetResponse(
         account_id="u1138",
         old_state="1",
         new_state="2",
-        created=dict(
-            mailbox=Mailbox(
+        created={
+            "mailbox": Mailbox(
                 id="MBX9000",
                 total_emails=0,
                 unread_emails=0,
                 total_threads=0,
                 unread_threads=0,
             )
-        ),
+        },
         updated=None,
         destroyed=None,
         not_created=None,

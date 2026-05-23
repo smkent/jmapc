@@ -20,10 +20,7 @@ result = client.request(method)
 # Print some information about each retrieved identity
 assert isinstance(result, IdentityGetResponse), "Error in Identity/get method"
 for identity in result.data:
-    print(
-        f"Identity {identity.id} is for "
-        f"{identity.name} at {identity.email}"
-    )
+    print(f"Identity {identity.id} is for {identity.name} at {identity.email}")
 
 # Example output:
 #

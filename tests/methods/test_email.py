@@ -27,8 +27,7 @@ from jmapc.methods import (
     EmailSet,
     EmailSetResponse,
 )
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 
 def test_email_changes(
@@ -414,7 +413,7 @@ def test_email_set(
         subject="I'm taking a day trip to Happy Happy Village",
         keywords={"$draft": True},
         mailbox_ids={"MBX1": True},
-        body_values=dict(body=EmailBodyValue(value="See you there!")),
+        body_values={"body": EmailBodyValue(value="See you there!")},
         text_body=[EmailBodyPart(part_id="body", type="text/plain")],
         headers=[EmailHeader(name="X-Onett-Sanctuary", value="Giant Step")],
     )
@@ -440,8 +439,7 @@ def test_email_set(
                                 }
                             ],
                             "subject": (
-                                "I'm taking a day trip to "
-                                "Happy Happy Village"
+                                "I'm taking a day trip to Happy Happy Village"
                             ),
                             "keywords": {"$draft": True},
                             "mailboxIds": {"MBX1": True},
@@ -492,16 +490,16 @@ def test_email_set(
     expect_jmap_call(http_responses, expected_request, response)
 
     assert client.request(
-        EmailSet(create=dict(draft=draft))
+        EmailSet(create={"draft": draft})
     ) == EmailSetResponse(
         account_id="u1138",
         old_state="1",
         new_state="2",
-        created=dict(
-            draft=Email(
+        created={
+            "draft": Email(
                 blob_id="G12345", id="M1001", size=42, thread_id="T1002"
             )
-        ),
+        },
         updated=None,
         destroyed=None,
         not_created=None,

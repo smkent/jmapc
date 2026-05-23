@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 import requests
+import requests.auth
 import responses
 
 from jmapc import Blob, Client, ClientError, EmailBodyPart, constants
@@ -27,33 +28,37 @@ from jmapc.session import (
 from .data import make_session_response
 from .utils import expect_jmap_call
 
-echo_test_data = dict(
-    who="Ness", goods=["Mr. Saturn coin", "Hall of Fame Bat"]
-)
+echo_test_data = {
+    "who": "Ness",
+    "goods": ["Mr. Saturn coin", "Hall of Fame Bat"],
+}
 
 
 @pytest.mark.parametrize(
     "test_client",
-    (
+    [
         Client.create_with_api_token(
-            "jmap-example.localhost", api_token="ness__pk_fire"
+            "jmap-example.localhost",
+            api_token="ness__pk_fire",  # noqa: S106
         ),
         Client.create_with_password(
-            "jmap-example.localhost", user="ness", password="pk_fire"
+            "jmap-example.localhost",
+            user="ness",
+            password="pk_fire",  # noqa: S106
         ),
         Client("jmap-example.localhost", auth=("ness", "pk_fire")),
         Client(
             "jmap-example.localhost",
             auth=requests.auth.HTTPBasicAuth(
-                username="ness", password="pk_fire"
+                username="ness",
+                password="pk_fire",  # noqa: S106
             ),
         ),
         Client("jmap-example.localhost", auth=BearerAuth("ness__pk_fire")),
-    ),
+    ],
 )
-def test_jmap_session(
-    test_client: Client, http_responses: responses.RequestsMock
-) -> None:
+@pytest.mark.usefixtures("http_responses")
+def test_jmap_session(test_client: Client) -> None:
     assert test_client.jmap_session == Session(
         username="ness@onett.example.net",
         api_url="https://jmap-api.localhost/api",
@@ -101,11 +106,11 @@ def test_jmap_session_no_account(
         body=json.dumps(session_response),
     )
     client = Client.create_with_api_token(
-        "jmap-example.localhost", api_token="ness__pk_fire"
+        "jmap-example.localhost",
+        api_token="ness__pk_fire",  # noqa:  S106
     )
-    with pytest.raises(Exception) as e:
-        client.account_id
-    assert str(e.value) == "No primary account ID found"
+    with pytest.raises(Exception, match="No primary account ID found"):
+        assert client.account_id
 
 
 @pytest.mark.parametrize(
@@ -278,7 +283,10 @@ def test_client_request(
 
 @pytest.mark.parametrize("raise_errors", [True, False])
 def test_client_request_single(
-    client: Client, http_responses: responses.RequestsMock, raise_errors: bool
+    client: Client,
+    http_responses: responses.RequestsMock,
+    *,
+    raise_errors: bool,
 ) -> None:
     method_params = CoreEcho(data=echo_test_data)
     expected_request = {
@@ -395,11 +403,16 @@ def test_client_request_single_with_multiple_responses_error(
 
 
 def test_client_invalid_single_response_argument(client: Client) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError,
+        match=(
+            "single_response cannot be used with multiple JMAP request methods"
+        ),
+    ):
         client.request(
             [CoreEcho(data=echo_test_data), MailboxGet(ids=[])],
             single_response=True,
-        )  # type: ignore
+        )  # ty: ignore[no-matching-overload]
 
 
 def test_error_unauthorized(
@@ -412,6 +425,7 @@ def test_error_unauthorized(
     )
     with pytest.raises(requests.exceptions.HTTPError) as e:
         client.request(CoreEcho(data=echo_test_data))
+    assert e.value.response is not None
     assert e.value.response.status_code == 401
 
 
@@ -451,14 +465,13 @@ def test_download_attachment(
         body=blob_content,
     )
     dest_file = tempdir / "download.txt"
-    with pytest.raises(Exception) as e:
+    with pytest.raises(Exception, match="Destination file name is required"):
         client.download_attachment(
             EmailBodyPart(
                 name="download.txt", blob_id="C2187", type="text/plain"
             ),
             "",
         )
-    assert str(e.value) == "Destination file name is required"
     assert not dest_file.exists()
     client.download_attachment(
         EmailBodyPart(name="download.txt", blob_id="C2187", type="text/plain"),
