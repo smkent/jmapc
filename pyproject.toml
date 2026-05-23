@@ -220,8 +220,13 @@ ignore = [
     "D1",  # Missing docstring presence rules
     "EM",  # flake8-errmsg
     "G004",  # Logging statement uses f-string
+    "N818",  # error-suffix-on-exception-name
     "PLR",  # pylint Refactor
+    "S101",  # Use of assert detected
     "S607",  # Starting a process with a partial executable path
+    "T201",  # print
+    "TC001",  # Move application import into a type-checking block
+    "TC003",  # Move standard library import into a type-checking block
     "TD",  # flake8-todos
     "TRY003", # Avoid specifying long messages outside the exception class
 ]
