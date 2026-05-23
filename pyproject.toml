@@ -235,6 +235,10 @@ ignore = [
 known-first-party = ["jmapc"]
 
 [tool.ruff.lint.per-file-ignores]
+"examples/**/*.py" = [
+    "ERA001",  # Found commented-out code
+    "TRY002",  # Create your own exception
+]
 "tests/**/*.py" = [
     "ARG",  # flake8-unused-arguments
     "S101",  # Use of assert detected
