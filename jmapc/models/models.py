@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional, TypeVar, Union
+from typing import TypeVar
 
 from dataclasses_json import config
 
-from ..ref import Ref, ResultReference
-from ..serializer import Model
+from jmapc.ref import Ref, ResultReference
+from jmapc.serializer import Model
 
 T = TypeVar("T")
-StrOrRef = Union[str, ResultReference, Ref]
-ListOrRef = Union[list[T], ResultReference, Ref]
-TypeOrRef = Union[T, ResultReference, Ref]
+StrOrRef = str | ResultReference | Ref
+ListOrRef = list[T] | ResultReference | Ref
+TypeOrRef = T | ResultReference | Ref
 
 
 @dataclass
@@ -30,18 +30,18 @@ class AddedItem(Model):
 
 @dataclass
 class EmailAddress(Model):
-    name: Optional[str] = None
-    email: Optional[str] = None
+    name: str | None = None
+    email: str | None = None
 
 
 @dataclass
 class Comparator(Model):
     property: str
     is_ascending: bool = True
-    collation: Optional[str] = None
-    anchor: Optional[str] = None
+    collation: str | None = None
+    anchor: str | None = None
     anchor_offset: int = 0
-    limit: Optional[int] = None
+    limit: int | None = None
     calculate_total: bool = False
     position: int = 0
 
@@ -60,7 +60,7 @@ class Operator(Enum):
 @dataclass
 class SetError(Model):
     type: str
-    description: Optional[str] = None
-    already_exists: Optional[str] = None
-    not_found: Optional[list[str]] = None
-    properties: Optional[list[str]] = None
+    description: str | None = None
+    already_exists: str | None = None
+    not_found: list[str] | None = None
+    properties: list[str] | None = None

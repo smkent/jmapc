@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import ClassVar
 
 from dataclasses_json import config
 
-from .. import constants
-from ..models import Mailbox, MailboxQueryFilter
+from jmapc import constants
+from jmapc.models import Mailbox, MailboxQueryFilter
+
 from .base import (
     Changes,
     ChangesResponse,
@@ -22,8 +23,8 @@ from .base import (
 
 
 class MailboxBase:
-    method_namespace: Optional[str] = "Mailbox"
-    using = {constants.JMAP_URN_MAIL}
+    method_namespace: ClassVar[str | None] = "Mailbox"
+    using: ClassVar[set[str]] = {constants.JMAP_URN_MAIL}
 
 
 @dataclass
@@ -48,7 +49,7 @@ class MailboxGetResponse(MailboxBase, GetResponse):
 
 @dataclass
 class MailboxQuery(MailboxBase, Query):
-    filter: Optional[MailboxQueryFilter] = None
+    filter: MailboxQueryFilter | None = None
     sort_as_tree: bool = False
     filter_as_tree: bool = False
 
@@ -60,7 +61,7 @@ class MailboxQueryResponse(MailboxBase, QueryResponse):
 
 @dataclass
 class MailboxQueryChanges(MailboxBase, QueryChanges):
-    filter: Optional[MailboxQueryFilter] = None
+    filter: MailboxQueryFilter | None = None
 
 
 @dataclass
@@ -70,11 +71,11 @@ class MailboxQueryChangesResponse(MailboxBase, QueryChangesResponse):
 
 @dataclass
 class MailboxSet(MailboxBase, Set):
-    create: Optional[dict[str, Mailbox]] = None
+    create: dict[str, Mailbox] | None = None
     on_destroy_remove_emails: bool = False
 
 
 @dataclass
 class MailboxSetResponse(MailboxBase, SetResponse):
-    created: Optional[dict[str, Optional[Mailbox]]]
-    updated: Optional[dict[str, Optional[Mailbox]]]
+    created: dict[str, Mailbox | None] | None
+    updated: dict[str, Mailbox | None] | None

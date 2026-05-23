@@ -11,7 +11,7 @@ client = Client.create_with_api_token(
 )
 
 # Prepare a request for the JMAP Core/echo method with some sample data
-method = CoreEcho(data=dict(hello="world"))
+method = CoreEcho(data={"hello": "world"})
 
 # Call JMAP API with the prepared request
 result = client.request(method)

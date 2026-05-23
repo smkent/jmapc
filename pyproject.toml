@@ -1,123 +1,259 @@
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
 
 [project]
 name = "jmapc"
-description = "JMAP client library for Python"
-license = "GPL-3.0-or-later"
-authors = [ { name = "Stephen Kent", email = "smkent@smkent.net" } ]
+dynamic = ["version"]
+description = "A JMAP client library for Python"
 readme = "README.md"
-repository = "https://github.com/smkent/jmapc"
+license = "GPL-3.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [
+    { name = "Stephen Kent", email = "smkent@smkent.net" },
+]
 classifiers = [
     "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Communications :: Email :: Post-Office",
+    "Topic :: Documentation",
     "Topic :: Office/Business :: Groupware",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
     "Typing :: Typed",
 ]
-requires-python = ">=3.9,<4.0"
-dynamic = [ "version" ]
+keywords = []
 dependencies = [
-    "brotli (>=1.0.9)",
+    "brotli>=1.0.9",
     "dataclasses-json",
     "python-dateutil",
     "requests",
     "sseclient",
 ]
-include = [
-    "examples",
+
+[project.urls]
+Homepage = "https://smkent.github.io/jmapc"
+Repository = "https://github.com/smkent/jmapc"
+Issues = "https://github.com/smkent/jmapc/issues"
+
+[dependency-groups]
+dev = [
+    "bump-my-version>=1.3.0",
+    "poethepoet>=0.42",
+    "prek>=0.4",
+    "pysentry-rs>=0.4",
+    "pytest>=9",
+    "pytest-cov>=7",
+    "pytest-sugar>=1",
+    "pytest-xdist>=3",
+    "responses",
+    "ruff>=0.15",
+    "syrupy>=5",
+    "ty>=0.0.38",
+]
+docs = [
+    "mkdocstrings[python]>=1",
+    "zensical>=0.0.43",
 ]
 
-[project.scripts]
+[tool.bumpversion]
+commit = false
+tag = true
+tag_name = "v{new_version}"
+tag_message = ""
+push = true
 
-[tool.poetry]
-requires-poetry = ">=2.0"
-version = "0.0.0"
+[tool.hatch.build.targets.sdist]
+include = ["/jmapc", "/tests", "/examples", "*.md", "LICENSE"]
 
-[tool.poetry.requires-plugins]
-poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
 
-[tool.poetry.group.dev.dependencies]
-bandit = {extras = ["toml"], version = "*"}
-black = "*"
-cruft = "*"
-flake8 = "*"
-flake8-bugbear = "*"
-flake8-pyproject = "*"
-flake8-simplify = "*"
-isort = "*"
-mypy = "*"
-pep8-naming = "*"
-poethepoet = "*"
-pre-commit = "*"
-pytest = "*"
-pytest-cov = "*"
-pytest-github-actions-annotate-failures = "*"
-pytest-sugar = "*"
-types-python-dateutil = "*"
-types-requests = "*"
-responses = "*"
+[tool.poe.executor]
+type = "uv"
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "semver"
+[tool.poe.tasks.audit]
+cmd = "pysentry-rs"
+help = "Run dependencies security audit"
+
+[tool.poe.tasks.build]
+cmd = "uv build"
+help = "Build distribution package"
+
+[tool.poe.tasks.docs-build]
+cmd = "zensical build -c"
+help = "Build documentation site"
+
+[tool.poe.tasks.docs]
+sequence = [
+    {ref = "docs-build"},
+    {cmd = "zensical serve -a \"${host}:${port}\""},
+]
+help = "Run documentation site locally"
+
+[tool.poe.tasks.docs.args.host]
+options = ['--host', '-h']
+help = "Bind IP"
+default = "localhost"
+
+[tool.poe.tasks.docs.args.port]
+positional = true
+help = "Bind Port"
+default = "8000"
+
+[tool.poe.tasks.init]
+sequence = [
+    {shell = "[ ! -d .git ] || { echo \"git repository already exists\"; exit 1; }"},
+    {cmd = "git init"},
+    {ref = "setup"},
+    {cmd = "git remote add origin https://github.com/smkent/jmapc"},
+    {cmd = "git config --local remote.origin.pushurl git@github.com:smkent/jmapc.git"},
+    {cmd = "git add ."},
+    {cmd = "git commit -m 'Create project from template'"},
+]
+help = "Initialize git repository once on project creation"
 
 [tool.poe.tasks.lint]
-cmd = "pre-commit run --all-files --show-diff-on-failure"
-help = "Check all files"
+cmd = "prek run --all-files"
+help = "Run all formatters and static checks"
 
-[tool.poe.tasks.pytest]
-cmd = "pytest"
-help = "Run unit tests with pytest"
+[tool.poe.tasks.lt]
+sequence = [{ref = "lint"}, {ref = "test"}]
+help = "Run all formatters, static checks and tests"
+
+[tool.poe.tasks.release]
+cmd = "bump-my-version bump -v"
+help = "Create and push a release tag (patch/minor/major)"
+
+[tool.poe.tasks.setup]
+sequence = [
+    {cmd = "uv sync"},
+    {cmd = "prek install"},
+]
+help = "Install project dependencies and git hooks"
+
+[tool.poe.tasks.snapup]
+cmd = "pytest --snapshot-update --numprocesses 0"
+help = "Update test snapshots"
 
 [tool.poe.tasks.test]
-sequence = ["lint", "pytest"]
-help = "Run all tests"
+cmd = "pytest"
+help = "Run tests"
 
-[tool.bandit]
-skips = ["B101"]  # assert_used
+[tool.poe.tasks.test-versions]
+sequence = ["test-py310", "test-py311", "test-py312", "test-py313", "test-py314"]
+help = "Run tests across all Python versions"
 
-[tool.black]
-line-length = 79
+[tool.poe.tasks.test-py310]
+cmd = "pytest"
+executor = {isolated = true, python = "3.10"}
+help = "Run tests using Python 3.10"
+
+[tool.poe.tasks.test-py311]
+cmd = "pytest"
+executor = {isolated = true, python = "3.11"}
+help = "Run tests using Python 3.11"
+
+[tool.poe.tasks.test-py312]
+cmd = "pytest"
+executor = {isolated = true, python = "3.12"}
+help = "Run tests using Python 3.12"
+
+[tool.poe.tasks.test-py313]
+cmd = "pytest"
+executor = {isolated = true, python = "3.13"}
+help = "Run tests using Python 3.13"
+
+[tool.poe.tasks.test-py314]
+cmd = "pytest"
+executor = {isolated = true, python = "3.14"}
+help = "Run tests using Python 3.14"
+
+[tool.poe.tasks.ti]
+cmd = "pytest --numprocesses 0 --no-cov -vv"
+help = "Run tests with debug friendly options"
+
+[tool.pytest]
+addopts = [
+    "-ra",
+    "--cov=jmapc",
+    "--strict-config",
+    "--strict-markers",
+    "--numprocesses",
+    "auto",
+]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["jmapc"]
+branch = true
 
 [tool.coverage.report]
-fail_under = 95
 show_missing = true
+skip_covered = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
 
-[tool.cruft]
-skip = [".git"]
+[tool.ruff]
+line-length = 79
+output-format = "concise"
+target-version = "py310"
 
-[tool.flake8]
-exclude = "./.*"
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed
+    "COM812",  # Trailing comma missing
+    "D1",  # Missing docstring presence rules
+    "EM",  # flake8-errmsg
+    "G004",  # Logging statement uses f-string
+    "N818",  # error-suffix-on-exception-name
+    "PLR",  # pylint Refactor
+    "S101",  # Use of assert detected
+    "S607",  # Starting a process with a partial executable path
+    "T201",  # print
+    "TC001",  # Move application import into a type-checking block
+    "TC003",  # Move standard library import into a type-checking block
+    "TD",  # flake8-todos
+    "TRY003", # Avoid specifying long messages outside the exception class
+]
 
-[tool.isort]
-atomic = true
-profile = "black"
-line_length = 79
+[tool.ruff.lint.isort]
+known-first-party = ["jmapc"]
 
-[tool.mypy]
-files = [ "tests", "jmapc" ]
-mypy_path = "types"
-disallow_untyped_defs = true
-no_implicit_optional = true
-check_untyped_defs = true
-warn_return_any = true
-show_error_codes = true
-warn_unused_ignores = true
+[tool.ruff.lint.per-file-ignores]
+"examples/**/*.py" = [
+    "ERA001",  # Found commented-out code
+    "TRY002",  # Create your own exception
+]
+"tests/**/*.py" = [
+    "ARG",  # flake8-unused-arguments
+    "S101",  # Use of assert detected
+]
 
-[tool.pytest.ini_options]
-addopts = """\
-    --cov \
-    --cov-append \
-    --cov-report term \
-    --cov-report xml:.pytest_coverage.xml \
-    --junitxml=.pytest_results.xml \
-"""
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
-# vim: ft=cfg
+[tool.ty.terminal]
+error-on-warning = true
+output-format = "concise"
+
+[tool.uv]
+default-groups = ["dev", "docs"]
+
+[tool.uv-dynamic-versioning]
+pattern = "default-unprefixed"
+fallback-version = "0.0.0"

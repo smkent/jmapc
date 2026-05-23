@@ -1,0 +1,31 @@
+name: Audit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - uv.lock
+  pull_request:
+    paths:
+      - uv.lock
+
+jobs:
+  audit:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v6
+
+      - name: 🦀 Set up Python project with uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: true
+          python-version: '3.14'
+
+      - name: 🐍 Install dependencies
+        run: uv sync
+
+      - name: 🔍 Check dependencies
+        run: uv run poe audit

@@ -1,10 +1,14 @@
-# jmapc: A [JMAP][jmapio] client library for Python
+# jmapc
 
-[![PyPI](https://img.shields.io/pypi/v/jmapc)][pypi]
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jmapc)][pypi]
-[![Build](https://img.shields.io/github/checks-status/smkent/jmapc/main?label=build)][gh-actions]
-[![codecov](https://codecov.io/gh/smkent/jmapc/branch/main/graph/badge.svg)][codecov]
-[![GitHub stars](https://img.shields.io/github/stars/smkent/jmapc?style=social)][repo]
+A [JMAP][jmapio] client library for Python
+
+[![License](https://img.shields.io/github/license/smkent/jmapc)](https://github.com/smkent/jmapc/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/jmapc)](https://pypi.org/project/jmapc/)
+[![Python](https://img.shields.io/pypi/pyversions/jmapc)](https://pypi.org/project/jmapc/)
+[![CI](https://github.com/smkent/jmapc/actions/workflows/ci.yaml/badge.svg)](https://github.com/smkent/jmapc/actions/workflows/ci.yaml)
+[![Coverage](https://codecov.io/gh/smkent/jmapc/branch/main/graph/badge.svg)](https://codecov.io/gh/smkent/jmapc)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot)](https://renovatebot.com)
+[![GitHub stars](https://img.shields.io/github/stars/smkent/jmapc?style=social)](https://github.com/smkent/jmapc)
 
 [![jmapc][logo]](#)
 
@@ -34,20 +38,32 @@ Currently implemented:
 
 ## Installation
 
-[jmapc is available on PyPI][pypi]:
+Install in any environment where `pip` is available:
 
-```console
+```sh
 pip install jmapc
+```
+
+### Installation in projects
+
+Install in a project, such as with [`uv`][uv] or [`poetry`][poetry]:
+
+```sh
+uv add jmapc
+```
+
+```sh
+poetry add jmapc
 ```
 
 ## Examples
 
-Any of the included examples can be invoked with `poetry run`:
+Any of the included examples can be invoked with `uv run`:
 
-```console
+```sh
 JMAP_HOST=jmap.example.com \
 JMAP_API_TOKEN=ness__pk_fire \
-poetry run examples/identity_get.py
+uv run examples/identity_get.py
 ```
 
 If successful, `examples/identity_get.py` should output something like:
@@ -57,45 +73,15 @@ Identity 12345 is for Ness at ness@onett.example.com
 Identity 67890 is for Ness at ness-alternate@onett.example.com
 ```
 
-## Development
+## Project template
 
-### [Poetry][poetry] installation
-
-Via [`pipx`][pipx]:
-
-```console
-pip install pipx
-pipx install poetry
-pipx inject poetry poetry-pre-commit-plugin
-```
-
-Via `pip`:
-
-```console
-pip install poetry
-poetry self add poetry-pre-commit-plugin
-```
-
-### Development tasks
-
-* Setup: `poetry install`
-* Run static checks: `poetry run poe lint` or
-  `poetry run pre-commit run --all-files`
-* Run static checks and tests: `poetry run poe test`
-
----
-
-Created from [smkent/cookie-python][cookie-python] using
-[cookiecutter][cookiecutter]
+This project is generated and maintained with [copier-python][copier-python].
 
 [codecov]: https://codecov.io/gh/smkent/jmapc
-[cookie-python]: https://github.com/smkent/cookie-python
-[cookiecutter]: https://github.com/cookiecutter/cookiecutter
+[copier-python]: https://smkent.github.io/copier-python
 [fastmail-maskedemail]: https://www.fastmail.com/developer/maskedemail/
-[gh-actions]: https://github.com/smkent/jmapc/actions?query=branch%3Amain
-[logo]: https://raw.github.com/smkent/jmapc/main/img/jmapc.png
 [jmapio]: https://jmap.io
+[logo]: https://raw.github.com/smkent/jmapc/main/img/jmapc.png
 [pipx]: https://pypa.github.io/pipx/
-[poetry]: https://python-poetry.org/docs/#installation
-[pypi]: https://pypi.org/project/jmapc/
-[repo]: https://github.com/smkent/jmapc
+[poetry]: https://python-poetry.org/
+[uv]: https://docs.astral.sh/uv/

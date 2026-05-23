@@ -8,7 +8,7 @@ def test_ref_with_no_method_calls() -> None:
     method = MailboxGet(
         ids=Ref("/ids"),
     )
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="No previous calls for reference"):
         method.to_dict()
 
 
@@ -33,9 +33,11 @@ def test_ref_with_no_method_match(invalid_ref: Ref) -> None:
 
 def test_invalid_ref_object() -> None:
     bad_ref = Ref("/ids")
-    bad_ref._ref_sentinel = "invalid_value"
+    bad_ref._ref_sentinel = "invalid_value"  # noqa: SLF001
     method = MailboxGet(ids=bad_ref)
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="Unexpected reference sentinel value: invalid_value"
+    ):
         method.to_dict()
 
 

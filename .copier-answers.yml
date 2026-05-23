@@ -1,0 +1,25 @@
+# Changes here will be overwritten by Copier
+_commit: v0.11.0
+_src_path: gh:smkent/copier-python
+copyright_holder: Stephen Kent
+copyright_holder_email: smkent@smkent.net
+copyright_license: GPL-3.0
+copyright_year: '2022'
+enable_container: false
+enable_coverage: true
+enable_docs: true
+enable_features:
+- syrupy
+- xdist
+enable_pypi: true
+github_user: smkent
+project_description: A JMAP client library for Python
+project_name: jmapc
+project_slug: jmapc
+project_type: library
+project_visibility: public
+python_version_maximum: No maximum
+python_version_minimum: '3.10'
+template_attribution: true
+user_email: smkent@smkent.net
+user_name: Stephen Kent

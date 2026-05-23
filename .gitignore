@@ -1,8 +1,19 @@
+# Python
+__pycache__/
 *.egg-info/
-*.pyc
-.coverage
-.pytest_cache/
-.pytest_coverage.xml
-.pytest_results.xml
+*.py[cod]
+
+# uv and packaging
 .venv/
-dist/
+/build/
+/dist/
+uv.lock
+
+# Development tools
+.cache/
+.coverage*
+.pytest_cache/
+.ruff_cache/
+/htmlcov/
+/site/
+coverage.xml

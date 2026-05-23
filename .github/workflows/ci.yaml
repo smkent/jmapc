@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - '3.10'
+          - '3.11'
+          - '3.12'
+          - '3.13'
+          - '3.14'
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v6
+
+      - name: 🦀 Set up Python project with uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: 🐍 Install dependencies
+        run: uv sync
+
+      - name: 📐 Lint
+        run: uv run poe lint
+
+      - name: 🔥 Test
+        run: uv run poe test
+
+      - name: 🔍 Collect coverage results
+        run: uv run coverage xml
+        if: ${{ matrix.python-version == '3.14' }}
+
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        if: ${{ matrix.python-version == '3.14' }}
+        with:
+          fail_ci_if_error: true
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🦀 Set up Python project with uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: true
+          python-version: '3.14'
+
+      - name: 🐍 Install dependencies
+        run: uv sync
+
+      - name: 📖 Build documentation
+        run: uv run poe docs-build
+
+  gitleaks:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

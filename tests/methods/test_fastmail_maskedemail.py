@@ -11,8 +11,7 @@ from jmapc.fastmail import (
     MaskedEmailSetResponse,
     MaskedEmailState,
 )
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 
 def test_maskedemail_get(
@@ -146,8 +145,8 @@ def test_maskedemail_set(
 
     assert client.request(
         MaskedEmailSet(
-            create=dict(
-                create=MaskedEmail(
+            create={
+                "create": MaskedEmail(
                     id=None,
                     email="pk.fire2187@ness.example.com",
                     for_domain="ness.example.com",
@@ -160,14 +159,14 @@ def test_maskedemail_set(
                     ),
                     created_by="API Token: onett-dev",
                 )
-            )
+            }
         )
     ) == MaskedEmailSetResponse(
         account_id="u1138",
         old_state=None,
         new_state=None,
-        created=dict(
-            create=MaskedEmail(
+        created={
+            "create": MaskedEmail(
                 id="masked-42",
                 email="pk.fire2187@ness.example.com",
                 state=MaskedEmailState.PENDING,
@@ -179,7 +178,7 @@ def test_maskedemail_set(
                 ),
                 created_by="API Token: onett-dev",
             ),
-        ),
+        },
         updated={},
         destroyed=[],
         not_created=None,

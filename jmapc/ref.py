@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Union
 
 import dataclasses_json
 from dataclasses_json import config
@@ -25,7 +24,7 @@ class ResultReference(dataclasses_json.DataClassJsonMixin):
 @dataclass
 class Ref(dataclasses_json.DataClassJsonMixin):
     path: str
-    method: Union[str, int] = -1
+    method: str | int = -1
     _ref_sentinel: str = field(
         init=False,
         default="Ref",

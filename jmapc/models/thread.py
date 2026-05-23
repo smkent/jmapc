@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ..serializer import Model
+from jmapc.serializer import Model
 
 
 @dataclass

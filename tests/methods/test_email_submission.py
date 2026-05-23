@@ -25,8 +25,7 @@ from jmapc.methods import (
     EmailSubmissionSet,
     EmailSubmissionSetResponse,
 )
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 expected_request_create = {
     "emailToSend": {
@@ -328,8 +327,8 @@ def test_email_submission_set(
     expect_jmap_call(http_responses, expected_request, response)
     assert client.request(
         EmailSubmissionSet(
-            create=dict(
-                emailToSend=EmailSubmission(
+            create={
+                "emailToSend": EmailSubmission(
                     email_id="#draft",
                     identity_id="1000",
                     envelope=Envelope(
@@ -337,19 +336,19 @@ def test_email_submission_set(
                         rcpt_to=[Address(email="ness@onett.example.com")],
                     ),
                 )
-            )
+            }
         )
     ) == EmailSubmissionSetResponse(
         account_id="u1138",
         old_state="1",
         new_state="2",
-        created=dict(
-            emailToSend=EmailSubmission(
+        created={
+            "emailToSend": EmailSubmission(
                 id="S2000",
                 undo_status=UndoStatus.FINAL,
                 send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
             ),
-        ),
+        },
         updated=None,
         destroyed=None,
         not_created=None,
@@ -406,8 +405,8 @@ def test_email_submission_set_on_success_destroy_email(
     assert client.request(
         EmailSubmissionSet(
             on_success_destroy_email=["#emailToSend"],
-            create=dict(
-                emailToSend=EmailSubmission(
+            create={
+                "emailToSend": EmailSubmission(
                     email_id="#draft",
                     identity_id="1000",
                     envelope=Envelope(
@@ -415,22 +414,22 @@ def test_email_submission_set_on_success_destroy_email(
                         rcpt_to=[Address(email="ness@onett.example.com")],
                     ),
                 )
-            ),
+            },
         )
     ) == [
         EmailSubmissionSetResponse(
             account_id="u1138",
             old_state="1",
             new_state="2",
-            created=dict(
-                emailToSend=EmailSubmission(
+            created={
+                "emailToSend": EmailSubmission(
                     id="S2000",
                     undo_status=UndoStatus.FINAL,
                     send_at=datetime(
                         1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
                     ),
                 ),
-            ),
+            },
             updated=None,
             destroyed=None,
             not_created=None,
@@ -505,8 +504,8 @@ def test_email_submission_set_on_success_update_email(
             on_success_update_email={
                 "keywords/$draft": None,
             },
-            create=dict(
-                emailToSend=EmailSubmission(
+            create={
+                "emailToSend": EmailSubmission(
                     email_id="#draft",
                     identity_id="1000",
                     envelope=Envelope(
@@ -514,22 +513,22 @@ def test_email_submission_set_on_success_update_email(
                         rcpt_to=[Address(email="ness@onett.example.com")],
                     ),
                 )
-            ),
+            },
         )
     ) == [
         EmailSubmissionSetResponse(
             account_id="u1138",
             old_state="1",
             new_state="2",
-            created=dict(
-                emailToSend=EmailSubmission(
+            created={
+                "emailToSend": EmailSubmission(
                     id="S2000",
                     undo_status=UndoStatus.FINAL,
                     send_at=datetime(
                         1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
                     ),
                 ),
-            ),
+            },
             updated=None,
             destroyed=None,
             not_created=None,
@@ -609,8 +608,8 @@ def test_email_submission_set_update_email_error(
                 "keywords/$draft": None,
                 "mailboxIds/MBX5": None,
             },
-            create=dict(
-                emailToSend=EmailSubmission(
+            create={
+                "emailToSend": EmailSubmission(
                     email_id="#draft",
                     identity_id="1000",
                     envelope=Envelope(
@@ -618,22 +617,22 @@ def test_email_submission_set_update_email_error(
                         rcpt_to=[Address(email="ness@onett.example.com")],
                     ),
                 )
-            ),
+            },
         )
     ) == [
         EmailSubmissionSetResponse(
             account_id="u1138",
             old_state="1",
             new_state="2",
-            created=dict(
-                emailToSend=EmailSubmission(
+            created={
+                "emailToSend": EmailSubmission(
                     id="S2000",
                     undo_status=UndoStatus.FINAL,
                     send_at=datetime(
                         1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
                     ),
                 ),
-            ),
+            },
             updated=None,
             destroyed=None,
             not_created=None,

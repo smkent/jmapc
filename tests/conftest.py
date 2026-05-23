@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import json
 import logging
 import tempfile
 import time
 from pathlib import Path
-from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 import pytest
 import responses
@@ -11,15 +13,19 @@ import responses
 from jmapc import Client
 from jmapc.logging import log
 
-from .data import make_session_response
-
 pytest.register_assert_rewrite("tests.data", "tests.utils")
+
+from .data import make_session_response  # noqa: E402
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 @pytest.fixture(autouse=True)
-def test_log() -> Iterable[None]:
+def test_log() -> None:
     class UTCFormatter(logging.Formatter):
-        converter = time.gmtime
+        def converter(self, seconds: float | None) -> time.struct_time:
+            return time.gmtime(seconds)
 
     logger = logging.getLogger()
     handler = logging.StreamHandler()
@@ -30,12 +36,12 @@ def test_log() -> Iterable[None]:
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     log.setLevel(logging.DEBUG)
-    yield
+    return
 
 
 @pytest.fixture
-def client() -> Iterable[Client]:
-    yield Client(host="jmap-example.localhost", auth=("ness", "pk_fire"))
+def client() -> Client:
+    return Client(host="jmap-example.localhost", auth=("ness", "pk_fire"))
 
 
 @pytest.fixture
@@ -47,13 +53,13 @@ def http_responses_base() -> Iterable[responses.RequestsMock]:
 @pytest.fixture
 def http_responses(
     http_responses_base: responses.RequestsMock,
-) -> Iterable[responses.RequestsMock]:
+) -> responses.RequestsMock:
     http_responses_base.add(
         method=responses.GET,
         url="https://jmap-example.localhost/.well-known/jmap",
         body=json.dumps(make_session_response()),
     )
-    yield http_responses_base
+    return http_responses_base
 
 
 @pytest.fixture

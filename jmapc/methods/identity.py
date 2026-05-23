@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import ClassVar
 
 from dataclasses_json import config
 
-from .. import constants
-from ..models import Identity, ListOrRef
+from jmapc import constants
+from jmapc.models import Identity, ListOrRef
+
 from .base import Changes, ChangesResponse, Get, GetResponse, Set, SetResponse
 
 
 class IdentityBase:
-    method_namespace: Optional[str] = "Identity"
-    using = {constants.JMAP_URN_SUBMISSION}
+    method_namespace: ClassVar[str | None] = "Identity"
+    using: ClassVar[set[str]] = {constants.JMAP_URN_SUBMISSION}
 
 
 @dataclass
@@ -27,7 +28,7 @@ class IdentityChangesResponse(IdentityBase, ChangesResponse):
 
 @dataclass
 class IdentityGet(IdentityBase, Get):
-    ids: Optional[ListOrRef[str]] = None
+    ids: ListOrRef[str] | None = None
 
 
 @dataclass
@@ -37,10 +38,10 @@ class IdentityGetResponse(IdentityBase, GetResponse):
 
 @dataclass
 class IdentitySet(IdentityBase, Set):
-    create: Optional[dict[str, Identity]] = None
+    create: dict[str, Identity] | None = None
 
 
 @dataclass
 class IdentitySetResponse(IdentityBase, SetResponse):
-    created: Optional[dict[str, Optional[Identity]]]
-    updated: Optional[dict[str, Optional[Identity]]]
+    created: dict[str, Identity | None] | None
+    updated: dict[str, Identity | None] | None

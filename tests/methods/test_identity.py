@@ -9,8 +9,7 @@ from jmapc.methods import (
     IdentitySet,
     IdentitySetResponse,
 )
-
-from ..utils import expect_jmap_call
+from tests.utils import expect_jmap_call
 
 
 def test_identity_changes(
@@ -182,8 +181,8 @@ def test_identity_set(
 
     assert client.request(
         IdentitySet(
-            create=dict(
-                new_id=Identity(
+            create={
+                "new_id": Identity(
                     name="Mr. Saturn",
                     email="mr.saturn@saturn.valley.example.net",
                     reply_to=None,
@@ -192,14 +191,14 @@ def test_identity_set(
                     html_signature="<i>Boing</i>",
                     may_delete=False,
                 )
-            )
+            }
         )
     ) == IdentitySetResponse(
         account_id="u1138",
         old_state="1",
         new_state="2",
-        created=dict(
-            new_id=Identity(
+        created={
+            "new_id": Identity(
                 id="0002",
                 name="Mr. Saturn",
                 email="mr.saturn@saturn.valley.example.net",
@@ -209,7 +208,7 @@ def test_identity_set(
                 html_signature="<i>Boing</i>",
                 may_delete=False,
             )
-        ),
+        },
         updated=None,
         destroyed=None,
         not_created=None,
