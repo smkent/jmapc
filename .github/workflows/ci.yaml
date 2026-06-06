@@ -51,6 +51,8 @@ jobs:
         if: ${{ matrix.python-version == '3.14' }}
         with:
           fail_ci_if_error: true
+          use_pypi: true
+          version: 11.2.8
 
   docs:
     name: Documentation
