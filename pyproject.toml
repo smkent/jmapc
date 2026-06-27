@@ -247,6 +247,9 @@ known-first-party = ["jmapc"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ty.src]
+include = ["jmapc/", "tests/"]
+
 [tool.ty.terminal]
 error-on-warning = true
 output-format = "concise"
