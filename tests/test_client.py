@@ -6,7 +6,7 @@ import requests
 import requests.auth
 import responses
 
-from jmapc import Blob, Client, ClientError, EmailBodyPart, constants
+from jmapc import Blob, Client, ClientError, Email, EmailBodyPart, constants
 from jmapc.auth import BearerAuth
 from jmapc.methods import (
     CoreEcho,
@@ -475,6 +475,33 @@ def test_download_attachment(
     assert not dest_file.exists()
     client.download_attachment(
         EmailBodyPart(name="download.txt", blob_id="C2187", type="text/plain"),
+        dest_file,
+    )
+    assert dest_file.read_text() == blob_content
+
+
+def test_download_email(
+    client: Client, http_responses: responses.RequestsMock, tempdir: Path
+) -> None:
+    blob_content = "test download blob content"
+    http_responses.add(
+        method=responses.GET,
+        url=(
+            "https://jmap-api.localhost/jmap/download"
+            "/u1138/E5402/?type=message/rfc822"
+        ),
+        body=blob_content,
+    )
+    dest_file = tempdir / "email.eml"
+    with pytest.raises(Exception) as e:
+        client.download_email(
+            Email(blob_id="E5402"),
+            "",
+        )
+    assert str(e.value) == "Destination file name is required"
+    assert not dest_file.exists()
+    client.download_email(
+        Email(blob_id="E5402"),
         dest_file,
     )
     assert dest_file.read_text() == blob_content
