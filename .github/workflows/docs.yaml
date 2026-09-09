@@ -19,23 +19,30 @@ jobs:
   build:
     name: Build Documentation
     runs-on: ubuntu-latest
+    env:
+      UV_PYTHON: '3.14'
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: 🦀 Set up Python project with uv
-        uses: astral-sh/setup-uv@v8.2.0
+      - name: 📦 Restore uv cache
+        uses: actions/cache@v6
         with:
-          enable-cache: true
-          python-version: '3.14'
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
 
-      - name: 🐍 Install dependencies
-        run: uv sync
+      - name: 🍳 Set up mise
+        uses: jdx/mise-action@v4
+        with:
+          cache: true
+          install: true
 
       - name: 📖 Build documentation
-        run: uv run poe docs-build
+        run: mise run docs-build
 
       - name: 🔼 Upload artifact
         uses: actions/upload-pages-artifact@v5

@@ -7,11 +7,11 @@ icon: lucide/rocket
 
 Release version numbers should follow [Semantic Versioning][semver].
 
-To create a release, run `poe release` with one of `patch`, `minor`, or `major`
-corresponding to the version number component to update:
+To create a release, run `mise run release` with one of `patch`, `minor`, or
+`major` corresponding to the version number component to update:
 
 ```sh
-poe release patch|minor|major
+mise run release patch|minor|major
 ```
 
 A new tag with the new release version number will be created automatically

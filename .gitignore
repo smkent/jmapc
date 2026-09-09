@@ -4,10 +4,15 @@ __pycache__/
 *.py[cod]
 
 # uv and packaging
-.venv/
+.venv*/
 /build/
 /dist/
 uv.lock
+
+# mise
+mise.local.toml
+.mise.local.toml
+.mise/
 
 # Development tools
 .cache/
