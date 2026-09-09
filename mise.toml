@@ -1,0 +1,121 @@
+min_version = "2026.2.5"
+
+[hooks]
+postinstall = [
+    "uv sync",
+    "[ -d .git ] && prek install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
+]
+
+[tools]
+"pipx:copier" = "latest"
+prek = "latest"
+uv = "latest"
+
+[settings]
+lockfile = true
+
+[tasks.audit]
+description = "Run dependencies security audit"
+raw_args = true
+run = "uv run pysentry-rs"
+
+[tasks.build]
+description = "Build distribution package"
+raw_args = true
+run = "uv build"
+
+[tasks.docs]
+description = "Run documentation site locally"
+depends = ["docs-build"]
+run = 'uv run zensical serve -a "${usage_host:-localhost}:${usage_port:-8000}"'
+usage = '''
+flag "--host <host>" help="Bind IP" default="localhost"
+arg "[port]" help="Bind port" default="8000"
+'''
+
+[tasks.docs-build]
+description = "Build documentation site"
+raw_args = true
+run = "uv run zensical build -c"
+
+[tasks.init]
+description = "Initialize git repository once on project creation"
+run = [
+    '[ ! -d .git ] || { echo "git repository already exists"; exit 1; }',
+    "git init",
+    "mise install",
+    "git remote add origin https://github.com/smkent/jmapc",
+    "git config --local remote.origin.pushurl git@github.com:smkent/jmapc.git",
+    "git add .",
+    "git commit -m 'Create project from template'",
+]
+
+[tasks.lint]
+description = "Run all formatters and static checks"
+raw_args = true
+run = "prek run --all-files"
+
+[tasks.lt]
+description = "Run all formatters, static checks and tests"
+depends = ["lint"]
+run = { task = "test" }
+
+[tasks.release]
+description = "Create and push a release tag (patch/minor/major)"
+raw_args = true
+run = "uv run bump-my-version bump -v"
+
+[tasks.snapup]
+description = "Update test snapshots"
+raw_args = true
+run = "uv run pytest --snapshot-update --numprocesses 0"
+
+[tasks.test]
+description = "Run tests"
+raw_args = true
+run = "uv run pytest"
+
+[tasks.test-versions]
+description = "Run tests across all Python versions"
+run = [
+    { task = "test-py310" },
+    { task = "test-py311" },
+    { task = "test-py312" },
+    { task = "test-py313" },
+    { task = "test-py314" },
+]
+
+[tasks.test-py310]
+description = "Run tests using Python 3.10"
+env = { UV_PROJECT_ENVIRONMENT = ".venv-py310" }
+raw_args = true
+run = "uv run --python 3.10 pytest"
+
+[tasks.test-py311]
+description = "Run tests using Python 3.11"
+env = { UV_PROJECT_ENVIRONMENT = ".venv-py311" }
+raw_args = true
+run = "uv run --python 3.11 pytest"
+
+[tasks.test-py312]
+description = "Run tests using Python 3.12"
+env = { UV_PROJECT_ENVIRONMENT = ".venv-py312" }
+raw_args = true
+run = "uv run --python 3.12 pytest"
+
+[tasks.test-py313]
+description = "Run tests using Python 3.13"
+env = { UV_PROJECT_ENVIRONMENT = ".venv-py313" }
+raw_args = true
+run = "uv run --python 3.13 pytest"
+
+[tasks.test-py314]
+description = "Run tests using Python 3.14"
+env = { UV_PROJECT_ENVIRONMENT = ".venv-py314" }
+raw_args = true
+run = "uv run --python 3.14 pytest"
+
+[tasks.ti]
+description = "Run tests with debug friendly options"
+raw_args = true
+run = "uv run pytest --numprocesses 0 --no-cov -vv"

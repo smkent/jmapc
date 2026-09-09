@@ -5,20 +5,20 @@ icon: lucide/bookmark-check
 
 # Prerequisites
 
-- [x] A [supported version][python-versions] of [**Python**][python]
-- [x] [**git** for verson control][git]
-- [x] [Astral's **uv** Python project manager][uv]: `pip install uv` or
-  [other supported method][uv-installation]
-- [x] [**Copier**][copier]: `uv tool install copier`
-- [x] [Poe the Poet][poethepoet] (recommended): `uv tool install poethepoet`
+- [x] [**git** for version control][git]
+- [x] [**mise**][mise] tool manager: `curl https://mise.run | sh` or
+  [alternate installation method][mise-installation]
 
-    This provides `poe` without the `uv run` prefix,
-    e.g. `poe test` instead of `uv run poe test`
+    !!! info
 
-[copier]: https://copier.readthedocs.io
+        `mise` ensures additional software is available, such as:
+
+        * A [supported version][python-versions] of [**Python**][python]
+        * [Astral's **uv** Python project manager][uv]
+
 [git]: https://git-scm.com
-[poethepoet]: https://poethepoet.natn.io/
+[mise-installation]: https://mise.jdx.dev/installing-mise.html
+[mise]: https://mise.jdx.dev
 [python-versions]: https://devguide.python.org/versions/
 [python]: https://python.org
-[uv-installation]: https://docs.astral.sh/uv/getting-started/installation/
 [uv]: https://docs.astral.sh/uv/

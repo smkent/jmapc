@@ -7,7 +7,7 @@
   },
   "packageRules": [
     {
-      "matchManagers": ["uv", "github-actions", "pre-commit"],
+      "matchManagers": ["github-actions", "pre-commit", "mise", "uv"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "non-major dependencies"
     }
