@@ -57,8 +57,10 @@ run = "prek run --all-files"
 
 [tasks.lt]
 description = "Run all formatters, static checks and tests"
-depends = ["lint"]
-run = { task = "test" }
+run = [
+    { task = "lint" },
+    { task = "test" },
+]
 
 [tasks.release]
 description = "Create and push a release tag (patch/minor/major)"
