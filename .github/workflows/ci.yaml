@@ -27,7 +27,7 @@ jobs:
           - '3.14'
     steps:
       - name: 💾 Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📦 Restore uv cache
         uses: actions/cache@v6
@@ -68,7 +68,7 @@ jobs:
       UV_PYTHON: '3.14'
     steps:
       - name: 💾 Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -96,7 +96,7 @@ jobs:
       contents: read
     steps:
       - name: 💾 Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
