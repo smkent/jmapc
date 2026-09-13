@@ -1,0 +1,10 @@
+title = "jmapc betterleaks config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+    id = "generic-password"
+    [[rules.allowlists]]
+        description = "Unit test mock credentials"
+        paths = ['''(^|/)tests/.*\.py$''']
