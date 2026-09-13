@@ -17,12 +17,13 @@ repos:
       - id: pretty-format-yaml
         args: [--autofix, --offset, '2']
         exclude: ^\.copier-answers\.yml$
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.1
-    hooks:
-      - id: gitleaks
   - repo: local
     hooks:
+      - id: betterleaks
+        name: betterleaks
+        entry: betterleaks git . --pre-commit --staged --redact
+        language: system
+        pass_filenames: false
       - id: ruff
         name: ruff
         entry: uv run ruff check --fix
