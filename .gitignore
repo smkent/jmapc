@@ -12,7 +12,6 @@ uv.lock
 # mise
 mise.local.toml
 .mise.local.toml
-.mise/
 
 # Development tools
 .cache/

@@ -12,9 +12,6 @@ betterleaks = "latest"
 prek = "latest"
 uv = "latest"
 
-[settings]
-lockfile = true
-
 [tasks.audit]
 description = "Run dependencies security audit"
 raw_args = true
