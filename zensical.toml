@@ -31,19 +31,19 @@ nav = [
 [project.theme]
 language = "en"
 features = [
-    "content.code.annotate",
-    "content.code.copy",
-    "content.tooltips",
-    "navigation.expand",
-    "navigation.footer",
-    "navigation.instant",
-    "navigation.path",
-    "navigation.sections",
-    "navigation.tabs",
-    "navigation.tabs.sticky",
-    "navigation.top",
-    "search.highlight",
-    "toc.follow",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.tooltips",
+  "navigation.expand",
+  "navigation.footer",
+  "navigation.instant",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
+  "navigation.top",
+  "search.highlight",
+  "toc.follow",
 ]
 
 [project.theme.icon]

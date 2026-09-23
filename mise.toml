@@ -2,14 +2,15 @@ min_version = "2026.2.5"
 
 [hooks]
 postinstall = [
-    "uv sync",
-    "[ -d .git ] && prek install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
+  "uv sync",
+  "[ -d .git ] && prek install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
 ]
 
 [tools]
 betterleaks = "latest"
 "pipx:copier" = "latest"
 prek = "latest"
+taplo = "latest"
 uv = "latest"
 
 [tasks.audit]
@@ -39,13 +40,13 @@ run = "uv run zensical build -c"
 [tasks.init]
 description = "Initialize git repository once on project creation"
 run = [
-    '[ ! -d .git ] || { echo "git repository already exists"; exit 1; }',
-    "git init",
-    "mise install",
-    "git remote add origin https://github.com/smkent/jmapc",
-    "git config --local remote.origin.pushurl git@github.com:smkent/jmapc.git",
-    "git add .",
-    "git commit -m 'Create project from template'",
+  '[ ! -d .git ] || { echo "git repository already exists"; exit 1; }',
+  "git init",
+  "mise install",
+  "git remote add origin https://github.com/smkent/jmapc",
+  "git config --local remote.origin.pushurl git@github.com:smkent/jmapc.git",
+  "git add .",
+  "git commit -m 'Create project from template'",
 ]
 
 [tasks.lint]
@@ -55,10 +56,7 @@ run = "prek run --all-files"
 
 [tasks.lt]
 description = "Run all formatters, static checks and tests"
-run = [
-    { task = "lint" },
-    { task = "test" },
-]
+run = [{ task = "lint" }, { task = "test" }]
 
 [tasks.release]
 description = "Create and push a release tag (patch/minor/major)"
@@ -83,11 +81,11 @@ run = "uv run pytest"
 [tasks.test-versions]
 description = "Run tests across all Python versions"
 run = [
-    { task = "test-py310" },
-    { task = "test-py311" },
-    { task = "test-py312" },
-    { task = "test-py313" },
-    { task = "test-py314" },
+  { task = "test-py310" },
+  { task = "test-py311" },
+  { task = "test-py312" },
+  { task = "test-py313" },
+  { task = "test-py314" },
 ]
 
 [tasks.test-py310]
