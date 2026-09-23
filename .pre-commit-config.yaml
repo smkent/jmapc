@@ -34,6 +34,11 @@ repos:
         entry: uv run ruff format
         language: system
         types_or: [python, pyi]
+      - id: taplo
+        name: taplo
+        entry: taplo format
+        language: system
+        types: [toml]
       - id: ty
         name: ty
         entry: uv run ty check
