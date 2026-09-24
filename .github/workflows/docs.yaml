@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 📦 Restore uv cache
+      - name: 📦 Cache uv managed packages
         uses: actions/cache@v6
         with:
           path: ~/.cache/uv
