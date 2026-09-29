@@ -153,11 +153,11 @@ class Set(MethodWithAccount, SetMethod):
 
 @dataclass
 class SetResponse(ResponseWithAccount, SetMethod):
-    old_state: str | None
-    new_state: str | None
-    created: dict[str, Any] | None
-    updated: dict[str, Any] | None
-    destroyed: list[str] | None
+    old_state: str | None = None
+    new_state: str | None = None
+    created: dict[str, Any] | None = None
+    updated: dict[str, Any] | None = None
+    destroyed: list[str] | None = None
     not_created: dict[str, SetError] | None = None
     not_updated: dict[str, SetError] | None = None
     not_destroyed: dict[str, SetError] | None = None

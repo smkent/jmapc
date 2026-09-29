@@ -506,3 +506,35 @@ def test_email_set(
         not_updated=None,
         not_destroyed=None,
     )
+
+
+def test_email_set_with_omitted_optional_response_fields(
+    client: Client, http_responses: responses.RequestsMock
+) -> None:
+    expected_request = {
+        "methodCalls": [
+            [
+                "Email/set",
+                {"accountId": "u1138", "destroy": ["M1001"]},
+                "single.Email/set",
+            ]
+        ],
+        "using": [
+            "urn:ietf:params:jmap:core",
+            "urn:ietf:params:jmap:mail",
+        ],
+    }
+    response = {
+        "methodResponses": [
+            [
+                "Email/set",
+                {"accountId": "u1138"},
+                "single.Email/set",
+            ]
+        ]
+    }
+    expect_jmap_call(http_responses, expected_request, response)
+
+    assert client.request(EmailSet(destroy=["M1001"])) == EmailSetResponse(
+        account_id="u1138"
+    )
