@@ -7,8 +7,8 @@ name = "jmapc"
 dynamic = ["version"]
 description = "A JMAP client library for Python"
 readme = "README.md"
-license = "GPL-3.0"
-license-files = ["LICENSE"]
+license = "GPL-3.0-only"
+license-files = ["COPYING"]
 requires-python = ">=3.10"
 authors = [{ name = "Stephen Kent", email = "smkent@smkent.net" }]
 classifiers = [
@@ -67,7 +67,7 @@ tag_message = ""
 push = true
 
 [tool.hatch.build.targets.sdist]
-include = ["/jmapc", "/tests", "/examples", "*.md", "LICENSE"]
+include = ["/jmapc", "/tests", "/examples", "*.md", "COPYING"]
 
 [tool.hatch.version]
 source = "uv-dynamic-versioning"

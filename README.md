@@ -2,7 +2,7 @@
 
 A [JMAP][jmapio] client library for Python
 
-[![License](https://img.shields.io/github/license/smkent/jmapc)](https://github.com/smkent/jmapc/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/smkent/jmapc)](https://github.com/smkent/jmapc/blob/main/COPYING)
 [![PyPI](https://img.shields.io/pypi/v/jmapc)](https://pypi.org/project/jmapc/)
 [![Python](https://img.shields.io/pypi/pyversions/jmapc)](https://pypi.org/project/jmapc/)
 [![CI](https://github.com/smkent/jmapc/actions/workflows/ci.yaml/badge.svg)](https://github.com/smkent/jmapc/actions/workflows/ci.yaml)
@@ -72,6 +72,13 @@ If successful, `examples/identity_get.py` should output something like:
 Identity 12345 is for Ness at ness@onett.example.com
 Identity 67890 is for Ness at ness-alternate@onett.example.com
 ```
+
+## License
+
+Copyright (C) 2022 Stephen Kent and contributors
+
+Licensed under the GNU General Public License v3.0 only
+([`GPL-3.0-only`](https://github.com/smkent/jmapc/blob/main/COPYING)).
 
 ## Project template
 
