@@ -5,7 +5,7 @@ site_author = "Stephen Kent"
 site_url = "https://smkent.github.io/jmapc"
 repo_url = "https://github.com/smkent/jmapc"
 repo_name = "smkent/jmapc"
-copyright = "&copy; 2022 Stephen Kent"
+copyright = "&copy; 2022 Stephen Kent and contributors"
 
 nav = [
   { "About" = [

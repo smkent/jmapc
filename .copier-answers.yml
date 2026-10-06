@@ -1,9 +1,8 @@
 # Changes here will be overwritten by Copier
-_commit: v0.16.3
+_commit: v0.17.0
 _src_path: gh:smkent/copier-python
 copyright_holder: Stephen Kent
-copyright_holder_email: smkent@smkent.net
-copyright_license: GPL-3.0
+copyright_license: GPL-3.0-only
 copyright_year: '2022'
 enable_container: false
 enable_coverage: true
