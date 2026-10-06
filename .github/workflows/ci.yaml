@@ -38,7 +38,7 @@ jobs:
             uv-${{ runner.os }}-${{ matrix.python-version }}-
 
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true
@@ -54,7 +54,7 @@ jobs:
         if: ${{ matrix.python-version == '3.14' }}
 
       - name: 📊 Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         if: ${{ matrix.python-version == '3.14' }}
         with:
           fail_ci_if_error: true
@@ -81,7 +81,7 @@ jobs:
             uv-${{ runner.os }}-
 
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true
@@ -109,7 +109,7 @@ jobs:
             uv-${{ runner.os }}-
 
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true

@@ -26,7 +26,7 @@ jobs:
             uv-${{ runner.os }}-
 
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true
