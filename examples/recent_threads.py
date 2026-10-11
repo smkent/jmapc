@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from jmapc import (
     Client,
@@ -55,7 +55,7 @@ results = client.request(
             collapse_threads=True,
             filter=EmailQueryFilterCondition(
                 in_mailbox=mailbox_id,
-                after=datetime.now(tz=timezone.utc) - timedelta(days=7),
+                after=datetime.now(tz=UTC) - timedelta(days=7),
             ),
             sort=[Comparator(property="receivedAt", is_ascending=False)],
             limit=5,

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import responses
 
@@ -165,7 +165,7 @@ def test_email_submission_get(
             EmailSubmission(
                 id="S2000",
                 undo_status=UndoStatus.FINAL,
-                send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+                send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
             ),
         ],
     )
@@ -346,7 +346,7 @@ def test_email_submission_set(
             "emailToSend": EmailSubmission(
                 id="S2000",
                 undo_status=UndoStatus.FINAL,
-                send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+                send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
             ),
         },
         updated=None,
@@ -425,9 +425,7 @@ def test_email_submission_set_on_success_destroy_email(
                 "emailToSend": EmailSubmission(
                     id="S2000",
                     undo_status=UndoStatus.FINAL,
-                    send_at=datetime(
-                        1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                    ),
+                    send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
                 ),
             },
             updated=None,
@@ -524,9 +522,7 @@ def test_email_submission_set_on_success_update_email(
                 "emailToSend": EmailSubmission(
                     id="S2000",
                     undo_status=UndoStatus.FINAL,
-                    send_at=datetime(
-                        1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                    ),
+                    send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
                 ),
             },
             updated=None,
@@ -628,9 +624,7 @@ def test_email_submission_set_update_email_error(
                 "emailToSend": EmailSubmission(
                     id="S2000",
                     undo_status=UndoStatus.FINAL,
-                    send_at=datetime(
-                        1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                    ),
+                    send_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
                 ),
             },
             updated=None,

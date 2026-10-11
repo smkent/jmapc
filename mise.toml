@@ -81,18 +81,11 @@ run = "uv run pytest"
 [tasks.test-versions]
 description = "Run tests across all Python versions"
 run = [
-  { task = "test-py310" },
   { task = "test-py311" },
   { task = "test-py312" },
   { task = "test-py313" },
   { task = "test-py314" },
 ]
-
-[tasks.test-py310]
-description = "Run tests using Python 3.10"
-env = { UV_PROJECT_ENVIRONMENT = ".venv-py310" }
-raw_args = true
-run = "uv run --python 3.10 pytest"
 
 [tasks.test-py311]
 description = "Run tests using Python 3.11"

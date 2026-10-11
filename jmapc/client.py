@@ -4,12 +4,11 @@ import functools
 import mimetypes
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, TypeVar, cast, overload
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast, overload
 
 import requests
 import requests.auth
 import sseclient
-from typing_extensions import Self
 
 from . import errors
 from .api import APIRequest, APIResponse
