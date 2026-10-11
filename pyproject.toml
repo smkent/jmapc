@@ -9,7 +9,7 @@ description = "A JMAP client library for Python"
 readme = "README.md"
 license = "GPL-3.0-only"
 license-files = ["COPYING"]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.15"
 authors = [{ name = "Stephen Kent", email = "smkent@smkent.net" }]
 classifiers = [
   "Development Status :: 4 - Beta",
