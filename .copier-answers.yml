@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v0.19.0
+_commit: v0.20.1
 _src_path: gh:smkent/copier-python
 copyright_holder: Stephen Kent
 copyright_license: GPL-3.0-only
@@ -12,6 +12,7 @@ enable_features:
 - xdist
 enable_pypi: true
 github_user: smkent
+llm_contribution_policy: accepted-with-disclosure
 project_description: A JMAP client library for Python
 project_name: jmapc
 project_slug: jmapc
