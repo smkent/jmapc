@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import responses
 
@@ -69,12 +69,8 @@ def test_maskedemail_get(
                 email="pk.fire@ness.example.com",
                 for_domain="ness.example.com",
                 description="Masked Email (pk.fire@ness.example.com)",
-                last_message_at=datetime(
-                    1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                ),
-                created_at=datetime(
-                    1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                ),
+                last_message_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
+                created_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
                 created_by="ness",
             ),
         ],
@@ -152,11 +148,9 @@ def test_maskedemail_set(
                     for_domain="ness.example.com",
                     description="Masked Email (pk.fire2187@ness.example.com)",
                     last_message_at=datetime(
-                        1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
+                        1994, 8, 24, 12, 1, 2, tzinfo=UTC
                     ),
-                    created_at=datetime(
-                        1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                    ),
+                    created_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
                     created_by="API Token: onett-dev",
                 )
             }
@@ -173,9 +167,7 @@ def test_maskedemail_set(
                 for_domain="ness.example.com",
                 description="Masked Email (pk.fire2187@ness.example.com)",
                 last_message_at=None,
-                created_at=datetime(
-                    1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                ),
+                created_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
                 created_by="API Token: onett-dev",
             ),
         },

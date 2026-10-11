@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import pytest
@@ -89,7 +89,7 @@ def test_serialize_add_account_id() -> None:
     ("dt", "expected_dict"),
     [
         (
-            datetime(2022, 2, 26, 12, 31, 45, tzinfo=timezone.utc),
+            datetime(2022, 2, 26, 12, 31, 45, tzinfo=UTC),
             {"timestamp": "2022-02-26T12:31:45Z"},
         ),
         (None, {}),

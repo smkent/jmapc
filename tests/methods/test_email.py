@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import responses
 
@@ -239,9 +239,7 @@ def test_email_get(
                     ),
                 ],
                 subject="I'm taking a day trip to Happy Happy Village",
-                received_at=datetime(
-                    1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc
-                ),
+                received_at=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
             ),
         ],
     )
@@ -303,7 +301,7 @@ def test_email_query(
             collapse_threads=True,
             filter=EmailQueryFilterCondition(
                 in_mailbox="MBX1",
-                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
             ),
             sort=[Comparator(property="receivedAt", is_ascending=False)],
             limit=10,
@@ -382,7 +380,7 @@ def test_email_query_changes(
         EmailQueryChanges(
             filter=EmailQueryFilterCondition(
                 in_mailbox="MBX1",
-                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=timezone.utc),
+                after=datetime(1994, 8, 24, 12, 1, 2, tzinfo=UTC),
             ),
             sort=[Comparator(property="receivedAt", is_ascending=False)],
             since_query_state="1000",
