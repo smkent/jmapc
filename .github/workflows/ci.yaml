@@ -116,3 +116,20 @@ jobs:
 
       - name: 🔍 Check for secrets
         run: mise run secretscan
+
+  commit-messages:
+    name: Commit messages
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: ✉️ Check commit messages
+        uses: commit-check/commit-check-action@v2
+        with:
+          branch: false
