@@ -104,4 +104,4 @@ class UnknownMethod(Error):
 
 @dataclass
 class UnsupportedFilter(Error):
-    _type = "UnsupportedFilter"
+    _type = "unsupportedFilter"
