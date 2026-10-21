@@ -53,7 +53,7 @@ class APIResponse(Model):
 
 @dataclass
 class APIRequest(Model):
-    account_id: str = field(
+    account_id: str = field(  # ty: ignore[invalid-mutable-override]
         repr=False,
         metadata=config(exclude=cast("Callable[..., bool]", lambda *_: True)),
     )
