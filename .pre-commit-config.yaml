@@ -26,6 +26,13 @@ repos:
         entry: betterleaks git . --pre-commit --staged --redact
         language: system
         pass_filenames: false
+      - id: jactionlint
+        name: jactionlint
+        entry: jactionlint --fix
+        language: system
+        types:
+          - yaml
+        files: ^\.github/workflows/
       - id: ruff
         name: ruff
         entry: uv run ruff check --fix
