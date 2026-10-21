@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 @pytest.fixture(autouse=True)
 def test_log() -> None:
     class UTCFormatter(logging.Formatter):
-        def converter(self, seconds: float | None) -> time.struct_time:
+        def converter(self, seconds: float | None) -> time.struct_time:  # ty: ignore[invalid-mutable-override]
             return time.gmtime(seconds)
 
     logger = logging.getLogger()
