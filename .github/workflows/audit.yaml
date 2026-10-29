@@ -10,12 +10,12 @@ on:
     paths:
       - uv.lock
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
-permissions:
-  contents: read
 
 jobs:
   audit:

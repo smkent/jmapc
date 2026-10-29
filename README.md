@@ -82,10 +82,10 @@ Licensed under the GNU General Public License v3.0 only
 
 ## Project template
 
-This project is generated and maintained with [copier-python][copier-python].
+This project is generated and maintained with [copier-project][copier-project].
 
 [codecov]: https://codecov.io/gh/smkent/jmapc
-[copier-python]: https://smkent.github.io/copier-python
+[copier-project]: https://smkent.github.io/copier-project
 [fastmail-maskedemail]: https://www.fastmail.com/developer/maskedemail/
 [jmapio]: https://jmap.io
 [logo]: https://raw.github.com/smkent/jmapc/main/img/jmapc.png
