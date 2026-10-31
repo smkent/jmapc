@@ -3,7 +3,7 @@ min_version = "2026.2.5"
 [hooks]
 postinstall = [
   "uv sync",
-  "[ -e .git ] && prek --quiet install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
+  "[ -e .git ] && prek --quiet install || { echo \"No git repository found.\"; }",
 ]
 
 [tools]
@@ -38,25 +38,13 @@ description = "Build documentation site"
 raw_args = true
 run = "uv run zensical build -c"
 
-[tasks.init]
-description = "Initialize git repository once on project creation"
-run = [
-  '[ ! -d .git ] || { echo "git repository already exists"; exit 1; }',
-  "git init",
-  "mise install",
-  "git remote add origin https://github.com/smkent/jmapc",
-  "git config --local remote.origin.pushurl git@github.com:smkent/jmapc.git",
-  "git add .",
-  "git commit -m 'Create project from template'",
-]
-
 [tasks.lint]
 description = "Run all formatters and static checks"
 raw_args = true
 run = "prek run --all-files"
 
 [tasks.lt]
-description = "Run all formatters, static checks and tests"
+description = "Run all formatters, static checks, and tests"
 run = [{ task = "lint" }, { task = "test" }]
 
 [tasks.release]

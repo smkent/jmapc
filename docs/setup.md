@@ -12,7 +12,7 @@ These steps only need to be completed once after the project is first created.
 [Settings → General][repo-settings]:
 
 - [x] Allow merge commits
-- [ ] Allow squash merging
+- [x] Allow squash merging
 - [ ] Allow rebase merging
 - [x] Automatically delete head branches
 
