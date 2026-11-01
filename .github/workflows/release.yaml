@@ -12,14 +12,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: false
 
+env:
+  UV_PYTHON: '3.14'
+
 jobs:
   build:
     name: Build distribution
     runs-on: ubuntu-latest
     cache-mode: none
     timeout-minutes: 15
-    env:
-      UV_PYTHON: '3.14'
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
