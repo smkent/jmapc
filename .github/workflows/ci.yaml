@@ -13,6 +13,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+  UV_PYTHON: '3.14'
+
 jobs:
   ci:
     name: Test (Python ${{ matrix.python-version }})
@@ -70,8 +73,6 @@ jobs:
     name: Documentation
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      UV_PYTHON: '3.14'
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
