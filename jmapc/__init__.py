@@ -47,7 +47,7 @@ from .models import (
 from .ref import Ref, ResultReference
 
 try:
-    version = import_version(__name__)
+    version = import_version("jmapc")
 except PackageNotFoundError:  # pragma: no cover
     version = "0.0.0"
 
