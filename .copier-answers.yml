@@ -1,10 +1,9 @@
 # Changes here will be overwritten by Copier
-_commit: v0.35.0
+_commit: v0.40.0
 _src_path: gh:smkent/copier-project
 copyright_holder: Stephen Kent
 copyright_license: GPL-3.0-only
 copyright_year: '2022'
-enable_container: false
 enable_coverage: true
 enable_docs: true
 enable_features:
