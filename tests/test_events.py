@@ -25,7 +25,7 @@ def mock_sseclient() -> Iterable[mock.MagicMock]:
     ):
         assert isinstance(sseclient.SSEClient, mock.MagicMock)
         sseclient.SSEClient.return_value.__iter__.side_effect = lambda: (
-            sseclient.SSEClient.return_value  # ty: ignore[unresolved-attribute]
+            sseclient.SSEClient.return_value  # ty: ignore[missing-attribute]
         )
         sseclient.SSEClient.return_value.__next__.side_effect = []
         yield mock_client
